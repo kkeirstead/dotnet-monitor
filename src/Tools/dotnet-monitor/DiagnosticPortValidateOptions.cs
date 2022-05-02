@@ -3,7 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.Diagnostics.Monitoring.WebApi;
+using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -12,8 +15,17 @@ namespace Microsoft.Diagnostics.Tools.Monitor
     internal class DiagnosticPortValidateOptions :
         IValidateOptions<DiagnosticPortOptions>
     {
+        private readonly IServiceProvider _serviceProvider;
+
+        public DiagnosticPortValidateOptions(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
         public ValidateOptionsResult Validate(string name, DiagnosticPortOptions options)
         {
+            IOptionsMonitor<CollectionRuleOptions> optionsMonitor = _serviceProvider.GetService<IOptionsMonitor<CollectionRuleOptions>>();
+
             var failures = new List<string>();
 
             if (options.ConnectionMode == DiagnosticPortConnectionMode.Listen

@@ -107,6 +107,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             services.AddSingleton<ICollectionRuleTriggerOperations, CollectionRuleTriggerOperations>();
 
             services.AddSingleton<IConfigureOptions<CollectionRuleOptions>, CollectionRuleConfigureNamedOptions>();
+            services.AddSingleton<IPostConfigureOptions<CollectionRuleOptions>, DefaultCollectionRulePostConfigureOptions>();
             services.AddSingleton<IValidateOptions<CollectionRuleOptions>, DataAnnotationValidateOptions<CollectionRuleOptions>>();
 
             // Register change sources for the options type
@@ -119,8 +120,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             services.AddSingleton<CollectionRuleService>();
             services.AddHostedServiceForwarder<CollectionRuleService>();
             services.AddSingleton<IEndpointInfoSourceCallbacks, CollectionRuleEndpointInfoSourceCallbacks>();
-
-            services.AddSingleton<IPostConfigureOptions<CollectionRuleOptions>, DefaultCollectionRulePostConfigureOptions>();
 
             return services;
         }
