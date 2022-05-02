@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.Diagnostics.Monitoring.WebApi;
+using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Configuration;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -15,18 +16,27 @@ namespace Microsoft.Diagnostics.Tools.Monitor
     internal class DiagnosticPortValidateOptions :
         IValidateOptions<DiagnosticPortOptions>
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly CollectionRulesConfigurationProvider _provider;
 
-        public DiagnosticPortValidateOptions(IServiceProvider serviceProvider)
+        public DiagnosticPortValidateOptions(CollectionRulesConfigurationProvider provider)
         {
-            _serviceProvider = serviceProvider;
+            _provider = provider;
         }
 
         public ValidateOptionsResult Validate(string name, DiagnosticPortOptions options)
         {
-            IOptionsMonitor<CollectionRuleOptions> optionsMonitor = _serviceProvider.GetService<IOptionsMonitor<CollectionRuleOptions>>();
+            var collectionRuleNames = _provider.GetCollectionRuleNames();
 
             var failures = new List<string>();
+
+            if (collectionRuleNames != null && collectionRuleNames.Count > 0)
+            {
+                if (!(options.ConnectionMode == DiagnosticPortConnectionMode.Listen
+                    && string.IsNullOrEmpty(options.EndpointName)))
+                {
+                    failures.Add(Strings.ErrorMessage_DiagnosticPortNotInListenModeForCollectionRules);
+                }
+            }
 
             if (options.ConnectionMode == DiagnosticPortConnectionMode.Listen
                 && string.IsNullOrEmpty(options.EndpointName))
