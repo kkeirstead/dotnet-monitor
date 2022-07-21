@@ -795,6 +795,15 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional egress providers that can be loaded from their file paths..
+        /// </summary>
+        public static string DisplayAttributeDescription_EgressOptions_Extensions {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_EgressOptions_Extensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mapping of file system egress provider names to their options..
         /// </summary>
         public static string DisplayAttributeDescription_EgressOptions_FileSystem {
@@ -1272,6 +1281,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
             }
         }
         
+        /// <summary>
         ///   Looks up a localized string similar to The {0} field, {1} field, or {2} field is required..
         /// </summary>
         public static string ErrorMessage_CredentialsMissing {

@@ -681,4 +681,8 @@
   <data name="DisplayAttributeDescription_AzureBlobEgressProviderOptions_ManagedIdentityClientId" xml:space="preserve">
     <value>Client id of the Managed Identity used for authentication. The identity must have permissions to create containers and write to blob storage.</value>
   </data>
+  <data name="DisplayAttributeDescription_EgressOptions_Extensions" xml:space="preserve">
+    <value>Additional egress providers that can be loaded from their file paths.</value>
+    <comment>The description provided for the Extensions parameter on EgressOptions.</comment>
+  </data>
 </root>
