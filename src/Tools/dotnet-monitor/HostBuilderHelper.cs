@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Diagnostics.Tools.Monitor
@@ -18,6 +19,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
     {
         public const string ConfigPrefix = "DotnetMonitor_";
         private const string SettingsFileName = "settings.json";
+        private const string ExtensionsDirectoryName = "Extensions";
 
         public static IHostBuilder CreateHostBuilder(HostBuilderSettings settings)
         {
@@ -38,6 +40,20 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                 {
                     string userSettingsPath = Path.Combine(settings.UserConfigDirectory, SettingsFileName);
                     builder.AddJsonFile(userSettingsPath, optional: true, reloadOnChange: true);
+
+                    string nextToMeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    string progDataFolder = settings.SharedConfigDirectory;
+                    string settingsFolder = settings.UserConfigDirectory;
+
+                    List<FileInfo> files = new();
+                    files.AddRange(GetExtensionFiles(nextToMeFolder));
+                    files.AddRange(GetExtensionFiles(progDataFolder));
+                    files.AddRange(GetExtensionFiles(settingsFolder));
+
+                    foreach (FileInfo file in files)
+                    {
+                        builder.AddJsonFile(file.FullName, optional: true, reloadOnChange: true);
+                    }
 
                     string sharedSettingsPath = Path.Combine(settings.SharedConfigDirectory, SettingsFileName);
                     builder.AddJsonFile(sharedSettingsPath, optional: true, reloadOnChange: true);
@@ -110,6 +126,20 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                     })
                     .UseStartup<Startup>();
                 });
+        }
+
+        private static FileInfo[] GetExtensionFiles(string path)
+        {
+            string extensionsPath = Path.Combine(path, ExtensionsDirectoryName);
+
+            if (Directory.Exists(extensionsPath))
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(extensionsPath);
+
+                return directoryInfo.GetFiles("*.json");
+            }
+
+            return Array.Empty<FileInfo>();
         }
 
         public static AuthConfiguration CreateAuthConfiguration(bool noAuth, bool tempApiKey)
