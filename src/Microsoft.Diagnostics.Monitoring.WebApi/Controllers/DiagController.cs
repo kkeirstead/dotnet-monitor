@@ -50,6 +50,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
         private readonly OperationTrackerService _operationTrackerService;
         private readonly ICollectionRuleService _collectionRuleService;
 
+        internal static Dictionary<Guid, EventTracePipeline> _tracePipelines = new();
+
         public DiagController(ILogger<DiagController> logger,
             IServiceProvider serviceProvider)
         {
@@ -106,6 +108,30 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
                 _logger.WrittenToHttpStream();
                 return new ActionResult<IEnumerable<Models.ProcessIdentifier>>(processesIdentifiers);
             }, _logger);
+        }
+
+        /// <summary>
+        /// Get the list of traces.
+        /// </summary>
+        [HttpGet("traces", Name = "GetTraces")]
+        [ProducesWithProblemDetails(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(typeof(List<Guid>), StatusCodes.Status200OK)] // Will change this later to have details about when it started...?
+        public List<Guid> GetTraces()
+        {
+            return _tracePipelines.Keys.ToList();
+        }
+
+        /// <summary>
+        /// Get the list of traces.
+        /// </summary>
+        [HttpGet("stoptrace", Name = "StopTrace")]
+        [ProducesWithProblemDetails(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)] // Will change this later to have details about when it started...?
+        public void StopTrace(
+            [FromQuery]
+            Guid uid)
+        {
+            _tracePipelines[uid].StopTrace();
         }
 
         /// <summary>

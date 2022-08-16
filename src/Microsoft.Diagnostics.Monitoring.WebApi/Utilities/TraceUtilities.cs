@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.Diagnostics.Monitoring.EventPipe;
+using Microsoft.Diagnostics.Monitoring.WebApi.Controllers;
 using Microsoft.Diagnostics.Monitoring.WebApi.Validation;
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Extensions.Logging;
@@ -89,11 +90,21 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
             var client = new DiagnosticsClient(endpointInfo.Endpoint);
 
+            EventTracePipeline pipeProcessor = new EventTracePipeline(client, new EventTracePipelineSettings
+            {
+                Configuration = configuration,
+                Duration = duration,
+            }, streamAvailable);
+
+            /*
             await using EventTracePipeline pipeProcessor = new EventTracePipeline(client, new EventTracePipelineSettings
             {
                 Configuration = configuration,
                 Duration = duration,
             }, streamAvailable);
+            */
+
+            DiagController._tracePipelines.Add(Guid.NewGuid(), pipeProcessor);
 
             await pipeProcessor.RunAsync(token);
         }
