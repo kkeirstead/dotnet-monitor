@@ -9,13 +9,8 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 using Azure.Storage.Queues;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Globalization;
-using System.IO;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob
 {
@@ -91,6 +86,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob
         {
             try
             {
+                _logger.LogWarning("THIS IS A WARNING TEST");
+
                 var containerClient = await GetBlobContainerClientAsync(options, token);
 
                 string blobName = GetBlobName(options, artifactSettings);
@@ -190,23 +187,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob
             try
             {
                 QueueClient queueClient = await GetQueueClientAsync(options, token);
-<<<<<<< HEAD:src/Extensions/AzureBlobStorage/AzureBlob/AzureBlobEgressProvider.cs
-
-                if (queueClient.Exists())
-                {
-                    await queueClient.SendMessageAsync(blobName, cancellationToken: token);
-                }
-                else
-                {
-                    _logger.QueueDoesNotExist(options.QueueName);
-                }
-=======
                 await queueClient.SendMessageAsync(blobName, cancellationToken: token);
             }
             catch (RequestFailedException ex) when (ex.Status == ((int)HttpStatusCode.NotFound))
             {
-                Logger.QueueDoesNotExist(options.QueueName);
->>>>>>> main:src/Tools/dotnet-monitor/Egress/AzureBlob/AzureBlobEgressProvider.cs
+                _logger.QueueDoesNotExist(options.QueueName);
             }
             catch (Exception ex)
             {
