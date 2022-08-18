@@ -5,10 +5,7 @@
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Actions;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options.Actions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,7 +40,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests.CollectionRules.Action
         }
     }
 
-    internal sealed class PassThroughOptions : ICloneable
+    internal sealed record class PassThroughOptions : BaseRecordOptions
     {
         [ActionOptionsDependencyProperty]
         public string Input1 { get; set; }
@@ -53,7 +50,5 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests.CollectionRules.Action
 
         [ActionOptionsDependencyProperty]
         public string Input3 { get; set; }
-
-        public object Clone() => MemberwiseClone();
     }
 }

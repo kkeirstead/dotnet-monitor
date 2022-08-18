@@ -70,6 +70,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to find a collection rule with name {0}..
+        /// </summary>
+        internal static string ErrorMessage_CollectionRuleNotFound {
+            get {
+                return ResourceManager.GetString("ErrorMessage_CollectionRuleNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; action was not registered correctly..
         /// </summary>
         internal static string ErrorMessage_CouldNotMapToAction {
@@ -133,7 +142,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File system egress failed&quot; {0}.
+        ///   Looks up a localized string similar to File system egress failed: {0}.
         /// </summary>
         internal static string ErrorMessage_EgressFileFailedDetailed {
             get {
@@ -484,6 +493,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The fully qualified path and filename of the json configuration file you&apos;d like to add to the list of configuration sources..
+        /// </summary>
+        internal static string HelpDescription_OptionConfigurationFilePath {
+            get {
+                return ResourceManager.GetString("HelpDescription_OptionConfigurationFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The fully qualified path and filename of the diagnostic port to which runtime instances can connect..
         /// </summary>
         internal static string HelpDescription_OptionDiagnosticPort {
@@ -790,11 +808,47 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Diagnostic port file at &apos;{0}&apos; was either deleted or moved while it was still being used..
+        /// </summary>
+        internal static string LogFormatString_DiagnosticPortAlteredWhileInUse {
+            get {
+                return ResourceManager.GetString("LogFormatString_DiagnosticPortAlteredWhileInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attemping to delete diagnostic port file at &apos;{0}&apos;..
+        /// </summary>
+        internal static string LogFormatString_DiagnosticPortDeleteAttempt {
+            get {
+                return ResourceManager.GetString("LogFormatString_DiagnosticPortDeleteAttempt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete diagnostic port file at &apos;{0}&apos;..
+        /// </summary>
+        internal static string LogFormatString_DiagnosticPortDeleteFailed {
+            get {
+                return ResourceManager.GetString("LogFormatString_DiagnosticPortDeleteFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When using collection rules, the diagnostic port must be in &apos;Listen&apos; mode. Please correct the configuration and restart dotnet monitor..
         /// </summary>
         internal static string LogFormatString_DiagnosticPortNotInListenModeForCollectionRules {
             get {
                 return ResourceManager.GetString("LogFormatString_DiagnosticPortNotInListenModeForCollectionRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to watch diagnostic port file at &apos;{0}&apos;..
+        /// </summary>
+        internal static string LogFormatString_DiagnosticPortWatchingFailed {
+            get {
+                return ResourceManager.GetString("LogFormatString_DiagnosticPortWatchingFailed", resourceCulture);
             }
         }
         
@@ -1062,9 +1116,18 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         /// <summary>
         ///   Looks up a localized string similar to WARNING: Authentication is enabled over insecure http transport. This can pose a security risk and is not intended for production environments..
         /// </summary>
-        internal static string LogFormatString_InsecureAutheticationConfiguration {
+        internal static string LogFormatString_InsecureAuthenticationConfiguration {
             get {
-                return ResourceManager.GetString("LogFormatString_InsecureAutheticationConfiguration", resourceCulture);
+                return ResourceManager.GetString("LogFormatString_InsecureAuthenticationConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The intermediate file at the following path could not be deleted: {path}.
+        /// </summary>
+        internal static string LogFormatString_IntermediateFileDeletionFailed {
+            get {
+                return ResourceManager.GetString("LogFormatString_IntermediateFileDeletionFailed", resourceCulture);
             }
         }
         
@@ -1141,6 +1204,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The provided url could not be parsed: {url}.
+        /// </summary>
+        internal static string LogFormatString_ParsingUrlFailed {
+            get {
+                return ResourceManager.GetString("LogFormatString_ParsingUrlFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The queue {0} does not exist; ensure that the {queueName} and {queueAccountUri} fields are set correctly..
         /// </summary>
         internal static string LogFormatString_QueueDoesNotExist {
@@ -1168,6 +1240,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to get the runtime instance cookie of the current process..
+        /// </summary>
+        internal static string LogFormatString_RuntimeInstanceCookieFailedToFilterSelf {
+            get {
+                return ResourceManager.GetString("LogFormatString_RuntimeInstanceCookieFailedToFilterSelf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Setting the environment variable {variableName} in process {processId}..
         /// </summary>
         internal static string LogFormatString_SetEnvironmentVariable {
@@ -1191,6 +1272,24 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         internal static string LogFormatString_WritingMessageToQueueFailed {
             get {
                 return ResourceManager.GetString("LogFormatString_WritingMessageToQueueFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided configuration file &apos;{0}&apos; could not be found..
+        /// </summary>
+        internal static string Message_ConfigurationFileDoesNotExist {
+            get {
+                return ResourceManager.GetString("Message_ConfigurationFileDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided configuration file &apos;{0}&apos; must have the .json extension..
+        /// </summary>
+        internal static string Message_ConfigurationFileNotJson {
+            get {
+                return ResourceManager.GetString("Message_ConfigurationFileNotJson", resourceCulture);
             }
         }
         

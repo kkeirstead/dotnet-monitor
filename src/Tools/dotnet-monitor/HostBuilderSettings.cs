@@ -58,15 +58,18 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         public string UserConfigDirectory { get; set; }
 
+        public FileInfo UserProvidedConfigFilePath { get; set; }
+
         /// <summary>
         /// Create settings for dotnet-monitor hosting.
         /// </summary>
         public static HostBuilderSettings CreateMonitor(
             string[] urls,
-            string[] metricUrls, 
+            string[] metricUrls,
             bool metrics,
             string diagnosticPort,
-            IAuthConfiguration authConfiguration)
+            IAuthConfiguration authConfiguration,
+            FileInfo userProvidedConfigFilePath)
         {
             return new HostBuilderSettings()
             {
@@ -77,7 +80,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                 Authentication = authConfiguration,
                 ContentRootDirectory = AppContext.BaseDirectory,
                 SharedConfigDirectory = SharedConfigDirectoryPath,
-                UserConfigDirectory = UserConfigDirectoryPath
+                UserConfigDirectory = UserConfigDirectoryPath,
+                UserProvidedConfigFilePath = userProvidedConfigFilePath
             };
         }
 

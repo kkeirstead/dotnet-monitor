@@ -59,9 +59,9 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         private static readonly Action<ILogger, Exception> _insecureAuthenticationConfiguration =
             LoggerMessage.Define(
-                eventId: LoggingEventIds.InsecureAutheticationConfiguration.EventId(),
+                eventId: LoggingEventIds.InsecureAuthenticationConfiguration.EventId(),
                 logLevel: LogLevel.Warning,
-                formatString: Strings.LogFormatString_InsecureAutheticationConfiguration);
+                formatString: Strings.LogFormatString_InsecureAuthenticationConfiguration);
 
         private static readonly Action<ILogger, string, Exception> _unableToListenToAddress =
             LoggerMessage.Define<string>(
@@ -81,7 +81,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                 logLevel: LogLevel.Debug,
                 formatString: Strings.LogFormatString_BoundMetricsAddress);
 
-        private static readonly Action<ILogger, string, Exception> _optionsValidationFalure =
+        private static readonly Action<ILogger, string, Exception> _optionsValidationFailure =
             LoggerMessage.Define<string>(
                 eventId: LoggingEventIds.OptionsValidationFailure.EventId(),
                 logLevel: LogLevel.Critical,
@@ -405,6 +405,48 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                 logLevel: LogLevel.Error,
                 formatString: Strings.LogFormatString_ExtensionMalformedOutput);
 
+        private static readonly Action<ILogger, Exception> _runtimeInstanceCookieFailedToFilterSelf =
+            LoggerMessage.Define(
+                eventId: LoggingEventIds.RuntimeInstanceCookieFailedToFilterSelf.EventId(),
+                logLevel: LogLevel.Debug,
+                formatString: Strings.LogFormatString_RuntimeInstanceCookieFailedToFilterSelf);
+
+        private static readonly Action<ILogger, string, Exception> _parsingUrlFailed =
+            LoggerMessage.Define<string>(
+                eventId: LoggingEventIds.ParsingUrlFailed.EventId(),
+                logLevel: LogLevel.Warning,
+                formatString: Strings.LogFormatString_ParsingUrlFailed);
+
+        private static readonly Action<ILogger, string, Exception> _intermediateFileDeletionFailed =
+            LoggerMessage.Define<string>(
+                eventId: LoggingEventIds.IntermediateFileDeletionFailed.EventId(),
+                logLevel: LogLevel.Debug,
+                formatString: Strings.LogFormatString_IntermediateFileDeletionFailed);
+
+        private static readonly Action<ILogger, string, Exception> _diagnosticPortDeleteAttempt =
+            LoggerMessage.Define<string>(
+                eventId: LoggingEventIds.DiagnosticPortDeleteAttempt.EventId(),
+                logLevel: LogLevel.Warning,
+                formatString: Strings.LogFormatString_DiagnosticPortDeleteAttempt);
+
+        private static readonly Action<ILogger, string, Exception> _diagnosticPortDeleteFailed =
+            LoggerMessage.Define<string>(
+                eventId: LoggingEventIds.DiagnosticPortDeleteFailed.EventId(),
+                logLevel: LogLevel.Warning,
+                formatString: Strings.LogFormatString_DiagnosticPortDeleteFailed);
+
+        private static readonly Action<ILogger, string, Exception> _diagnosticPortAlteredWhileInUse =
+            LoggerMessage.Define<string>(
+                eventId: LoggingEventIds.DiagnosticPortAlteredWhileInUse.EventId(),
+                logLevel: LogLevel.Warning,
+                formatString: Strings.LogFormatString_DiagnosticPortAlteredWhileInUse);
+
+        private static readonly Action<ILogger, string, Exception> _diagnosticPortWatchingFailed =
+            LoggerMessage.Define<string>(
+                eventId: LoggingEventIds.DiagnosticPortWatchingFailed.EventId(),
+                logLevel: LogLevel.Warning,
+                formatString: Strings.LogFormatString_DiagnosticPortWatchingFailed);
+
         public static void EgressProviderInvalidOptions(this ILogger logger, string providerName)
         {
             _egressProviderInvalidOptions(logger, providerName, null);
@@ -463,7 +505,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         public static void OptionsValidationFailure(this ILogger logger, OptionsValidationException exception)
         {
             foreach (string failure in exception.Failures)
-                _optionsValidationFalure(logger, failure, null);
+                _optionsValidationFailure(logger, failure, null);
         }
 
         public static void RunningElevated(this ILogger logger)
@@ -743,6 +785,41 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         public static void ExtensionMalformedOutput(this ILogger logger, int pid, string message, Type resultType)
         {
             _extensionMalformedOutput(logger, pid, message, resultType.Name, null);
+        }
+
+        public static void RuntimeInstanceCookieFailedToFilterSelf(this ILogger logger, Exception ex)
+        {
+            _runtimeInstanceCookieFailedToFilterSelf(logger, ex);
+        }
+
+        public static void ParsingUrlFailed(this ILogger logger, string url, Exception ex)
+        {
+            _parsingUrlFailed(logger, url, ex);
+        }
+
+        public static void IntermediateFileDeletionFailed(this ILogger logger, string intermediateFilePath, Exception ex)
+        {
+            _intermediateFileDeletionFailed(logger, intermediateFilePath, ex);
+        }
+
+        public static void DiagnosticPortDeleteAttempt(this ILogger logger, string diagnosticPort)
+        {
+            _diagnosticPortDeleteAttempt(logger, diagnosticPort, null);
+        }
+
+        public static void DiagnosticPortDeleteFailed(this ILogger logger, string diagnosticPort, Exception ex)
+        {
+            _diagnosticPortDeleteFailed(logger, diagnosticPort, ex);
+        }
+
+        public static void DiagnosticPortAlteredWhileInUse(this ILogger logger, string diagnosticPort)
+        {
+            _diagnosticPortAlteredWhileInUse(logger, diagnosticPort, null);
+        }
+
+        public static void DiagnosticPortWatchingFailed(this ILogger logger, string diagnosticPort, Exception ex)
+        {
+            _diagnosticPortWatchingFailed(logger, diagnosticPort, ex);
         }
     }
 }

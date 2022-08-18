@@ -128,6 +128,21 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon.Options
                 });
         }
 
+        public static CollectionRuleOptions AddCollectLiveMetricsAction(this CollectionRuleOptions options, string egress = null, Action<CollectLiveMetricsOptions> callback = null)
+        {
+            return options.AddAction(
+                KnownCollectionRuleActions.CollectLiveMetrics,
+                actionOptions =>
+                {
+                    CollectLiveMetricsOptions collectLiveMetricsOptions = new();
+                    collectLiveMetricsOptions.Egress = egress;
+
+                    callback?.Invoke(collectLiveMetricsOptions);
+
+                    actionOptions.Settings = collectLiveMetricsOptions;
+                });
+        }
+
         public static CollectionRuleOptions AddExecuteAction(this CollectionRuleOptions options, string path, string arguments = null, bool? waitForCompletion = null)
         {
             return options.AddAction(
@@ -159,14 +174,14 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon.Options
 
         public static CollectionRuleOptions AddLoadProfilerAction(this CollectionRuleOptions options, Action<LoadProfilerOptions> configureOptions)
         {
-           return options.AddAction(
-                KnownCollectionRuleActions.LoadProfiler,
-                callback: actionOptions =>
-                {
-                    LoadProfilerOptions loadProfilerOptions = new();
-                    configureOptions?.Invoke(loadProfilerOptions);
-                    actionOptions.Settings = loadProfilerOptions;
-                });
+            return options.AddAction(
+                 KnownCollectionRuleActions.LoadProfiler,
+                 callback: actionOptions =>
+                 {
+                     LoadProfilerOptions loadProfilerOptions = new();
+                     configureOptions?.Invoke(loadProfilerOptions);
+                     actionOptions.Settings = loadProfilerOptions;
+                 });
         }
 
         public static CollectionRuleOptions AddSetEnvironmentVariableAction(this CollectionRuleOptions options, string name, string value = null)
@@ -198,7 +213,7 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon.Options
                  });
         }
 
-        public static CollectionRuleOptions SetActionLimits(this CollectionRuleOptions options, int? count = null, TimeSpan? slidingWindowDuration = null)
+        public static CollectionRuleOptions SetActionLimits(this CollectionRuleOptions options, int? count = null, TimeSpan? slidingWindowDuration = null, TimeSpan? ruleDuration = null)
         {
             if (null == options.Limits)
             {
@@ -207,6 +222,7 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon.Options
 
             options.Limits.ActionCount = count;
             options.Limits.ActionCountSlidingWindowDuration = slidingWindowDuration;
+            options.Limits.RuleDuration = ruleDuration;
 
             return options;
         }
@@ -217,7 +233,7 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon.Options
             {
                 options.Limits = new CollectionRuleLimitsOptions();
             }
-            
+
             options.Limits.RuleDuration = duration;
 
             return options;
@@ -503,6 +519,16 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon.Options
             }
 
             return collectTraceOptions;
+        }
+
+        public static CollectLiveMetricsOptions VerifyCollectLiveMetricsAction(this CollectionRuleOptions ruleOptions, int actionIndex, string expectedEgress)
+        {
+            CollectLiveMetricsOptions collectLiveMetricsOptions = ruleOptions.VerifyAction<CollectLiveMetricsOptions>(
+                actionIndex, KnownCollectionRuleActions.CollectLiveMetrics);
+
+            Assert.Equal(expectedEgress, collectLiveMetricsOptions.Egress);
+
+            return collectLiveMetricsOptions;
         }
 
         public static ExecuteOptions VerifyExecuteAction(this CollectionRuleOptions ruleOptions, int actionIndex, string expectedPath, string expectedArguments = null)

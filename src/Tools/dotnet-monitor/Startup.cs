@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Diagnostics.Monitoring;
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.Monitoring.WebApi.Controllers;
@@ -20,7 +19,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO.Compression;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text.Json.Serialization;
@@ -75,13 +73,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                 configureOptions.MimeTypes = new List<string> { ContentTypes.ApplicationOctetStream };
             });
 
-            // This is needed to allow the StreamingLogger to synchronously write to the output stream.
-            // Eventually should switch StreamingLoggger to something that allows for async operations.
-            services.Configure<KestrelServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
-
             var metricsOptions = new MetricsOptions();
             Configuration.Bind(ConfigurationKeys.Metrics, metricsOptions);
             if (metricsOptions.Enabled.GetValueOrDefault(MetricsOptionsDefaults.Enabled))
@@ -101,6 +92,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             IAuthConfiguration options,
             AddressListenResults listenResults,
             MonitorApiKeyConfigurationObserver optionsObserver,
+            HostBuilderContext hostBuilderContext,
             ILogger<Startup> logger)
         {
             logger.ExperienceSurvey();
@@ -115,6 +107,17 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             foreach (AddressListenResult result in listenResults.Errors)
             {
                 logger.UnableToListenToAddress(result.Url, result.Exception);
+            }
+
+            if (hostBuilderContext.Properties.TryGetValue(HostBuilderResults.ResultKey, out object resultsObject))
+            {
+                if (resultsObject is HostBuilderResults hostBuilderResults)
+                {
+                    foreach (string message in hostBuilderResults.Warnings)
+                    {
+                        logger.LogWarning(message);
+                    }
+                }
             }
 
             // If we end up not listening on any ports, Kestrel defaults to port 5000. Make sure we don't attempt this.
@@ -155,8 +158,9 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                     {
                         address = BindingAddress.Parse(url);
                     }
-                    catch (Exception)
+                    catch (FormatException ex)
                     {
+                        logger.ParsingUrlFailed(url, ex);
                         continue;
                     }
 
