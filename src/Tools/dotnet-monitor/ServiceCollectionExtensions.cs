@@ -17,7 +17,6 @@ using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options.Triggers;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options.Triggers.EventCounterShortcuts;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Triggers;
 using Microsoft.Diagnostics.Tools.Monitor.Egress;
-using Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob;
 using Microsoft.Diagnostics.Tools.Monitor.Egress.Configuration;
 using Microsoft.Diagnostics.Tools.Monitor.Egress.FileSystem;
 using Microsoft.Diagnostics.Tools.Monitor.Extensibility;
@@ -253,13 +252,9 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             services.AddSingleton<IOptionsTypeToProviderTypesMapper, OptionsTypeToProviderTypesMapper>();
 
             // Register egress providers
-            services.RegisterEgressType<AzureBlobEgressProviderOptions, AzureBlobEgressProvider>();
             services.RegisterEgressType<FileSystemEgressProviderOptions, FileSystemEgressProvider>();
 
             services.RegisterEgressType<ExtensionEgressProviderOptions, ExtensionEgressProvider>();
-
-            // Extra registrations for provider specific behavior
-            services.AddSingleton<IPostConfigureOptions<AzureBlobEgressProviderOptions>, AzureBlobEgressPostConfigureOptions>();
 
             return services;
         }

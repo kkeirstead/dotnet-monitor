@@ -115,6 +115,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provider {providerType}: Unable to find &apos;{keyName}&apos; key in egress properties.
+        /// </summary>
+        internal static string LogFormatString_EgressProviderUnableToFindPropertyKey {
+            get {
+                return ResourceManager.GetString("LogFormatString_EgressProviderUnableToFindPropertyKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The queue {0} does not exist; ensure that the {queueName} and {queueAccountUri} fields are set correctly..
         /// </summary>
         internal static string LogFormatString_QueueDoesNotExist {
