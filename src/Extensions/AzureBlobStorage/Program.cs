@@ -5,7 +5,6 @@
 using Microsoft.Diagnostics.Tools.Monitor.Egress;
 using Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob;
 using System.CommandLine;
-using System.CommandLine.Binding;
 using System.Text.Json;
 
 /*
@@ -38,9 +37,15 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
             // Expected command line format is: AzureBlobStorage.exe Egress --Provider-Name MyProviderEndpointName
             RootCommand rootCommand = new RootCommand("Egresses an artifact to Azure Storage.");
 
-            Command egressCmd = new Command("Egress", "The class of extension being invoked; Egress is for egressing an artifact.");
-            egressCmd.Add(new Option<string>("--Provider-Name", "The provider name given in the configuration to dotnet-monitor."));
-            egressCmd.SetHandler<string>(Program.Egress, egressCmd.Children.OfType<IValueDescriptor>().ToArray());
+            var providerNameOption = new Option<string>(
+                name: "--Provider-Name",
+                description: "The provider name given in the configuration to dotnet-monitor.");
+
+            Command egressCmd = new Command("Egress", "The class of extension being invoked; Egress is for egressing an artifact.")
+            { providerNameOption };
+
+            egressCmd.SetHandler(async (providerNameOption) => { await Egress(providerNameOption); }, providerNameOption);
+
             rootCommand.Add(egressCmd);
 
             return await rootCommand.InvokeAsync(args);
@@ -58,7 +63,7 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
                 ILoggerFactory loggerFactory = new LoggerFactory();
                 ILogger<AzureBlobEgressProvider> myLogger = loggerFactory.CreateLogger<AzureBlobEgressProvider>();
 
-                AzureBlobEgressProvider provider = new AzureBlobEgressProvider(logger: myLogger); // TODO: Replace logger with real instance of console logger (console events on standard out will get forwarded to dotnet-monitor and written to its console).
+                AzureBlobEgressProvider provider = new AzureBlobEgressProvider();
 
                 Console.CancelKeyPress += Console_CancelKeyPress;
 
