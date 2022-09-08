@@ -88,7 +88,16 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copying action stream to egress stream with buffer size {bufferSize}.
+        ///   Looks up a localized string similar to Metadata cannot include duplicate keys; please change or remove the key &apos;{0}&apos;.
+        /// </summary>
+        internal static string LogFormatString_DuplicateKeyInMetadata {
+            get {
+                return ResourceManager.GetString("LogFormatString_DuplicateKeyInMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copying action stream to egress stream with buffer size {0}.
         /// </summary>
         internal static string LogFormatString_EgressCopyActionStreamToEgressStream {
             get {
@@ -115,7 +124,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provider {providerType}: Unable to find &apos;{keyName}&apos; key in egress properties.
+        ///   Looks up a localized string similar to Provider {0}: Unable to find &apos;{1}&apos; key in egress properties.
         /// </summary>
         internal static string LogFormatString_EgressProviderUnableToFindPropertyKey {
             get {
@@ -124,7 +133,34 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The queue {0} does not exist; ensure that the {queueName} and {queueAccountUri} fields are set correctly..
+        ///   Looks up a localized string similar to Target framework does not support custom egress metadata..
+        /// </summary>
+        internal static string LogFormatString_EnvironmentBlockNotSupported {
+            get {
+                return ResourceManager.GetString("LogFormatString_EnvironmentBlockNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The environment variable &apos;{0}&apos; could not be found on the target process..
+        /// </summary>
+        internal static string LogFormatString_EnvironmentVariableNotFound {
+            get {
+                return ResourceManager.GetString("LogFormatString_EnvironmentVariableNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid metadata; custom metadata keys must be valid C# identifiers..
+        /// </summary>
+        internal static string LogFormatString_InvalidMetadata {
+            get {
+                return ResourceManager.GetString("LogFormatString_InvalidMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The queue {0} does not exist; ensure that the {0} and {1} fields are set correctly..
         /// </summary>
         internal static string LogFormatString_QueueDoesNotExist {
             get {
@@ -133,7 +169,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Queue message egress requires {queueName} and {queueAccountUri} to be set.
+        ///   Looks up a localized string similar to Queue message egress requires {0} and {1} to be set.
         /// </summary>
         internal static string LogFormatString_QueueOptionsPartiallySet {
             get {

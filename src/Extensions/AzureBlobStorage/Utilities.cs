@@ -11,13 +11,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress
     /// </summary>
     internal class Utilities
     {
-        internal static void WriteInfoLogs(string logMessage, string[] args)
+        internal static void WriteInfoLogs(string logMessage, string[] args = null) // Make sure null default doesn't break anything
         {
+            args = args ?? Array.Empty<string>();
             Console.WriteLine(string.Format(CultureInfo.InvariantCulture, logMessage, args));
         }
 
-        internal static void WriteWarningLogs(string logMessage, string[] args)
+        internal static void WriteWarningLogs(string logMessage, string[] args = null) // Make sure null default doesn't break anything
         {
+            args = args ?? Array.Empty<string>();
             Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, logMessage, args));
         }
     }

@@ -5,6 +5,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Microsoft.Diagnostics.Tools.Monitor.Egress.Configuration
@@ -34,7 +35,37 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.Configuration
                 IConfigurationSection providerOptionsSection = providerTypeSection.GetSection(name);
                 if (providerOptionsSection.Exists())
                 {
-                    providerOptionsSection.Bind(options);
+                    //((ExtensionEgressProviderOptions)options)["Test"] = new Dictionary<string, string>() { { "K1", "V1" } };
+
+                    var tempOptions = new ExtensionEgressProviderOptions();
+
+                    var tempOptions2 = new Dictionary<string, object>();
+
+                    var children = providerOptionsSection.GetChildren();
+
+                    if (options is ExtensionEgressProviderOptions eepOptions)
+                    {
+                        foreach (var child in children)
+                        {
+                            if (child.Value != null)
+                            {
+                                eepOptions.Add(child.Key, child.Value);
+                            }
+                        }
+
+                        var dictOptions = providerOptionsSection.Get<Dictionary<string, Dictionary<string, string>>>();
+
+                        foreach (var key in dictOptions.Keys)
+                        {
+                            eepOptions.Add(key, dictOptions[key]);
+                        }
+                    }
+
+
+
+                    //options = tempOptions as TOptions; // Check if this works...? -> does work but isn't passed along
+
+                    //providerOptionsSection.Bind(options); // Should throw an exception if this doesn't bind
                     return;
                 }
             }

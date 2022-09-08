@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob
@@ -79,5 +78,24 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob
             ResourceType = typeof(OptionsDisplayStrings),
             Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_AzureBlobEgressProviderOptions_QueueAccountUri))]*/
         public Uri QueueAccountUri { get; set; }
+
+        /*
+        [Display(
+            ResourceType = typeof(OptionsDisplayStrings),
+            Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_AzureBlobEgressProviderOptions_QueueSharedAccessSignature))]*/
+        public string QueueSharedAccessSignature { get; set; }
+
+        /*
+        [Display(
+            ResourceType = typeof(OptionsDisplayStrings),
+            Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_AzureBlobEgressProviderOptions_QueueSharedAccessSignatureName))]*/
+        public string QueueSharedAccessSignatureName { get; set; }
+
+        /*
+        [Display(
+            ResourceType = typeof(OptionsDisplayStrings),
+            Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_AzureBlobEgressProviderOptions_Metadata))]*/
+        public IDictionary<string, string> Metadata { get; set; }
+            = new Dictionary<string, string>(0);
     }
 }

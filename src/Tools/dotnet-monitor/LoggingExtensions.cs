@@ -33,12 +33,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                 logLevel: LogLevel.Error,
                 formatString: Strings.LogFormatString_EgressProviderOptionsValidationError);
 
-        private static readonly Action<ILogger, string, string, Exception> _egressProviderUnableToFindPropertyKey =
-            LoggerMessage.Define<string, string>(
-                eventId: LoggingEventIds.EgressProviderUnableToFindPropertyKey.EventId(),
-                logLevel: LogLevel.Warning,
-                formatString: Strings.LogFormatString_EgressProviderUnableToFindPropertyKey);
-
         private static readonly Action<ILogger, string, Exception> _egressProviderInvokeStreamAction =
             LoggerMessage.Define<string>(
                 eventId: LoggingEventIds.EgressProviderInvokeStreamAction.EventId(),
@@ -460,11 +454,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         public static void EgressProviderOptionsValidationFailure(this ILogger logger, string providerName, string failureMessage)
         {
             _egressProviderOptionsValidationFailure(logger, providerName, failureMessage, null);
-        }
-
-        public static void EgressProviderUnableToFindPropertyKey(this ILogger logger, string providerName, string keyName)
-        {
-            _egressProviderUnableToFindPropertyKey(logger, providerName, keyName, null);
         }
 
         public static void EgressProviderInvokeStreamAction(this ILogger logger, string providerName)

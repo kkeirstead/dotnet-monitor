@@ -44,6 +44,11 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 
             rootCommand.Add(egressCmd);
 
+            foreach (var arg in args)
+            {
+                Console.WriteLine(arg);
+            }
+
             return await rootCommand.InvokeAsync(args);
         }
 
@@ -59,17 +64,21 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
                 ILoggerFactory loggerFactory = new LoggerFactory();
                 ILogger<AzureBlobEgressProvider> myLogger = loggerFactory.CreateLogger<AzureBlobEgressProvider>();
 
+                Console.WriteLine("Right after logger");
+
                 AzureBlobEgressProvider provider = new AzureBlobEgressProvider();
 
                 Console.CancelKeyPress += Console_CancelKeyPress;
 
-                result.ArtifactPath = await provider.EgressAsync(configPayload.ProfileName, options, GetStream, configPayload.Settings, CancelSource.Token);
+                Console.WriteLine("Right before egress");
+
+                result.ArtifactPath = await provider.EgressAsync(options, GetStream, configPayload.Settings, CancelSource.Token);
                 result.Succeeded = true;
             }
             catch (Exception ex)
             {
                 result.Succeeded = false;
-                result.FailureMessage = ex.Message;
+                result.FailureMessage = ex.ToString(); // ex.Message
             }
 
             string jsonBlob = JsonSerializer.Serialize<EgressArtifactResult>(result);
@@ -81,6 +90,11 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 
         private static AzureBlobEgressProviderOptions BuildOptions(ExtensionEgressPayload configPayload)
         {
+            foreach (var pair in configPayload.Configuration)
+            {
+                Console.WriteLine(pair.Key + " | " + pair.Value);
+            }
+
             AzureBlobEgressProviderOptions options = new AzureBlobEgressProviderOptions()
             {
                 AccountUri = GetUriConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.AccountUri)),
@@ -92,7 +106,13 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
                 BlobPrefix = GetConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.BlobPrefix)),
                 QueueName = GetConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.QueueName)),
                 QueueAccountUri = GetUriConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.QueueAccountUri)),
+                QueueSharedAccessSignature = GetConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.QueueSharedAccessSignature)),
+                QueueSharedAccessSignatureName = GetConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.QueueSharedAccessSignatureName)),
+                ManagedIdentityClientId = GetConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.ManagedIdentityClientId)),
+                Metadata = GetDictionaryConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.Metadata)) // ENSURE THIS WORKS
             };
+
+            Console.WriteLine("After options are assembled");
 
             if (string.IsNullOrEmpty(options.AccountKey) && !string.IsNullOrEmpty(options.AccountKeyName) && configPayload.Properties.TryGetValue(options.AccountKeyName, out string accountKey))
             {
@@ -119,16 +139,21 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
             return Task.FromResult(StdInStream);
         }
 
-        private static string GetConfig(Dictionary<string, string> configDict, string propKey)
+        private static string GetConfig(Dictionary<string, object> configDict, string propKey)
         {
+            Console.WriteLine("GetConfig | " + propKey);
+
             if (configDict.ContainsKey(propKey))
             {
-                return configDict[propKey];
+                return configDict[propKey].ToString();
             }
             return null;
         }
-        private static Uri GetUriConfig(Dictionary<string, string> configDict, string propKey)
+
+        private static Uri GetUriConfig(Dictionary<string, object> configDict, string propKey)
         {
+            Console.WriteLine("GetUriConfig | " + propKey);
+
             string uriStr = GetConfig(configDict, propKey);
             if (uriStr == null)
             {
@@ -136,14 +161,27 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
             }
             return new Uri(uriStr);
         }
+
+        private static Dictionary<string, string> GetDictionaryConfig(Dictionary<string, object> configDict, string propKey)
+        {
+            Console.WriteLine("GetDictionaryConfig | " + propKey);
+
+            if (configDict.ContainsKey(propKey))
+            {
+                if (configDict[propKey] is JsonElement element)
+                {
+                    return JsonSerializer.Deserialize<Dictionary<string, string>>(element);
+                }
+            }
+            return null;
+        }
     }
 
     internal class ExtensionEgressPayload
     {
         public EgressArtifactSettings Settings { get; set; }
         public Dictionary<string, string> Properties { get; set; }
-        public Dictionary<string, string> Configuration { get; set; }
-        public string ProfileName { get; set; }
+        public Dictionary<string, object> Configuration { get; set; }
     }
 
 }
