@@ -160,7 +160,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The queue {0} does not exist; ensure that the {0} and {1} fields are set correctly..
+        ///   Looks up a localized string similar to The queue {0} does not exist; ensure that the {1} and {2} fields are set correctly..
         /// </summary>
         internal static string LogFormatString_QueueDoesNotExist {
             get {
