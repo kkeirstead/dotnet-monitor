@@ -2,7 +2,7 @@ name: 'Submit linter suggestions'
 
 on:
   workflow_run:
-    workflows: ["C# linting"]
+    workflows: ["Add Markdown Feedback"]
     types:
       - completed
 
