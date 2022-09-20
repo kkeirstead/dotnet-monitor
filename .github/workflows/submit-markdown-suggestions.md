@@ -1,4 +1,4 @@
-name: 'Submit linter suggestions'
+name: 'Submit markdown suggestions'
 
 on:
   workflow_run:
@@ -10,8 +10,8 @@ permissions:
   pull-requests: write
 
 jobs:
-  submit-linter-suggestions:
-    name: 'Submit linter suggestions'
+  submit-markdown-suggestions:
+    name: 'Submit markdown suggestions'
     runs-on: ubuntu-latest
     if: >
       ${{ github.event.workflow_run.event == 'pull_request' &&
@@ -27,7 +27,7 @@ jobs:
       - name: 'Download linting results'
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: lint-csharp.yml
+          workflow: add-markdown-feedback.yml
           run_id: ${{github.event.workflow_run.id }}
           name: pr-linter
           path: ./pr-linter
@@ -50,7 +50,7 @@ jobs:
           new_event_name=$(cat ./pr-linter/pr-event-name)
           jq -j ".${new_event_name}.head.repo.owner.id = .${new_event_name}.base.repo.owner.id" ./pr-linter/pr-event.json > ${new_event_file}
           GITHUB_EVENT_NAME="${new_event_name}" GITHUB_EVENT_PATH="${new_event_file}" REVIEWDOG_GITHUB_API_TOKEN="${{ secrets.GITHUB_TOKEN }}" reviewdog \
-              -name="dotnet format" \
+              -name="AppendMarkdownFeedback" \
               -f=diff \
               -f.diff.strip=1 \
               -reporter="github-pr-review" \
