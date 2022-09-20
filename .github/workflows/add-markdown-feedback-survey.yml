@@ -2,12 +2,13 @@ name: 'Add Markdown Feedback'
 on:
   pull_request:
     paths: ['documentation/**.md']
+    branches: ['main', 'release/6.x']
 
 permissions:
   pull-requests: read
 
 jobs:
-  lint-csharp:
+  add-markdown-feedback:
     name: 'Add Markdown Feedback'
     runs-on: ubuntu-latest
 
