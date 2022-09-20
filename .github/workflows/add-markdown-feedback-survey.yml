@@ -42,8 +42,8 @@ jobs:
         run: |
           mkdir -p ./pr-markdown
           cp $GITHUB_EVENT_PATH ./pr-markdown/pr-event.json
-          echo -n $GITHUB_EVENT_NAME > ./pr/pr-event-name
-          git diff > ./pr/linter.diff
+          echo -n $GITHUB_EVENT_NAME > ./pr-markdown/pr-event-name
+          git diff > ./pr-markdown/linter.diff
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
