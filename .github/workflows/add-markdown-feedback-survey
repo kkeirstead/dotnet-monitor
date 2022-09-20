@@ -31,7 +31,7 @@ jobs:
         run: echo 'dotnet_version='$(jq -r '.tools.dotnet' global.json) >> $GITHUB_ENV
 
       - name: Append To File
-        uses: kkeirstead/append-to-file
+        uses: kkeirstead/AppendToFile
         with:
           textToSearch: 'HelpfulDocs/images/WasThisHelpful.png'
           textToAdd: '[<img src=../../HelpfulDocs/images/WasThisHelpful.png width="150"/>](https://www.surveymonkey.com/r/XFMFHJ9?src={insertFileName})'
