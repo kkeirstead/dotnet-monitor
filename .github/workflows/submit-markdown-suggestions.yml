@@ -27,7 +27,7 @@ jobs:
       - name: 'Download linting results'
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: add-markdown-feedback-survey.yml
+          workflow: add-markdown-feedback.yml
           run_id: ${{github.event.workflow_run.id }}
           name: pr-linter
           path: ./pr-linter
