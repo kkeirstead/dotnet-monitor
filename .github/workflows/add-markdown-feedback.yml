@@ -43,7 +43,7 @@ jobs:
           mkdir -p ./pr
           cp $GITHUB_EVENT_PATH ./pr/pr-markdown-event.json
           echo -n $GITHUB_EVENT_NAME > ./pr/pr-markdown-event-name
-          git diff > ./pr-markdown/markdown.diff
+          git diff > ./pr/markdown.diff
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
