@@ -85,7 +85,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
                 catch(InvalidOperationException)
                 {
                 }
-                catch(Exception ex) when (!(ex is OperationCanceledException))
+                catch (Exception ex) when (!(ex is OperationCanceledException))
                 {
                     _logger.DefaultProcessUnexpectedFailure(ex);
                 }
