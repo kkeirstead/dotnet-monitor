@@ -29,8 +29,8 @@ jobs:
         with:
           workflow: add-markdown-feedback.yml
           run_id: ${{github.event.workflow_run.id }}
-          name: pr-markdown
-          path: ./pr-markdown
+          name: pr-linter
+          path: ./pr-linter
 
       - name: 'Setup reviewdog'
         uses: reviewdog/action-setup@v1
@@ -47,8 +47,8 @@ jobs:
       - name: Submit formatting suggestions
         run: |
           new_event_file=${{github.workspace}}/reviewdog_event.json
-          new_event_name=$(cat ./pr-markdown/pr-markdown-event-name)
-          jq -j ".${new_event_name}.head.repo.owner.id = .${new_event_name}.base.repo.owner.id" ./pr-markdown/pr-markdown-event.json > ${new_event_file}
+          new_event_name=$(cat ./pr-linter/pr-event-name)
+          jq -j ".${new_event_name}.head.repo.owner.id = .${new_event_name}.base.repo.owner.id" ./pr-linter/pr-event.json > ${new_event_file}
           GITHUB_EVENT_NAME="${new_event_name}" GITHUB_EVENT_PATH="${new_event_file}" REVIEWDOG_GITHUB_API_TOKEN="${{ secrets.GITHUB_TOKEN }}" reviewdog \
               -name="AppendMarkdownFeedback" \
               -f=diff \
@@ -57,4 +57,4 @@ jobs:
               -filter-mode="diff_context" \
               -fail-on-error="false" \
               -level="warning" \
-              < "./pr-markdown/markdown.diff"
+              < "./pr-linter/linter.diff"
