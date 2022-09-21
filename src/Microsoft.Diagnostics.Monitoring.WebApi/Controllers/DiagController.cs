@@ -82,7 +82,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
                 {
                     // Unable to locate a default process; no action required
                 }
-                catch(InvalidOperationException)
+                catch (InvalidOperationException)
                 {
                 }
                 catch (Exception ex) when (!(ex is OperationCanceledException))
