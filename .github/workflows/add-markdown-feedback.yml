@@ -41,11 +41,11 @@ jobs:
       - name: Generate artifacts
         run: |
           mkdir -p ./pr
-          cp $GITHUB_EVENT_PATH ./pr/pr-markdown-event.json
-          echo -n $GITHUB_EVENT_NAME > ./pr/pr-markdown-event-name
-          git diff > ./pr/markdown.diff
+          cp $GITHUB_EVENT_PATH ./pr/pr-event.json
+          echo -n $GITHUB_EVENT_NAME > ./pr/pr-event-name
+          git diff > ./pr/linter.diff
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: pr-markdown
+          name: pr-linter
           path: pr/
