@@ -1,4 +1,4 @@
-name: 'C# linting2'
+name: 'C# linting'
 on:
   pull_request:
     paths: ['src/**.cs']
@@ -8,8 +8,8 @@ permissions:
   pull-requests: read
 
 jobs:
-  lint-csharp2:
-    name: 'C# Linting2'
+  lint-csharp:
+    name: 'C# Linting'
     runs-on: ubuntu-latest
 
     steps:
