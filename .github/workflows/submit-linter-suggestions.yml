@@ -8,6 +8,7 @@ on:
 
 permissions:
   pull-requests: write
+
 jobs:
   submit-linter-suggestions:
     name: 'Submit linter suggestions'
@@ -18,6 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       # Download the artifact from the workflow that kicked off this one.
       # The default artifact download action doesn't support cross-workflow
       # artifacts, so use a 3rd party one.
@@ -31,6 +33,7 @@ jobs:
 
       - name: 'Setup reviewdog'
         uses: reviewdog/action-setup@v1
+
       # Manually supply the triggering PR event information since when a PR is from a fork,
       # this workflow running in the base repo will not be given information about it.
       #
