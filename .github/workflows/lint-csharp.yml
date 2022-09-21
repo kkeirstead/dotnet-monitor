@@ -1,4 +1,4 @@
-name: 'Add Markdown Feedback'
+name: 'C# linting'
 on:
   pull_request:
     paths: ['documentation/**.md']
@@ -8,8 +8,8 @@ permissions:
   pull-requests: read
 
 jobs:
-  add-markdown-feedback:
-    name: 'Add Markdown Feedback'
+  lint-csharp:
+    name: 'C# Linting'
     runs-on: ubuntu-latest
 
     steps:
