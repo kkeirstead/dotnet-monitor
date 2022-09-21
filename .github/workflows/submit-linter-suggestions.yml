@@ -50,7 +50,7 @@ jobs:
               -f=diff \
               -f.diff.strip=1 \
               -reporter="github-pr-review" \
-              -filter-mode="added" \
+              -filter-mode="nofilter" \
               -fail-on-error="false" \
               -level="info" \
               < "./pr-linter/linter.diff"
