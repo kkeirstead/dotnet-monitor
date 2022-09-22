@@ -180,3 +180,4 @@ The rule system plays a part in this process by starting the triggers of all of 
 ## Examples
 
 For examples of how to configure collection rules, see [Collection Rule Examples](collectionruleexamples.md).
+
