@@ -40,37 +40,11 @@ jobs:
 
       - name: Generate artifacts
         run: |
-          mkdir -p ./pr
-          cp $GITHUB_EVENT_PATH ./pr/pr-event.json
-          echo -n $GITHUB_EVENT_NAME > ./pr/pr-event-name
-          git diff > ./pr/linter.diff
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: pr-linter
-          path: pr/
-
-  submit-markdown-suggestions:
-    needs: add-markdown-feedback
-    name: 'Submit markdown suggestions'
-    runs-on: ubuntu-latest
-    if: >
-      ${{ github.event.workflow_run.event == 'pull_request' &&
-      github.event.workflow_run.conclusion == 'success' }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      # Download the artifact from the workflow that kicked off this one.
-      # The default artifact download action doesn't support cross-workflow
-      # artifacts, so use a 3rd party one.
-      - name: 'Download linting results'
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: add-markdown-feedback.yml
-          run_id: ${{github.event.workflow_run.id }}
-          name: pr-linter
-          path: ./pr-linter
-
+          mkdir -p ./pr-linter
+          cp $GITHUB_EVENT_PATH ./pr-linter/pr-event.json
+          echo -n $GITHUB_EVENT_NAME > ./pr-linter/pr-event-name
+          git diff > ./pr-linter/linter.diff
+      
       - name: 'Setup reviewdog'
         uses: reviewdog/action-setup@v1
       # Manually supply the triggering PR event information since when a PR is from a fork,
