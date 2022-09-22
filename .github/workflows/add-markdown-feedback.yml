@@ -90,7 +90,7 @@ jobs:
               -f=diff \
               -f.diff.strip=1 \
               -reporter="github-pr-review" \
-              -filter-mode="diff_context" \
+              -filter-mode="nofilter" \
               -fail-on-error="true" \
               -level="warning" \
               < "./pr-linter/linter.diff"
