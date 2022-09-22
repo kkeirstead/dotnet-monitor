@@ -100,4 +100,4 @@ On Windows, `.gcdump` files can be viewed in [PerfView](https://github.com/micro
 You can collect multiple `.gcdump`s and open them simultaneously in Visual Studio to get a comparison experience.
 
 Reports can be generated from `.gcdump` files using the [dotnet-gcdump](https://docs.microsoft.com/dotnet/core/diagnostics/dotnet-gcdump) tool.
-
+/n[<img src=../../HelpfulDocs/images/WasThisHelpful.png width="150"/>](https://www.surveymonkey.com/r/XFMFHJ9?src=gcdump)
