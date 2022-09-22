@@ -46,5 +46,3 @@ General .NET OSS discussions: [.NET Foundation Discussions](https://github.com/d
 ## License
 
 .NET monitor  is licensed under the [MIT](LICENSE.TXT) license.
-
-
