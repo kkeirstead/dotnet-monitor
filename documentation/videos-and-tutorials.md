@@ -5,4 +5,4 @@
 ### Inspecting Application Metrics with Dotnet Monitor
 [![Video Tutorial For Inspecting Application Metrics with Dotnet Monitor](https://i.ytimg.com/vi/hbgPvjTJSLY/hq720.jpg)](https://www.youtube.com/watch?v=hbgPvjTJSLY)
 
-[<img src=../../HelpfulDocs/images/WasThisHelpful.png width="150"/>](https://www.surveymonkey.com/r/XFMFHJ9)
+[<img src=../images/WasThisHelpful.png width="150"/>](https://www.surveymonkey.com/r/XFMFHJ9)
