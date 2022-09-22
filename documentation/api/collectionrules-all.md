@@ -31,6 +31,7 @@ If none of `pid`, `uid`, or `name` are specified, the state of collection rules 
 Authentication is enforced for this route. See [Authentication](./../authentication.md) for further information.
 
 
+
 Allowed schemes:
 - `Bearer`
 - `Negotiate` (Windows only, running as unelevated)
