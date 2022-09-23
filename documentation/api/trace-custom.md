@@ -131,3 +131,5 @@ A `.nettrace` files can be converted to another format (e.g. SpeedScope or Chrom
 ### Indefinite traces are inaccessible
 
 When setting `durationSeconds` to `-1` (indefinite duration), there is currently no way to terminate the trace operation that preserves the `.nettrace` file in an accessible format. This also applies when prematurely terminating a trace operation that uses a finite value for `durationSeconds`.
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=trace-custom)
