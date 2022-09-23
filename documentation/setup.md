@@ -58,3 +58,5 @@ The official releases and previews are:
 - Announced on the GitHub [Releases](https://github.com/dotnet/dotnet-monitor/releases) tab.
 - Published to [nuget.org](https://www.nuget.org/packages/dotnet-monitor/).
 - Published to the Microsoft Container Registry ([tag list](https://mcr.microsoft.com/v2/dotnet/monitor/tags/list)).
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=setup)
