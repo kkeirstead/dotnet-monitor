@@ -16,3 +16,5 @@ The expected CPU and memory usage of `dotnet monitor` is described under [Recomm
 >
 > Adjust the logging being emitted in your app to be in-line with CPU performance.
 > For ASP.NET you can use the configuration settings described in [ASP.NET Core 6.0 logging: Configure logging](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-6.0#configure-logging).
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=troubleshooting)
