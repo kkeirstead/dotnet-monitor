@@ -4,3 +4,5 @@ Today we are releasing the 6.0.1 build of the `dotnet-monitor` tool. This releas
 - Avoid artifact filename collisions by adding millisecond disambiguation (#1180)
 
 \*⚠️ **_indicates a breaking change_**
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
