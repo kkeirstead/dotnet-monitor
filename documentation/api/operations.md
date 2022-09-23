@@ -7,3 +7,5 @@ Operations are used to track long running operations in dotnet-monitor, specific
 | [List Operations](operations-list.md) | Lists all the operations and their current state. |
 | [Get Operation](operations-get.md) | Get detailed information about an operation. |
 | [Delete Operation](operations-delete.md) | Cancels a running operation. |
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=operations)
