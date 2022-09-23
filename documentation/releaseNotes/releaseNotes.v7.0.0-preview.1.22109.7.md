@@ -9,3 +9,5 @@ Today we are releasing the next official preview of the `dotnet monitor` tool. T
 - Add `net7.0` TFM (#1269)
 
 \*⚠️ **_indicates a breaking change_**
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
