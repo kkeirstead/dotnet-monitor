@@ -11,3 +11,5 @@ The Processes API enables enumeration of the processes that `dotnet monitor` can
 | [List Processes](processes-list.md) | Lists the processes that are available from which diagnostic information can be obtained. |
 
 The `dotnet monitor` tool is able to detect .NET Core 3.1 and .NET 5+ applications. When connecting to a .NET Core 3.1 application, some information may not be available and is called out in the documentation.
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=processes)
