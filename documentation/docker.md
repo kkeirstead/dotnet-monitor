@@ -33,3 +33,5 @@ In addition to its availability as a .NET CLI tool, the `dotnet monitor` tool is
 ### Nightly Repository
 - Docker Hub: https://hub.docker.com/_/microsoft-dotnet-nightly-monitor
 - Microsoft Container Registry: https://mcr.microsoft.com/v2/dotnet/nightly/monitor/tags/list
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=docker)
