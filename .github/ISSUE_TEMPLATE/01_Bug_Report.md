@@ -44,5 +44,3 @@ assignees: ''
   -->
 
 <!-- Thanks for taking the time to report this! -->
-
-test
