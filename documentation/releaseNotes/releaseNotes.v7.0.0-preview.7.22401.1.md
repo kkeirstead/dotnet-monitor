@@ -6,3 +6,5 @@ Today we are releasing the next official preview of the `dotnet monitor` tool. T
 - Add `CollectLiveMetrics` collection rule action (#2119)
 - Update Azure.Storage.Blobs to 12.13.0 (#2218)
 - Update Azure.Storage.Queues to 12.11.0 (#2218)
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
