@@ -360,3 +360,5 @@ Object for specifying errors and validation results based on https://tools.ietf.
     }
 }
 ```
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=definitions)
