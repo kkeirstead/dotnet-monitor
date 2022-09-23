@@ -7,3 +7,5 @@ Today we are releasing the official 6.0.0 GA build of the `dotnet monitor` tool.
 - Fix root route to respond with HTTP 404 instead of HTTP 500 (#1072)
 
 \*⚠️ **_indicates a breaking change_**
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
