@@ -95,3 +95,5 @@ See [Process ID `pid` vs Unique ID `uid`](pidvsuid.md) for clarification on when
 ### View the collected dump file
 
 Dump files collected from this route can be analyzed using tools such as [dotnet-dump](https://docs.microsoft.com/dotnet/core/diagnostics/dotnet-dump) or Visual Studio.
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=dump)
