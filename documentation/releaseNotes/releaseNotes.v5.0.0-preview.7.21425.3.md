@@ -7,3 +7,5 @@ Today we are releasing the next official preview of the `dotnet-monitor` tool. T
 - ⚠️ The `generatekey` command line parameters `--hash-algorithm` and `--key-length` have been removed. (#247)
 
 \*⚠️ **_indicates a breaking change_**
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
