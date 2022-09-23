@@ -3,3 +3,5 @@ Today we are releasing the next official preview of the `dotnet monitor` tool. T
 - Add experience survey link (#1601)
 - Docker: Add Alpine 3.15 arm64 image
 - Docker: Add CBL-Mariner 2.0 amd64 image
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
