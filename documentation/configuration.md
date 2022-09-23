@@ -2042,3 +2042,5 @@ The following example includes a default egress provider that corresponds to the
     value: "monitorBlob"
   ```
 </details>
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=configuration)
