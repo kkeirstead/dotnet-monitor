@@ -130,3 +130,4 @@ The release image is `mcr.microsoft.com/dotnet/monitor`. The tag list is https:/
 1. When releasing a new minor version, include an announcement that the previous version will soon be out of support. For example, https://github.com/dotnet/dotnet-monitor/discussions/1871
 1. Make sure you [Revert](#revert-pipeline-variable-after-release) the nightly build pipeline.
 
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=release-process)
