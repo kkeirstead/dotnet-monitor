@@ -271,3 +271,5 @@ Usage that is satisfied when the threadpool queue length of the application is h
     value: "ThreadpoolQueueLength"
   ```
 </details>
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=triggershortcuts)
