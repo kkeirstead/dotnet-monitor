@@ -7,3 +7,5 @@ Today we are releasing the next official preview of the `dotnet-monitor` tool. T
 - ⚠️ New operational-style API by endpoints that produce a diagnostic artifact when egressed (`/dump`, `/gcdump`, `/trace`, and `/logs`). Prior to this change, long-running operations synchronously waited until the diagnostic artifact had been handled by an egress provider (e.g., a call to `/dump` would not return a HTTP response until the dump was written to Azure blob storage). The new API, will immediately return a 202 response with an operation id. Clients can then use this operation id to query the newly introduced `/operations` API to query `dotnet monitor` about the status of the operation. (#425)
 
 \*⚠️ **_indicates a breaking change_**
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
