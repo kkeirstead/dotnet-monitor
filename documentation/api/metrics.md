@@ -161,3 +161,5 @@ systemruntime_active_timer_count 0 1618889186313
 ### Custom Metrics
 
 The metrics providers and counter names to return from this route can be specified via configuration. See [Metrics Configuration](<../configuration.md#metrics-configuration>) for more information.
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=metrics)
