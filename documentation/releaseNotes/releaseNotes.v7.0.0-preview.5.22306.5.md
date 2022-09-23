@@ -8,3 +8,5 @@ Today we are releasing the next official preview of the `dotnet monitor` tool. T
 - Prevent process enumeration from pruning processes that are capturing gcdumps (#1932)
 - Show warning when using collection rules in `connect` mode (#1830)
 - Prevent auth configuration warnings when using `--no-auth` switch (#1838)
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
