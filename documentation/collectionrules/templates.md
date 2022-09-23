@@ -292,3 +292,5 @@ The following example creates a template trigger named "HighRequestCount", two t
     value: "12345"
   ```
 </details>
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=templates)
