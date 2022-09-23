@@ -10,3 +10,5 @@ This signs and publishes the following packages to the [dotnet-tools](https://pk
 The packages are only published to the feed from builds of the `main` and `release/*` branches.
 
 The release process is documented at [Release Process](./release-process.md).
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=official-build-instructions)
