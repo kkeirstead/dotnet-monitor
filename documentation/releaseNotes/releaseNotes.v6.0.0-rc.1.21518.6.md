@@ -10,3 +10,5 @@ Today we are releasing the official release candidate build of the `dotnet monit
 - Handle all exceptions when enumerating processes. (#977)
 
 \*⚠️ **_indicates a breaking change_**
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
