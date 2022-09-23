@@ -10,3 +10,5 @@ The Logs API enables collecting logs that are logged to the [ILogger<> infrastru
 |---|---|
 | [Get Logs](logs-get.md) | Captures log statements from a process at a specified level or at the application-defined categories and levels. |
 | [Get Custom Logs](logs-custom.md) | Captures log statements from a process using the settings specified in the request body. |
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=logs)
