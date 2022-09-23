@@ -50,3 +50,5 @@ HTTP/1.1 200 OK
 | Windows | .NET Core 3.1, .NET 5+ |
 | Linux | .NET Core 3.1, .NET 5+ |
 | MacOS | .NET Core 3.1, .NET 5+ |
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=operations-delete)
