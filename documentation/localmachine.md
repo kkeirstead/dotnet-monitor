@@ -49,3 +49,5 @@ Assuming your default process is running, you can use the endpoints exposed by `
 Alternatively, if you are using an API Key, you must [specify it via the Authorization header](./authentication.md#authenticating-requests), you can accomplish that with a CLI tool like CURL.
 
 In addition to downloading artifacts directly over HTTP, artifacts can be output to specific local directories by configuring [egress file providers](./configuration.md#filesystem-egress-provider) in the settings file.
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=localmachine)
