@@ -4,3 +4,5 @@ Today we are releasing the next official preview of the `dotnet monitor` tool. T
 - [Here is a new feature we added and its work item] (#737)
 
 \*⚠️ **_indicates a breaking change_**
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
