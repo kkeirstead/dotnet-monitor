@@ -116,3 +116,5 @@ How much memory and CPU is consumed by dotnet-monitor is dependent on which scen
 - Resource consumption by trace operations is also dependent on which providers are enabled, as well as the [buffer size](./api/definitions.md#eventprovidersconfiguration) allocated in the runtime.
 - It is not recommended to use highly verbose [log levels](./api/definitions.md#loglevel) while under load. This causes a lot of CPU usage in the dotnet-monitor container and more memory pressure in the main application container.
 - Dumps also temporarily increase the amount of memory consumed by the application container.
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=kubernetes)
