@@ -5,3 +5,5 @@ Today we are releasing the 6.2.2 build of the `dotnet monitor` tool. This releas
 - Fixed memory leak in authentication handler (#2172)
 - Update Azure.Storage.Blobs to 12.13.0 (#2219)
 - Update Azure.Storage.Queues to 12.11.0 (#2219)
+
+[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=releaseNotes)
