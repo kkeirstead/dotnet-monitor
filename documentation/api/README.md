@@ -1,6 +1,4 @@
 
-[<img src=../../HelpfulDocs/images/WasThisHelpful.png width="150"/>](https://www.surveymonkey.com/r/XFMFHJ9?src=README)
-
 # HTTP API Documentation
 
 The HTTP API enables on-demand extraction of diagnostic information and artifacts from discoverable processes.
