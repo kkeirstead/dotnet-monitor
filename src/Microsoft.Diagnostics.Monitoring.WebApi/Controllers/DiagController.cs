@@ -182,7 +182,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
 
                     return environment;
                 }
-                catch (ServerErrorException)
+                catch(ServerErrorException)
                 {
                     throw new InvalidOperationException(Strings.ErrorMessage_CanNotGetEnvironment);
                 }
