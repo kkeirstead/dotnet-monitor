@@ -1,5 +1,5 @@
 
-[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=documentation%2Fapi%2Fcollectionrules-all)
+[<img src=/images/WasThisHelpful.png alt="A button asking if the documentation was helpful" width="200"/>](https://www.research.net/r/DGDQWXH?src=documentation%2Fapi%2Fcollectionrules-all)
 
 # Collection Rules - Get
 
