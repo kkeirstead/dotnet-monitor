@@ -1,6 +1,4 @@
 
-[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=README)
-
 # HTTP API Documentation
 
 The HTTP API enables on-demand extraction of diagnostic information and artifacts from discoverable processes.
