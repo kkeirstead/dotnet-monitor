@@ -1,6 +1,4 @@
 
-[<img src=/images/WasThisHelpful.png width="200"/>](https://www.research.net/r/DGDQWXH?src=collectionrules-all)
-
 # Collection Rules - Get
 
 Reports the state of the configured collection rules of a specific process.
