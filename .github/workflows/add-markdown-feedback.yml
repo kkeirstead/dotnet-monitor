@@ -2,7 +2,7 @@ name: 'Add Markdown Feedback'
 on:
   pull_request:
     paths: ['documentation/**.md']
-    branches: ['main', 'release/6.x']
+    branches: ['main']
 
 permissions:
   pull-requests: read
