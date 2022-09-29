@@ -3,17 +3,18 @@ const fs = require('fs');
 const path = require('path')
 
 const main = async () => {
-    try {
-        const jsExec = util.promisify(require("child_process").exec);
 
-        console.log("Installing npm dependencies");
-        const { stdout, stderr } = await jsExec("npm install @actions/core @actions/github");
-        console.log("npm-install stderr:\n\n" + stderr);
-        console.log("npm-install stdout:\n\n" + stdout);
-        console.log("Finished installing npm dependencies");
+    const jsExec = util.promisify(require("child_process").exec);
 
-        const core = require('@actions/core');
-        
+    console.log("Installing npm dependencies");
+    const { stdout, stderr } = await jsExec("npm install @actions/core @actions/github");
+    console.log("npm-install stderr:\n\n" + stderr);
+    console.log("npm-install stdout:\n\n" + stdout);
+    console.log("Finished installing npm dependencies");
+
+    const core = require('@actions/core');
+
+    try {        
         const textToSearch = core.getInput('textToSearch', { required: true });
         const textToAdd = core.getInput('textToAdd', { required: true });
         const paths = core.getInput('paths', {required: false});
