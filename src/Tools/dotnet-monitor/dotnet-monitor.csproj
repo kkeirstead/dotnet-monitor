@@ -60,6 +60,7 @@
 
   <PropertyGroup>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);GatherNativeFilesForTfm</TargetsForTfmSpecificContentInPackage>
+    <UserSecretsId>d4e90a9f-b489-4902-a8e8-0fd5a480d46a</UserSecretsId>
   </PropertyGroup>
 
   <Target Name="GatherNativeFilesForTfm">

@@ -26,7 +26,7 @@
   <!-- Filter tests based on specified TestGroup -->
   <PropertyGroup Condition="'$(TestGroup)' == 'CI'">
     <!-- Exclude netcoreapp3.1 and net5.0 tests from CI builds -->
-    <TestRunnerAdditionalArguments>$(TestRunnerAdditionalArguments) --filter "TargetFrameworkMoniker!=NetCoreApp31&amp;TargetFrameworkMoniker!=Net50"</TestRunnerAdditionalArguments>
+    <TestRunnerAdditionalArguments>$(TestRunnerAdditionalArguments) --filter "TargetFrameworkMoniker!=NetCoreApp31&amp;TargetFrameworkMoniker!=Net50&amp;NonPR!=true"</TestRunnerAdditionalArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TestGroup)' == 'PR'">
     <!-- Exclude netcoreapp3.1 and net5.0 tests from PR builds -->

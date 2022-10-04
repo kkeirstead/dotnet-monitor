@@ -37,6 +37,16 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests
 #if NET5_0_OR_GREATER
         private const string DefaultRuleName = "FunctionalTestRule";
 
+        [NonPRTrait]
+        [Fact]
+        public async Task DummyTest()
+        {
+            await Task.Delay(1000);
+
+            Assert.True(1 == 2);
+
+        }
+
         /// <summary>
         /// Validates that a startup rule will execute and complete without action beyond
         /// discovering the target process.
