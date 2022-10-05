@@ -28,10 +28,6 @@ jobs:
           changed_source_files=$(git diff-tree --no-commit-id --name-only -r ${{ env.base_sha }} ${{ github.sha }} -- . ':!documentation/releaseNotes/*' | { grep "**.md$" || test $? = 1; })
           echo "Files to validate: '${changed_source_files}'"
           echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
-          
-      - name: Get changed files
-        run: |
-          echo "Printing from env var: '${env.updated_files}'"
 
       - name: Append To File
         uses: ./.github/actions/AppendToFile
