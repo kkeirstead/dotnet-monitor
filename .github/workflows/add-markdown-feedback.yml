@@ -21,10 +21,6 @@ jobs:
           git fetch origin ${{ github.base_ref }}
           echo "base_sha=$(git rev-parse origin/${{ github.base_ref }})" >> $GITHUB_ENV
           echo "Merging ${{ github.sha }} into ${{ github.base_ref }}"
-          
-      - name: Get changed files
-        run: 
-          echo ${{ env.updated_files }} | cat -v
 
       - name: Print env var
         run: |
@@ -33,6 +29,10 @@ jobs:
           echo "Files to validate: '${changed_source_files}'"
           echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
           
+      - name: Get changed files
+        run: 
+          echo "Printing from env var: '${env.updated_files}'"
+
       - name: Append To File
         uses: ./.github/actions/AppendToFile
         with:
