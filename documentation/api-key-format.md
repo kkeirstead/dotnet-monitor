@@ -1,4 +1,5 @@
 
+
 ### Was this documentation helpful? [Share feedback](https://www.research.net/r/DGDQWXH?src=documentation%2Fapi-key-format)
 
 # API Key Format
