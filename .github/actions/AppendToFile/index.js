@@ -30,7 +30,11 @@ async function main() {
 
         for (const currPath of paths.split(',')) {
             fs.readFile(currPath, (err, content) => {
-                if (err) throw err;
+                if (err)
+                {
+                    console.log(err);
+                    break;
+                }
 
                 if (!content.includes(textToSearch))
                 {
