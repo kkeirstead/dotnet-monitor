@@ -33,10 +33,9 @@ async function main() {
                 if (err)
                 {
                     console.log(err);
-                    break;
                 }
 
-                if (!content.includes(textToSearch))
+                if (content && !content.includes(textToSearch))
                 {
                     var updatedTextToAdd = textToAdd;
                     if (textToAdd.includes(insertFileNameParameter))
