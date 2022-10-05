@@ -7,7 +7,7 @@ async function main() {
     const jsExec = util.promisify(require("child_process").exec);
 
     console.log("Installing npm dependencies");
-    const { stdout, stderr } = await jsExec("npm install @actions/core @actions/github");
+    const { stdout, stderr } = await jsExec("npm install @actions/core");
     console.log("npm-install stderr:\n\n" + stderr);
     console.log("npm-install stdout:\n\n" + stdout);
     console.log("Finished installing npm dependencies");
