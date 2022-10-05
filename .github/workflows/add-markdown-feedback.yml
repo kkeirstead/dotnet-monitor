@@ -21,13 +21,18 @@ jobs:
           git fetch origin ${{ github.base_ref }}
           echo "base_sha=$(git rev-parse origin/${{ github.base_ref }})" >> $GITHUB_ENV
           echo "Merging ${{ github.sha }} into ${{ github.base_ref }}"
+          
       - name: Get changed files
+        run: 
+          echo ${{ env.updated_files }} | cat -v
+
+      - name: Print env var
         run: |
           echo "Files changed: '$(git diff-tree --no-commit-id --name-only -r ${{ env.base_sha }} ${{ github.sha }})'"
           changed_source_files=$(git diff-tree --no-commit-id --name-only -r ${{ env.base_sha }} ${{ github.sha }} -- . ':!documentation/releaseNotes/*' | { grep "**.md$" || test $? = 1; })
           echo "Files to validate: '${changed_source_files}'"
           echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
-
+          
       - name: Append To File
         uses: ./.github/actions/AppendToFile
         with:
