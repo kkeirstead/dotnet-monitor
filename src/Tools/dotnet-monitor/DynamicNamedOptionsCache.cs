@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics;
 
-namespace Microsoft.Diagnostics.Tools.Monitor
+namespace Microsoft.Diagnostics.Tools.Monitor 
 {
     /// <summary>
     /// Custom <see cref="IOptionsMonitorCache{TOptions}"/> to override behavior
