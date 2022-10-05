@@ -3,39 +3,32 @@ on:
   pull_request:
     paths: ['documentation/**.md']
     branches: ['main']
-
 permissions:
   pull-requests: read
-
 jobs:
   add-markdown-feedback:
     name: 'Add Markdown Feedback'
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Get base commit for the PR
         run: |
           git fetch origin ${{ github.base_ref }}
           echo "base_sha=$(git rev-parse origin/${{ github.base_ref }})" >> $GITHUB_ENV
           echo "Merging ${{ github.sha }} into ${{ github.base_ref }}"
-
-      - name: Print env var
+      - name: Get changed files
         run: |
           echo "Files changed: '$(git diff-tree --no-commit-id --name-only -r ${{ env.base_sha }} ${{ github.sha }})'"
           changed_source_files=$(git diff-tree --no-commit-id --name-only -r ${{ env.base_sha }} ${{ github.sha }} -- . ':!documentation/releaseNotes/*' | { grep "**.md$" || test $? = 1; })
           echo "Files to validate: '${changed_source_files}'"
           echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
-
       - name: Append To File
         uses: ./.github/actions/AppendToFile
         with:
           textToSearch: 'DGDQWXH'
           textToAdd: '### Was this documentation helpful? [Share feedback](https://www.research.net/r/DGDQWXH?src={insertFileName})'
           paths: ${{ env.updated_files }}
-
       - name: Generate artifacts
         run: |
           mkdir -p ./pr
