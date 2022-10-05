@@ -28,7 +28,7 @@ async function main() {
         
         console.log("Paths: " + paths);
 
-        for (const currPath of paths.split('\n')) {
+        for (const currPath of paths.split(',')) {
             fs.readFile(currPath, (err, content) => {
                 if (err) throw err;
 
