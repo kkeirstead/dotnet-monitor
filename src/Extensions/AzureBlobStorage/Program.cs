@@ -7,25 +7,6 @@ using Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob;
 using System.CommandLine;
 using System.Text.Json;
 
-/*
- *   <ItemGroup>
-    <Compile Include="..\..\Tools\dotnet-monitor\LoggingEventIds.cs" Link="ExternalRefs\LoggingEventIds.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Egress\EgressProvider.cs" Link="ExternalRefs\EgressProvider.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Egress\IEgressProvider.cs" Link="ExternalRefs\IEgressProvider.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Egress\EgressProviderTypes.cs" Link="ExternalRefs\EgressProviderTypes.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Egress\EgressException.cs" Link="ExternalRefs\EgressException.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Egress\EgressArtifactSettings.cs" Link="ExternalRefs\EgressArtifactSettings.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Egress\AzureBlob\AzureBlobEgressProvider.cs" Link="ExternalRefs\AzureBlobEgressProvider.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Egress\AzureBlob\AzureBlobEgressProvider.AutoFlushStream.cs" Link="ExternalRefs\AzureBlobEgressProvider.AutoFlushStream.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Egress\Extension\EgressArtifactResult.cs" Link="ExternalRefs\EgressArtifactResult.cs" />
-    <Compile Include="..\..\Microsoft.Diagnostics.Monitoring.Options\IEgressProviderCommonOptions.cs" Link="ExternalRefs\IEgressProviderCommonOptions.cs" />
-    <Compile Include="..\..\Microsoft.Diagnostics.Monitoring.Options\OptionsDisplayStrings.Designer.cs" Link="ExternalRefs\OptionsDisplayStrings.Designer.cs" />
-    <Compile Include="..\..\Tools\dotnet-monitor\Extensibility\IExtensionResult.cs" Link="ExternalRefs\IExtensionResult.cs" />
-    <Compile Include="..\..\Microsoft.Diagnostics.Monitoring.Options\AzureBlobEgressProviderOptions.cs" Link="ExternalRefs\AzureBlobEgressProviderOptions.cs" />
-  </ItemGroup>
-*/
-
-
 namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 {
     internal class Program
@@ -34,7 +15,7 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
         private static CancellationTokenSource CancelSource = new CancellationTokenSource();
         static async Task<int> Main(string[] args)
         {
-            // Expected command line format is: AzureBlobStorage.exe Egress --Provider-Name MyProviderEndpointName
+            // Expected command line format is: AzureBlobStorage.exe Egress
             RootCommand rootCommand = new RootCommand("Egresses an artifact to Azure Storage.");
 
             Command egressCmd = new Command("Egress", "The class of extension being invoked; Egress is for egressing an artifact.")
@@ -64,13 +45,9 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
                 ILoggerFactory loggerFactory = new LoggerFactory();
                 ILogger<AzureBlobEgressProvider> myLogger = loggerFactory.CreateLogger<AzureBlobEgressProvider>();
 
-                Console.WriteLine("Right after logger");
-
                 AzureBlobEgressProvider provider = new AzureBlobEgressProvider();
 
                 Console.CancelKeyPress += Console_CancelKeyPress;
-
-                Console.WriteLine("Right before egress");
 
                 result.ArtifactPath = await provider.EgressAsync(options, GetStream, configPayload.Settings, CancelSource.Token);
                 result.Succeeded = true;
@@ -112,8 +89,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
                 Metadata = GetDictionaryConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.Metadata)) // ENSURE THIS WORKS
             };
 
-            Console.WriteLine("After options are assembled");
-
             if (string.IsNullOrEmpty(options.AccountKey) && !string.IsNullOrEmpty(options.AccountKeyName) && configPayload.Properties.TryGetValue(options.AccountKeyName, out string accountKey))
             {
                 options.AccountKey = accountKey;
@@ -141,8 +116,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 
         private static string GetConfig(Dictionary<string, object> configDict, string propKey)
         {
-            Console.WriteLine("GetConfig | " + propKey);
-
             if (configDict.ContainsKey(propKey))
             {
                 return configDict[propKey].ToString();
@@ -152,8 +125,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 
         private static Uri GetUriConfig(Dictionary<string, object> configDict, string propKey)
         {
-            Console.WriteLine("GetUriConfig | " + propKey);
-
             string uriStr = GetConfig(configDict, propKey);
             if (uriStr == null)
             {
@@ -164,8 +135,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 
         private static Dictionary<string, string> GetDictionaryConfig(Dictionary<string, object> configDict, string propKey)
         {
-            Console.WriteLine("GetDictionaryConfig | " + propKey);
-
             if (configDict.ContainsKey(propKey))
             {
                 if (configDict[propKey] is JsonElement element)
@@ -183,5 +152,4 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
         public Dictionary<string, string> Properties { get; set; }
         public Dictionary<string, object> Configuration { get; set; }
     }
-
 }
