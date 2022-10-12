@@ -35,12 +35,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.Configuration
                 IConfigurationSection providerOptionsSection = providerTypeSection.GetSection(name);
                 if (providerOptionsSection.Exists())
                 {
-                    //((ExtensionEgressProviderOptions)options)["Test"] = new Dictionary<string, string>() { { "K1", "V1" } };
-
-                    var tempOptions = new ExtensionEgressProviderOptions();
-
-                    var tempOptions2 = new Dictionary<string, object>();
-
                     var children = providerOptionsSection.GetChildren();
 
                     if (options is ExtensionEgressProviderOptions eepOptions)
@@ -61,11 +55,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.Configuration
                         }
                     }
 
-
-
-                    //options = tempOptions as TOptions; // Check if this works...? -> does work but isn't passed along
-
-                    //providerOptionsSection.Bind(options); // Should throw an exception if this doesn't bind
                     return;
                 }
             }
