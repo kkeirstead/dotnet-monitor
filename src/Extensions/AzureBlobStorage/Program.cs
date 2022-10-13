@@ -68,11 +68,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 
         private static AzureBlobEgressProviderOptions BuildOptions(ExtensionEgressPayload configPayload)
         {
-            foreach (var pair in configPayload.Configuration)
-            {
-                Console.WriteLine(pair.Key + " | " + pair.Value);
-            }
-
             AzureBlobEgressProviderOptions options = new AzureBlobEgressProviderOptions()
             {
                 AccountUri = GetUriConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.AccountUri)),
@@ -87,7 +82,7 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
                 QueueSharedAccessSignature = GetConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.QueueSharedAccessSignature)),
                 QueueSharedAccessSignatureName = GetConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.QueueSharedAccessSignatureName)),
                 ManagedIdentityClientId = GetConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.ManagedIdentityClientId)),
-                Metadata = GetDictionaryConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.Metadata)) // ENSURE THIS WORKS
+                Metadata = GetDictionaryConfig(configPayload.Configuration, nameof(AzureBlobEgressProviderOptions.Metadata))
             };
 
             if (string.IsNullOrEmpty(options.AccountKey) && !string.IsNullOrEmpty(options.AccountKeyName) && configPayload.Properties.TryGetValue(options.AccountKeyName, out string accountKey))
@@ -140,17 +135,11 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
             {
                 configDict[propKey].GetType();
 
-                Console.WriteLine("Type: " + configDict[propKey].GetType());
-                Console.WriteLine("Value: " + configDict[propKey]);
-
-                // THIS IS WORKING -> NORMAL METADATA ISN'T SHOWING UP THOUGH
                 if (configDict[propKey] is JsonElement element)
                 {
                     var dict =  JsonSerializer.Deserialize<Dictionary<string, string>>(element);
 
-                    var dictTrimmed = (from kv in dict
-                                       where kv.Value != null
-                                           select kv).ToDictionary(kv => kv.Key, kv => kv.Value); // Doesn't have keys that correspond to null
+                    var dictTrimmed = (from kv in dict where kv.Value != null select kv).ToDictionary(kv => kv.Key, kv => kv.Value);
 
                     var dictToReturn = new Dictionary<string, string>();
 
