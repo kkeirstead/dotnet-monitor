@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Microsoft.Diagnostics.Tools.Monitor.Egress.Configuration
 {
@@ -45,13 +46,12 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.Configuration
                             {
                                 eepOptions.Add(child.Key, child.Value);
                             }
-                        }
-
-                        var dictOptions = providerOptionsSection.Get<Dictionary<string, Dictionary<string, string>>>();
-
-                        foreach (var key in dictOptions.Keys)
-                        {
-                            eepOptions.Add(key, dictOptions[key]);
+                            else
+                            {
+                                eepOptions.Add(child.Key, child.AsEnumerable().ToDictionary(k => k.Key, v => v.Value));
+                                //Console.WriteLine("Child: " + child);
+                                //eepOptions.Add(child.Key, child); // THIS DOESN'T WORK -> JUST ADDS THE KEY AND VALUE
+                            }
                         }
                     }
 

@@ -22,6 +22,7 @@
     <PackageReference Include="Azure.Storage.Queues" Version="$(AzureStorageQueuesVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCoreAuthenticationJwtBearerVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="$(MicrosoftAspNetCoreAuthenticationNegotiateVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
     <PackageReference Include="System.CommandLine" Version="$(SystemCommandLineVersion)" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="$(SystemIdentityModelTokensJwtVersion)" />
   </ItemGroup>
@@ -77,9 +78,9 @@
     </ItemGroup>
     <ItemGroup>
       <!-- Pack the profiler library for each platform if it exists. -->
-      <TfmSpecificPackageFile Include="@(MonitorProfilerLibraryFile->Exists())" />
+      <TfmSpecificPackageFile Include="@(MonitorProfilerLibraryFile-&gt;Exists())" />
       <!-- Pack the profiler symbols for each platform if it exists. -->
-      <TfmSpecificPackageFile Include="@(MonitorProfilerSymbolsFile->Exists())" />
+      <TfmSpecificPackageFile Include="@(MonitorProfilerSymbolsFile-&gt;Exists())" />
     </ItemGroup>
   </Target>
 
