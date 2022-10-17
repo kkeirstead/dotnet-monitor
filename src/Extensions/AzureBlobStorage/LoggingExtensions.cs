@@ -8,12 +8,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 {
     public static class LoggingExtensions
     {
-        private static readonly Action<ILogger, int, Exception> _egressCopyActionStreamToEgressStream =
-            LoggerMessage.Define<int>(
-                eventId: LoggingEventIds.EgressCopyActionStreamToEgressStream.EventId(),
-                logLevel: LogLevel.Debug,
-                formatString: Strings.LogFormatString_EgressCopyActionStreamToEgressStream);
-
         private static readonly Action<ILogger, string, string, Exception> _egressProviderUnableToFindPropertyKey =
             LoggerMessage.Define<string, string>(
                 eventId: LoggingEventIds.EgressProvideUnableToFindPropertyKey.EventId(),
@@ -25,12 +19,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
                 eventId: LoggingEventIds.EgressProviderInvokeStreamAction.EventId(),
                 logLevel: LogLevel.Debug,
                 formatString: Strings.LogFormatString_EgressProviderInvokeStreamAction);
-
-        private static readonly Action<ILogger, string, string, Exception> _egressProviderSavedStream =
-            LoggerMessage.Define<string, string>(
-                eventId: LoggingEventIds.EgressProviderSavedStream.EventId(),
-                logLevel: LogLevel.Debug,
-                formatString: Strings.LogFormatString_EgressProviderSavedStream);
 
         private static readonly Action<ILogger, string, string, string, Exception> _queueDoesNotExist =
             LoggerMessage.Define<string, string, string>(
@@ -74,11 +62,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
                 logLevel: LogLevel.Warning,
                 formatString: Strings.LogFormatString_EnvironmentBlockNotSupported);
 
-        public static void EgressCopyActionStreamToEgressStream(this ILogger logger, int bufferSize)
-        {
-            _egressCopyActionStreamToEgressStream(logger, bufferSize, null);
-        }
-
         public static void EgressProviderUnableToFindPropertyKey(this ILogger logger, string providerName, string keyName)
         {
             _egressProviderUnableToFindPropertyKey(logger, providerName, keyName, null);
@@ -87,11 +70,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage
         public static void EgressProviderInvokeStreamAction(this ILogger logger, string providerName)
         {
             _egressProviderInvokeStreamAction(logger, providerName, null);
-        }
-
-        public static void EgressProviderSavedStream(this ILogger logger, string providerName, string path)
-        {
-            _egressProviderSavedStream(logger, providerName, path, null);
         }
 
         public static void QueueDoesNotExist(this ILogger logger, string queueName)

@@ -9,8 +9,6 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 using Azure.Storage.Queues;
-using Microsoft.Diagnostics.Monitoring.AzureStorage;
-using Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob;
 using System.Globalization;
 using System.Net;
 
@@ -40,8 +38,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureStorage.AzureBlob
         {
             try
             {
-                Logger.LogInformation("THIS IS A LOG INFO TEST");
-
                 AddConfiguredMetadataAsync(options, artifactSettings);
 
                 var containerClient = await GetBlobContainerClientAsync(options, token);
