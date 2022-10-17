@@ -4,14 +4,14 @@
 
 using System.Globalization;
 
-namespace Microsoft.Diagnostics.Tools.Monitor.Egress
+namespace Microsoft.Diagnostics.Monitoring.AzureStorage
 {
     /// <summary>
     /// Exception that egress providers can throw when an operational error occurs (e.g. failed to write the stream data).
     /// </summary>
     internal class Utilities
     {
-        internal static void WriteInfoLogs(string logMessage, string[] args = null) // Make sure null default doesn't break anything
+        /*internal static void WriteInfoLogs(string logMessage, string[] args = null) // Make sure null default doesn't break anything
         {
             args = args ?? Array.Empty<string>();
             Console.WriteLine(string.Format(CultureInfo.InvariantCulture, logMessage, args));
@@ -21,6 +21,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress
         {
             args = args ?? Array.Empty<string>();
             Console.Error.WriteLine(string.Format(CultureInfo.InvariantCulture, logMessage, args));
-        }
+        }*/
     }
 }

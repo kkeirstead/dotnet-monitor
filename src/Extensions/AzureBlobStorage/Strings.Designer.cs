@@ -133,6 +133,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.AzureBlob {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provider {providerType}: Unable to find &apos;{keyName}&apos; key in egress properties.
+        /// </summary>
+        internal static string LogFormatString_EgressProvideUnableToFindPropertyKey {
+            get {
+                return ResourceManager.GetString("LogFormatString_EgressProvideUnableToFindPropertyKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Target framework does not support custom egress metadata..
         /// </summary>
         internal static string LogFormatString_EnvironmentBlockNotSupported {
