@@ -23,24 +23,19 @@ namespace Microsoft.Diagnostics.Monitoring.AzureBlobStorage
 
             Logger = loggerFactory.CreateLogger<Program>();
 
-            // Expected command line format is: AzureBlobStorage.exe Egress --Provider-Name MyProviderEndpointName
+            // Expected command line format is: dotnet-monitor-egress-azureblobstorage.exe Egress
             RootCommand rootCommand = new RootCommand("Egresses an artifact to Azure Storage.");
 
-            var providerNameOption = new Option<string>(
-                name: "--Provider-Name",
-                description: "The provider name given in the configuration to dotnet-monitor.");
+            Command egressCmd = new Command("Egress", "The class of extension being invoked; Egress is for egressing an artifact.");
 
-            Command egressCmd = new Command("Egress", "The class of extension being invoked; Egress is for egressing an artifact.")
-            { providerNameOption };
-
-            egressCmd.SetHandler(Egress, providerNameOption);
+            egressCmd.SetHandler(Egress);
 
             rootCommand.Add(egressCmd);
 
             return await rootCommand.InvokeAsync(args);
         }
 
-        private static async Task<int> Egress(string ProviderName)
+        private static async Task<int> Egress()
         {
             EgressArtifactResult result = new();
             try
@@ -169,5 +164,6 @@ namespace Microsoft.Diagnostics.Monitoring.AzureBlobStorage
         public EgressArtifactSettings Settings { get; set; }
         public Dictionary<string, string> Properties { get; set; }
         public Dictionary<string, string> Configuration { get; set; }
+        public string ProviderName { get; set; }
     }
 }
