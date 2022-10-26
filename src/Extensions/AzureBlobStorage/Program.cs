@@ -53,7 +53,7 @@ namespace Microsoft.Diagnostics.Monitoring.AzureBlobStorage
 
                 Console.CancelKeyPress += Console_CancelKeyPress;
 
-                result.ArtifactPath = await provider.EgressAsync(Constants.AzureBlobStorageProviderName, configPayload.ProviderName, options, GetStream, configPayload.Settings, CancelSource.Token);
+                result.ArtifactPath = await provider.EgressAsync(options, GetStream, configPayload.Settings, CancelSource.Token);
                 result.Succeeded = true;
             }
             catch (Exception ex)
@@ -169,6 +169,5 @@ namespace Microsoft.Diagnostics.Monitoring.AzureBlobStorage
         public EgressArtifactSettings Settings { get; set; }
         public Dictionary<string, string> Properties { get; set; }
         public Dictionary<string, string> Configuration { get; set; }
-        public string ProviderName { get; set; }
     }
 }
