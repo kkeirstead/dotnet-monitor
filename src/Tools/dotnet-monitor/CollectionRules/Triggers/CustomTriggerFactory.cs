@@ -38,7 +38,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Triggers
             {
                 ExtensionName = options.ExtensionName,
                 Args = options.Args,
-                // Providers = options.Providers
+                Providers = options.Providers,
+                CounterIntervalSeconds = _counterOptions.CurrentValue.GetIntervalSeconds(),
             };
 
             return EventPipeTriggerFactory.Create(

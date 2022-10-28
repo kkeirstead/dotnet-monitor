@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.Diagnostics.Monitoring.EventPipe.Triggers.Custom;
+
 namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options.Triggers
 {
     /// <summary>
@@ -13,7 +15,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options.Triggers
 
         public string Args { get; set; }
 
-        public Provider[] ProvidersToInclude { get; set; }
+        public Provider[] Providers { get; set; }
 
     }
 }
