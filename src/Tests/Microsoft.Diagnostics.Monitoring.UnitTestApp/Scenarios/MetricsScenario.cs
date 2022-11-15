@@ -50,7 +50,7 @@ namespace Microsoft.Diagnostics.Monitoring.UnitTestApp.Scenarios
                     {
                         histogram1.Record(rd.Next(5000));
                         histogram2.Record(rd.Next(5000), metadata.ToArray());
-                    }
+                }
 
                     counter2.Add(1);
 

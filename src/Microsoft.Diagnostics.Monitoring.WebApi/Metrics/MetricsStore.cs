@@ -62,6 +62,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             _logger = logger;
         }
 
+
         public void AddMetric(ICounterPayload metric)
         {
             if (metric is PercentilePayload payload && !payload.Quantiles.Any())
