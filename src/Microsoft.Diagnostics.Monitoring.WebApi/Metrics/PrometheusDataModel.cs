@@ -12,7 +12,9 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 {
     internal static class PrometheusDataModel
     {
-        private const char SeperatorChar = '_';
+        private const char SeparatorChar = '_';
+        private const char EqualsChar = '=';
+        private const char QuotationChar = '"';
 
         private static readonly Dictionary<string, string> KnownUnits = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -38,13 +40,32 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             StringBuilder builder = new StringBuilder(metricProvider.Length + metric.Length + (hasUnit ? baseUnit.Length + 1 : 0) + 1);
 
             NormalizeString(builder, metricProvider, isProvider: true);
-            builder.Append(SeperatorChar);
+            builder.Append(SeparatorChar);
+
             NormalizeString(builder, metric, isProvider: false);
             if (hasUnit)
             {
-                builder.Append(SeperatorChar);
+                builder.Append(SeparatorChar);
                 NormalizeString(builder, baseUnit, isProvider: false);
             }
+
+            return builder.ToString();
+        }
+
+        public static string GetPrometheusNormalizedLabel(string key, string value)
+        {
+            //The +1's account for separators
+            //CONSIDER Can we optimize with Span/stackalloc here instead of using StringBuilder?
+            StringBuilder builder = new StringBuilder(key.Length + value.Length + 3); // Includes =,", and "
+
+            NormalizeString(builder, key, isProvider: false);
+            builder.Append(EqualsChar);
+
+            builder.Append(QuotationChar);
+
+            NormalizeString(builder, value, isProvider: false); // need to do this differently
+
+            builder.Append(QuotationChar);
 
             return builder.ToString();
         }
@@ -73,14 +94,14 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 }
                 else if (!isProvider)
                 {
-                    builder.Append(SeperatorChar);
+                    builder.Append(SeparatorChar);
                 }
             }
 
             //CONSIDER Completely invalid providers such as '!@#$' will become '_'. Should we have a more obvious value for this?
             if (allInvalid && isProvider)
             {
-                builder.Append(SeperatorChar);
+                builder.Append(SeparatorChar);
             }
         }
         private static bool IsValidChar(char c, bool isFirst)
@@ -90,7 +111,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 return false;
             }
 
-            if (c == SeperatorChar)
+            if (c == SeparatorChar)
             {
                 return true;
             }
