@@ -5,21 +5,24 @@
 using Microsoft.Diagnostics.Monitoring.EventPipe;
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Microsoft.Diagnostics.Tools.Monitor
 {
     internal sealed class MetricsOperationFactory : IMetricsOperationFactory
     {
         private readonly ILogger<MetricsOperation> _logger;
+        private readonly IServiceProvider _serviceProvider;
 
-        public MetricsOperationFactory(ILogger<MetricsOperation> logger)
+        public MetricsOperationFactory(ILogger<MetricsOperation> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
         public IArtifactOperation Create(IEndpointInfo endpointInfo, EventPipeCounterPipelineSettings settings)
         {
-            return new MetricsOperation(endpointInfo, settings, _logger);
+            return new MetricsOperation(endpointInfo, settings, _logger, _serviceProvider);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
     /// </summary>
     internal sealed class MetricsService : BackgroundService
     {
-        private EventCounterPipeline _counterPipeline;
+        public EventCounterPipeline _counterPipeline;
         private readonly IDiagnosticServices _services;
         private readonly MetricsStoreService _store;
         private IOptionsMonitor<MetricsOptions> _optionsMonitor;
