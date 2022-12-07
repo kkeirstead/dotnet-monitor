@@ -62,7 +62,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             return ConfigureOptions<MetricsOptions>(services, configuration, ConfigurationKeys.Metrics)
                 .AddSingleton<IValidateOptions<MetricsOptions>, DataAnnotationValidateOptions<MetricsOptions>>()
                 .AddSingleton<MetricsStoreService>()
-                .AddHostedService<MetricsService>()
+                .AddSingleton<MetricsService>()
+                .AddSingleton<IHostedService>(p => p.GetRequiredService<MetricsService>())
                 .AddSingleton<IMetricsPortsProvider, MetricsPortsProvider>();
         }
 
