@@ -4,6 +4,7 @@
 using Microsoft.Diagnostics.Monitoring.EventPipe;
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.NETCore.Client;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -16,16 +17,24 @@ namespace Microsoft.Diagnostics.Tools.Monitor
     internal sealed class MetricsOperation : PipelineArtifactOperation<EventCounterPipeline>
     {
         private readonly EventPipeCounterPipelineSettings _settings;
+        private readonly IServiceProvider _serviceProvider;
 
-        public MetricsOperation(IEndpointInfo endpointInfo, EventPipeCounterPipelineSettings settings, ILogger logger)
+        public MetricsOperation(IEndpointInfo endpointInfo, EventPipeCounterPipelineSettings settings, ILogger logger, IServiceProvider serviceProvider)
             : base(logger, Utils.ArtifactType_Metrics, endpointInfo)
         {
             _settings = settings;
+            _serviceProvider = serviceProvider;
         }
 
         protected override EventCounterPipeline CreatePipeline(Stream outputStream)
         {
             var client = new DiagnosticsClient(EndpointInfo.Endpoint);
+
+            var service = _serviceProvider.GetService<MetricsService>();
+
+            var pipeline = service._counterPipeline;
+
+            //pipeline.
 
             return new EventCounterPipeline(
                 client,
