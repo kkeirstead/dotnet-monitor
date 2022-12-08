@@ -34,12 +34,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
             var pipeline = service._counterPipeline;
 
-            //pipeline.
-
-            return new EventCounterPipeline(
-                client,
+            pipeline.AddPipeline(client,
                 _settings,
                 loggers: new[] { new JsonCounterLogger(outputStream, Logger) });
+
+            return pipeline;
         }
 
         protected override Task<Task> StartPipelineAsync(EventCounterPipeline pipeline, CancellationToken token)

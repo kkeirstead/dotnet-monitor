@@ -27,8 +27,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Stacks
         private CallStackResult _result = new();
 
         public EventStacksPipeline(DiagnosticsClient client, EventStacksPipelineSettings settings)
-            : base(client, settings)
         {
+            AddToPipeline(client, settings);
         }
 
         protected override MonitoringSourceConfiguration CreateConfiguration()
@@ -50,7 +50,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Stacks
                 token);
 
             // This is the same issue as GCDumps. We don't always get events back in realtime, so we have to stop the session and then process the events.
-            Task eventsTimeoutTask = Task.Delay(Settings.Timeout, token);
+            Task eventsTimeoutTask = Task.Delay(Settings[0].Timeout, token);
             Task completedTask = await Task.WhenAny(_stackResult.Task, eventsTimeoutTask);
 
             await completedTask;

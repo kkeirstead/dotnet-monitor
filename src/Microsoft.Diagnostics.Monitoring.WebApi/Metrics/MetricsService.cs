@@ -17,6 +17,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
     /// </summary>
     internal sealed class MetricsService : BackgroundService
     {
+        private IServiceProvider _serviceProvider;
         public EventCounterPipeline _counterPipeline;
         private readonly IDiagnosticServices _services;
         private readonly MetricsStoreService _store;
@@ -28,6 +29,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             IOptionsMonitor<GlobalCounterOptions> counterOptions,
             MetricsStoreService metricsStore)
         {
+            _serviceProvider = serviceProvider;
             _store = metricsStore;
             _services = serviceProvider.GetRequiredService<IDiagnosticServices>();
             _optionsMonitor = optionsMonitor;
@@ -59,7 +61,14 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
                     EventPipeCounterPipelineSettings counterSettings = EventCounterSettingsFactory.CreateSettings(counterOptions, options);
 
-                    _counterPipeline = new EventCounterPipeline(client, counterSettings, loggers: new[] { new MetricsLogger(_store.MetricsStore) });
+                    var service = _serviceProvider.GetService<MetricsService>();
+
+                    if (service._counterPipeline  == null)
+                    {
+                        service._counterPipeline = new();
+                    }
+
+                    service._counterPipeline.AddPipeline(client, counterSettings, loggers: new[] { new MetricsLogger(_store.MetricsStore) });
 
                     using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken, optionsTokenSource.Token);
                     await _counterPipeline.RunAsync(linkedTokenSource.Token);
