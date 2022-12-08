@@ -61,14 +61,9 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
                     EventPipeCounterPipelineSettings counterSettings = EventCounterSettingsFactory.CreateSettings(counterOptions, options);
 
-                    var service = _serviceProvider.GetService<MetricsService>();
+                    _counterPipeline = new();
 
-                    if (service._counterPipeline  == null)
-                    {
-                        service._counterPipeline = new();
-                    }
-
-                    service._counterPipeline.AddPipeline(client, counterSettings, loggers: new[] { new MetricsLogger(_store.MetricsStore) });
+                    _counterPipeline.AddPipeline(client, counterSettings, loggers: new[] { new MetricsLogger(_store.MetricsStore) });
 
                     using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken, optionsTokenSource.Token);
                     await _counterPipeline.RunAsync(linkedTokenSource.Token);
