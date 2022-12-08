@@ -26,9 +26,9 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Stacks
         private TaskCompletionSource<CallStackResult> _stackResult = new(TaskCreationOptions.RunContinuationsAsynchronously);
         private CallStackResult _result = new();
 
-        public EventStacksPipeline(DiagnosticsClient client, EventStacksPipelineSettings settings)
+        public EventStacksPipeline(DiagnosticsClient client, EventStacksPipelineSettings settings) : base(client, settings)
         {
-            AddToPipeline(client, settings);
+
         }
 
         protected override MonitoringSourceConfiguration CreateConfiguration()
