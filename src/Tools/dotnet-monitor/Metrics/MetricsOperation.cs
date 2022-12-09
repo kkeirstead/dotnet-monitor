@@ -38,6 +38,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                 _settings,
                 loggers: new[] { new JsonCounterLogger(outputStream, Logger) });
 
+            //await pipeline.StopAsync(); // Experimenting...to avoid concurrent sessions issue
+
             return pipeline;
         }
 
