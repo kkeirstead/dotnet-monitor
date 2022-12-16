@@ -240,9 +240,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         public static IServiceCollection AddFolderExtensionRepository(this IServiceCollection services, string path)
         {
-            const string ExtensionFolder = "extensions";
-
-            string targetExtensionFolder = Path.Combine(path, ExtensionFolder);
+            string targetExtensionFolder = Path.Combine(path, Constants.ExtensionFolder);
 
             if (Directory.Exists(targetExtensionFolder))
             {

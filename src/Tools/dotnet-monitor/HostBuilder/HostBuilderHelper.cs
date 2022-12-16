@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Diagnostics.Monitoring.WebApi;
+using Microsoft.Diagnostics.Tools.Monitor.Extensibility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -52,6 +53,20 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
                     string userSettingsPath = Path.Combine(settings.UserConfigDirectory, SettingsFileName);
                     AddJsonFileHelper(builder, hostBuilderResults, userSettingsPath);
+
+                    //string executingAssemblyFolder = settings.ExecutingAssemblyDirectory; // Won't work until rebase
+                    string progDataFolder = settings.SharedConfigDirectory;
+                    string settingsFolder = settings.UserConfigDirectory;
+
+                    List<FileInfo> files = new();
+                    //files.AddRange(GetExtensionFiles(executingAssemblyFolder));
+                    files.AddRange(GetExtensionFiles(progDataFolder));
+                    files.AddRange(GetExtensionFiles(settingsFolder));
+
+                    foreach (FileInfo file in files)
+                    {
+                        builder.AddJsonFile(file.FullName, optional: true, reloadOnChange: true);
+                    }
 
                     string sharedSettingsPath = Path.Combine(settings.SharedConfigDirectory, SettingsFileName);
                     AddJsonFileHelper(builder, hostBuilderResults, sharedSettingsPath);
@@ -196,6 +211,30 @@ namespace Microsoft.Diagnostics.Tools.Monitor
                     // the option may be read from configuration by default.
                     manager.IsBlocking = false;
                 });
+        }
+
+        private static IEnumerable<FileInfo> GetExtensionFiles(string path)
+        {
+            List<FileInfo> extensionFiles = new List<FileInfo>();
+
+            string extensionsPath = Path.Combine(path, Constants.ExtensionFolder);
+
+            if (Directory.Exists(extensionsPath))
+            {
+                string[] extensionDirectories = Directory.GetDirectories(extensionsPath, "*", SearchOption.TopDirectoryOnly);
+
+                foreach (var extensionDirectory in extensionDirectories)
+                {
+                    string configurationFilePath = Path.Combine(extensionDirectory, Constants.ConfigurationDefinitionFile);
+
+                    if (File.Exists(configurationFilePath))
+                    {
+                        extensionFiles.Add(new FileInfo(configurationFilePath));
+                    }
+                }
+            }
+
+            return extensionFiles;
         }
 
         private static void AddJsonFileHelper(IConfigurationBuilder builder, HostBuilderResults hostBuilderResults, string filePath)

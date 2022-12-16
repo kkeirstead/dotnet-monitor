@@ -7,5 +7,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Extensibility
     public static class Constants
     {
         public const string ExtensionDefinitionFile = "extension.json";
+        public const string ExtensionFolder = "extensions";
+        public const string ConfigurationDefinitionFile = "configuration.json";
     }
 }
