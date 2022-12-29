@@ -40,6 +40,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Triggers
                 CounterName = options.CounterName,
                 GreaterThan = options.GreaterThan,
                 LessThan = options.LessThan,
+                HistogramMode = options.HistogramMode,
                 HistogramPercentiles = options.HistogramPercentiles,
                 SlidingWindowDuration = options.SlidingWindowDuration.GetValueOrDefault(TimeSpan.Parse(EventCounterOptionsDefaults.SlidingWindowDuration))
             };

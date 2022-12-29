@@ -46,8 +46,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options.Triggers
         [Display(
             ResourceType = typeof(OptionsDisplayStrings),
             Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramPercentiles))]
-        public IDictionary<double, double> HistogramPercentiles { get; set; }
-            = new Dictionary<double, double>(0);
+        public IDictionary<string, double> HistogramPercentiles { get; set; }
+            = new Dictionary<string, double>(0);
 
         [Display(
             ResourceType = typeof(OptionsDisplayStrings),
