@@ -753,9 +753,9 @@
     <value>The maximum number of time series that can be tracked. Each unique combination of provider name, metric name, and dimension values counts as one time series. Tracking more time series uses more memory in the target process so this bound guards against unintentional high memory use.</value>
     <comment>The description provided for the MaxTimeSeries parameter on MetricsOptions.</comment>
   </data>
-  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_CounterName" xml:space="preserve">
-    <value>The name of the counter to monitor.</value>
-    <comment>The description provided for the CounterName parameter on SystemDiagnosticsMetricsOptions.</comment>
+  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_InstrumentName" xml:space="preserve">
+    <value>The name of the instrument to monitor.</value>
+    <comment>The description provided for the InstrumentName parameter on SystemDiagnosticsMetricsOptions.</comment>
   </data>
   <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_GreaterThan" xml:space="preserve">
     <value>The threshold level the counter must maintain (or higher) for the specified duration. Either GreaterThan or LessThan (or both) must be specified.</value>

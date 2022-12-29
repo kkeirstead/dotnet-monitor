@@ -48,8 +48,8 @@ namespace Microsoft.Diagnostics.Monitoring.UnitTestApp.Scenarios
                 {
                     for (int i = 0; i < 20; ++i)
                     {
-                        histogram1.Record(rd.Next(5000));
-                        histogram2.Record(rd.Next(5000), metadata.ToArray());
+                        histogram1.Record(rd.Next(5000) + 1);
+                        histogram2.Record(rd.Next(5000) + 1, metadata.ToArray());
                     }
 
                     counter2.Add(1);
