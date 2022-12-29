@@ -116,7 +116,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                     options.CreateCollectionRule(TestRuleName)
                         .SetEventCounterTrigger(options =>
                         {
-                            // cpu usage greater that 5% for 2 seconds
+                            // cpu usage greater than 5% for 2 seconds
                             options.ProviderName = "System.Runtime";
                             options.CounterName = "cpu-usage";
                             options.GreaterThan = 5;
@@ -184,7 +184,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                     options.CreateCollectionRule(TestRuleName)
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
-                            // gauge greater that 0 for 2 seconds
+                            // gauge greater than 0 for 2 seconds
                             options.ProviderName = LiveMetricsTestConstants.ProviderName1;
                             options.InstrumentName = LiveMetricsTestConstants.GaugeName;
                             options.GreaterThan = 0;
@@ -249,7 +249,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                     options.CreateCollectionRule(TestRuleName)
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
-                            // histogram percentiles greater that 0 for 2 seconds
+                            // histogram percentiles greater than 0 for 2 seconds
                             options.ProviderName = LiveMetricsTestConstants.ProviderName1;
                             options.InstrumentName = LiveMetricsTestConstants.HistogramName1;
                             options.HistogramMode = HistogramMode.GreaterThan;
