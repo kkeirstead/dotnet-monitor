@@ -753,4 +753,32 @@
     <value>The maximum number of time series that can be tracked. Each unique combination of provider name, metric name, and dimension values counts as one time series. Tracking more time series uses more memory in the target process so this bound guards against unintentional high memory use.</value>
     <comment>The description provided for the MaxTimeSeries parameter on MetricsOptions.</comment>
   </data>
+  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_CounterName" xml:space="preserve">
+    <value>The name of the counter to monitor.</value>
+    <comment>The description provided for the CounterName parameter on SystemDiagnosticsMetricsOptions.</comment>
+  </data>
+  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_GreaterThan" xml:space="preserve">
+    <value>The threshold level the counter must maintain (or higher) for the specified duration. Either GreaterThan or LessThan (or both) must be specified.</value>
+    <comment>The description provided for the GreaterThan parameter on SystemDiagnosticsMetricsOptions.</comment>
+  </data>
+  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramMode" xml:space="preserve">
+    <value>The histogram mode that dictates whether the histogram percentiles are minimums or maximums.</value>
+    <comment>The description provided for the HistogramMode parameter on SystemDiagnosticsMetricsOptions.</comment>
+  </data>
+  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramPercentiles" xml:space="preserve">
+    <value>The histogram percentiles and the threshold levels that should be maintained for the specified duration. </value>
+    <comment>The description provided for the HistogramPercentiles parameter on SystemDiagnosticsMetricsOptions.</comment>
+  </data>
+  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_LessThan" xml:space="preserve">
+    <value>The threshold level the counter must maintain (or lower) for the specified duration. Either GreaterThan or LessThan (or both) must be specified.</value>
+    <comment>The description provided for the LessThan parameter on SystemDiagnosticsMetricsOptions.</comment>
+  </data>
+  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_ProviderName" xml:space="preserve">
+    <value>The name of the event source that provides the counter information.</value>
+    <comment>The description provided for the ProviderName parameter on SystemDiagnosticsMetricsOptions.</comment>
+  </data>
+  <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_SlidingWindowDuration" xml:space="preserve">
+    <value>The sliding time window in which the counter must maintain its value as specified by the threshold levels in GreaterThan and LessThan.</value>
+    <comment>The description provided for the SlidingWindowDuration parameter on SystemDiagnosticsMetricsOptions.</comment>
+  </data>
 </root>

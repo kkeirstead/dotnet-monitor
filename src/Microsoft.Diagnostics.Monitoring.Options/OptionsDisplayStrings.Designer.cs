@@ -653,7 +653,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The format used to display the callstacks..
+        ///   Looks up a localized string similar to The format used to display the call stacks..
         /// </summary>
         public static string DisplayAttributeDescription_CollectStacksOptions_Format {
             get {
@@ -1397,6 +1397,70 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         public static string DisplayAttributeDescription_StorageOptions_SharedLibraryPath {
             get {
                 return ResourceManager.GetString("DisplayAttributeDescription_StorageOptions_SharedLibraryPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the counter to monitor..
+        /// </summary>
+        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_CounterName {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_CounterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The threshold level the counter must maintain (or higher) for the specified duration. Either GreaterThan or LessThan (or both) must be specified..
+        /// </summary>
+        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_GreaterThan {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_GreaterThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The histogram mode that dictates whether the histogram percentiles are minimums or maximums..
+        /// </summary>
+        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramMode {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The histogram percentiles and the threshold levels that should be maintained for the specified duration. .
+        /// </summary>
+        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramPercentiles {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramPercentiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The threshold level the counter must maintain (or lower) for the specified duration. Either GreaterThan or LessThan (or both) must be specified..
+        /// </summary>
+        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_LessThan {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_LessThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the event source that provides the counter information..
+        /// </summary>
+        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_ProviderName {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_ProviderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sliding time window in which the counter must maintain its value as specified by the threshold levels in GreaterThan and LessThan..
+        /// </summary>
+        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_SlidingWindowDuration {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_SlidingWindowDuration" +
+                        "", resourceCulture);
             }
         }
         
