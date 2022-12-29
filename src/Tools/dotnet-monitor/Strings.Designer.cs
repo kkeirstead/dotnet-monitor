@@ -70,6 +70,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When specifying HistogramMode and HistogramPercentiles, GreaterThan and LessThan must be empty..
+        /// </summary>
+        internal static string ErrorMessage_CannotHaveGreaterThanLessThanWithHistogram {
+            get {
+                return ResourceManager.GetString("ErrorMessage_CannotHaveGreaterThanLessThanWithHistogram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to find a collection rule with name {0}..
         /// </summary>
         internal static string ErrorMessage_CollectionRuleNotFound {

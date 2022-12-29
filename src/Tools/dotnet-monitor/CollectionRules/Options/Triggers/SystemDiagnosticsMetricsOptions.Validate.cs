@@ -18,8 +18,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options.Triggers
                 if (GreaterThan.HasValue || LessThan.HasValue)
                 {
                     results.Add(new ValidationResult(
-                        string.Format(
-                            "not allowed to have both types"))); // add resx for this
+                        string.Format(Strings.ErrorMessage_CannotHaveGreaterThanLessThanWithHistogram)));
                 }
             }
             else if (HistogramMode.HasValue && !HistogramPercentiles.Any())
