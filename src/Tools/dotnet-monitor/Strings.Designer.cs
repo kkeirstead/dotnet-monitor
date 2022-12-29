@@ -304,6 +304,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When {0} is provided, {1} must be provided..
+        /// </summary>
+        internal static string ErrorMessage_MissingComplementaryField {
+            get {
+                return ResourceManager.GetString("ErrorMessage_MissingComplementaryField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} field specified the provider &apos;{1}&apos; but it was not found in the {2} field..
         /// </summary>
         internal static string ErrorMessage_MissingStoppingEventProvider {
