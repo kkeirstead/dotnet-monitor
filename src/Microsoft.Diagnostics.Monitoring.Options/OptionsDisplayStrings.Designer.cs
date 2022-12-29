@@ -1401,15 +1401,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the counter to monitor..
-        /// </summary>
-        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_CounterName {
-            get {
-                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_CounterName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The threshold level the counter must maintain (or higher) for the specified duration. Either GreaterThan or LessThan (or both) must be specified..
         /// </summary>
         public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_GreaterThan {
@@ -1433,6 +1424,15 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramPercentiles {
             get {
                 return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramPercentiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the instrument to monitor..
+        /// </summary>
+        public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_InstrumentName {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_InstrumentName", resourceCulture);
             }
         }
         

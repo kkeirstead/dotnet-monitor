@@ -37,7 +37,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Triggers
             {
                 ProviderName = options.ProviderName,
                 CounterIntervalSeconds = _counterOptions.CurrentValue.GetIntervalSeconds(),
-                CounterName = options.CounterName,
+                InstrumentName = options.InstrumentName,
                 GreaterThan = options.GreaterThan,
                 LessThan = options.LessThan,
                 HistogramMode = options.HistogramMode,

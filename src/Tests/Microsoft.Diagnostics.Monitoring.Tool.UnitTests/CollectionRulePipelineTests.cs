@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Diagnostics.Monitoring.EventPipe.Triggers.SystemDiagnosticsMetrics;
 using Microsoft.Diagnostics.Monitoring.TestCommon;
 using Microsoft.Diagnostics.Monitoring.TestCommon.Options;
 using Microsoft.Diagnostics.Monitoring.TestCommon.Runners;
@@ -159,6 +160,144 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                     services.RegisterTestAction(callbackService);
                 });
         }
+
+#if NET7_0_OR_GREATER
+        /// <summary>
+        /// Test that the pipeline works with the SystemDiagnosticsMetrics trigger (gauge instrument).
+        /// </summary>
+        [Fact]
+        public Task CollectionRulePipeline_SystemDiagnosticsMetricsTriggerTest_Gauge()
+        {
+            CallbackActionService callbackService = new(_outputHelper);
+
+            return CollectionRulePipelineTestsHelper.ExecuteScenario(
+                TargetFrameworkMoniker.Net70,
+                TestAppScenarios.Metrics.Name,
+                TestRuleName,
+                options =>
+                {
+                    options.GlobalCounter = new WebApi.GlobalCounterOptions()
+                    {
+                        IntervalSeconds = 1
+                    };
+
+                    options.CreateCollectionRule(TestRuleName)
+                        .SetSystemDiagnosticsMetricsTrigger(options =>
+                        {
+                            // gauge greater that 0 for 2 seconds
+                            options.ProviderName = LiveMetricsTestConstants.ProviderName1;
+                            options.InstrumentName = LiveMetricsTestConstants.GaugeName;
+                            options.GreaterThan = 0;
+                            options.SlidingWindowDuration = TimeSpan.FromSeconds(2);
+                        })
+                        .AddAction(CallbackAction.ActionName);
+                },
+                async (runner, pipeline, callbacks) =>
+                {
+                    using CancellationTokenSource cancellationSource = new(DefaultPipelineTimeout);
+
+                    Task startedTask = callbacks.StartWaitForPipelineStarted();
+
+                    // Register first callback before pipeline starts. This callback should be completed after
+                    // the pipeline finishes starting.
+                    Task actionStartedTask = await callbackService.StartWaitForCallbackAsync(cancellationSource.Token);
+
+                    // Start pipeline with SystemDiagnosticsMetrics trigger.
+                    Task runTask = pipeline.RunAsync(cancellationSource.Token);
+
+                    await startedTask.WithCancellation(cancellationSource.Token);
+
+                    // This should not complete until the trigger conditions are satisfied for the first time.
+                    await actionStartedTask.WithCancellation(cancellationSource.Token);
+
+                    VerifyExecutionCount(callbackService, 1);
+
+                    await runner.SendCommandAsync(TestAppScenarios.Metrics.Commands.Continue);
+
+                    // Validate that the pipeline is not in a completed state.
+                    // The pipeline should already be running since it was started.
+                    Assert.False(runTask.IsCompleted);
+
+                    await pipeline.StopAsync(cancellationSource.Token);
+                },
+                _outputHelper,
+                services =>
+                {
+                    services.RegisterTestAction(callbackService);
+                });
+        }
+
+        /// <summary>
+        /// Test that the pipeline works with the SystemDiagnosticsMetrics trigger (histogram instrument).
+        /// </summary>
+        [Fact]
+        public Task CollectionRulePipeline_SystemDiagnosticsMetricsTriggerTest_Histogram()
+        {
+            CallbackActionService callbackService = new(_outputHelper);
+
+            return CollectionRulePipelineTestsHelper.ExecuteScenario(
+                TargetFrameworkMoniker.Net70,
+                TestAppScenarios.Metrics.Name,
+                TestRuleName,
+                options =>
+                {
+                    options.GlobalCounter = new WebApi.GlobalCounterOptions()
+                    {
+                        IntervalSeconds = 1
+                    };
+
+                    options.CreateCollectionRule(TestRuleName)
+                        .SetSystemDiagnosticsMetricsTrigger(options =>
+                        {
+                            // histogram percentiles greater that 0 for 2 seconds
+                            options.ProviderName = LiveMetricsTestConstants.ProviderName1;
+                            options.InstrumentName = LiveMetricsTestConstants.HistogramName1;
+                            options.HistogramMode = HistogramMode.GreaterThan;
+                            options.HistogramPercentiles = new Dictionary<string, double>()
+                            {
+                                { "50", 0 },
+                                { "95", 0 },
+                                { "99", 0 },
+                            };
+                            options.SlidingWindowDuration = TimeSpan.FromSeconds(2);
+                        })
+                        .AddAction(CallbackAction.ActionName);
+                },
+                async (runner, pipeline, callbacks) =>
+                {
+                    using CancellationTokenSource cancellationSource = new(DefaultPipelineTimeout);
+
+                    Task startedTask = callbacks.StartWaitForPipelineStarted();
+
+                    // Register first callback before pipeline starts. This callback should be completed after
+                    // the pipeline finishes starting.
+                    Task actionStartedTask = await callbackService.StartWaitForCallbackAsync(cancellationSource.Token);
+
+                    // Start pipeline with SystemDiagnosticsMetrics trigger.
+                    Task runTask = pipeline.RunAsync(cancellationSource.Token);
+
+                    await startedTask.WithCancellation(cancellationSource.Token);
+
+                    // This should not complete until the trigger conditions are satisfied for the first time.
+                    await actionStartedTask.WithCancellation(cancellationSource.Token);
+
+                    VerifyExecutionCount(callbackService, 1);
+
+                    await runner.SendCommandAsync(TestAppScenarios.Metrics.Commands.Continue);
+
+                    // Validate that the pipeline is not in a completed state.
+                    // The pipeline should already be running since it was started.
+                    Assert.False(runTask.IsCompleted);
+
+                    await pipeline.StopAsync(cancellationSource.Token);
+                },
+                _outputHelper,
+                services =>
+                {
+                    services.RegisterTestAction(callbackService);
+                });
+        }
+#endif
 
         /// <summary>
         /// Test that the CollectionRulePipeline completes to due to rule duration limit.

@@ -23,9 +23,9 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options.Triggers
 
         [Display(
             ResourceType = typeof(OptionsDisplayStrings),
-            Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_CounterName))]
+            Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_InstrumentName))]
         [Required]
-        public string CounterName { get; set; }
+        public string InstrumentName { get; set; }
 
         [Display(
             ResourceType = typeof(OptionsDisplayStrings),

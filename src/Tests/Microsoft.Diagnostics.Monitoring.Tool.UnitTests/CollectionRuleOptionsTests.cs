@@ -267,7 +267,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
                             options.ProviderName = ExpectedProviderName;
-                            options.CounterName = ExpectedCounterName;
+                            options.InstrumentName = ExpectedCounterName;
                             options.GreaterThan = ExpectedGreaterThan;
                         });
                 },
@@ -275,7 +275,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                 {
                     SystemDiagnosticsMetricsOptions systemDiagnosticsMetricsOptions = ruleOptions.VerifySystemDiagnosticsMetricsTrigger();
                     Assert.Equal(ExpectedProviderName, systemDiagnosticsMetricsOptions.ProviderName);
-                    Assert.Equal(ExpectedCounterName, systemDiagnosticsMetricsOptions.CounterName);
+                    Assert.Equal(ExpectedCounterName, systemDiagnosticsMetricsOptions.InstrumentName);
                     Assert.Equal(ExpectedGreaterThan, systemDiagnosticsMetricsOptions.GreaterThan);
                 });
         }
@@ -296,7 +296,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
                             options.ProviderName = ExpectedProviderName;
-                            options.CounterName = ExpectedCounterName;
+                            options.InstrumentName = ExpectedCounterName;
                             options.GreaterThan = ExpectedGreaterThan;
                             options.LessThan = ExpectedLessThan;
                             options.SlidingWindowDuration = ExpectedDuration;
@@ -306,7 +306,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                 {
                     SystemDiagnosticsMetricsOptions systemDiagnosticsMetricsOptions = ruleOptions.VerifySystemDiagnosticsMetricsTrigger();
                     Assert.Equal(ExpectedProviderName, systemDiagnosticsMetricsOptions.ProviderName);
-                    Assert.Equal(ExpectedCounterName, systemDiagnosticsMetricsOptions.CounterName);
+                    Assert.Equal(ExpectedCounterName, systemDiagnosticsMetricsOptions.InstrumentName);
                     Assert.Equal(ExpectedGreaterThan, systemDiagnosticsMetricsOptions.GreaterThan);
                     Assert.Equal(ExpectedLessThan, systemDiagnosticsMetricsOptions.LessThan);
                     Assert.Equal(ExpectedDuration, systemDiagnosticsMetricsOptions.SlidingWindowDuration);
@@ -332,7 +332,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
                             options.ProviderName = ExpectedProviderName;
-                            options.CounterName = ExpectedCounterName;
+                            options.InstrumentName = ExpectedCounterName;
                             options.HistogramMode = ExpectedHistogramMode;
                             options.HistogramPercentiles = ExpectedHistogramPercentiles;
                             options.SlidingWindowDuration = ExpectedDuration;
@@ -342,7 +342,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                 {
                     SystemDiagnosticsMetricsOptions systemDiagnosticsMetricsOptions = ruleOptions.VerifySystemDiagnosticsMetricsTrigger();
                     Assert.Equal(ExpectedProviderName, systemDiagnosticsMetricsOptions.ProviderName);
-                    Assert.Equal(ExpectedCounterName, systemDiagnosticsMetricsOptions.CounterName);
+                    Assert.Equal(ExpectedCounterName, systemDiagnosticsMetricsOptions.InstrumentName);
                     Assert.Equal(ExpectedHistogramMode, systemDiagnosticsMetricsOptions.HistogramMode);
                     Assert.Equal(ExpectedHistogramPercentiles, systemDiagnosticsMetricsOptions.HistogramPercentiles);
                     Assert.Equal(ExpectedDuration, systemDiagnosticsMetricsOptions.SlidingWindowDuration);
@@ -369,7 +369,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                     // either GreaterThan or LessThan should be specified).
                     Assert.Equal(3, failures.Length);
                     VerifyRequiredMessage(failures, 0, nameof(SystemDiagnosticsMetricsOptions.ProviderName));
-                    VerifyRequiredMessage(failures, 1, nameof(SystemDiagnosticsMetricsOptions.CounterName));
+                    VerifyRequiredMessage(failures, 1, nameof(SystemDiagnosticsMetricsOptions.InstrumentName));
                     VerifyRangeMessage<TimeSpan>(failures, 2, nameof(SystemDiagnosticsMetricsOptions.SlidingWindowDuration),
                         TriggerOptionsConstants.SlidingWindowDuration_MinValue, TriggerOptionsConstants.SlidingWindowDuration_MaxValue);
                 });
@@ -388,7 +388,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
                             options.ProviderName = ExpectedProviderName;
-                            options.CounterName = ExpectedCounterName;
+                            options.InstrumentName = ExpectedCounterName;
                         });
                 },
                 ex =>
@@ -413,7 +413,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
                             options.ProviderName = ExpectedProviderName;
-                            options.CounterName = ExpectedCounterName;
+                            options.InstrumentName = ExpectedCounterName;
                             options.GreaterThan = 0.75;
                             options.LessThan = 0.5;
                         });
@@ -444,7 +444,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
                             options.ProviderName = ExpectedProviderName;
-                            options.CounterName = ExpectedCounterName;
+                            options.InstrumentName = ExpectedCounterName;
                             options.GreaterThan = 0.75;
                             options.HistogramMode = ExpectedHistogramMode;
                             options.HistogramPercentiles = ExpectedHistogramPercentiles;
@@ -472,7 +472,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
                             options.ProviderName = ExpectedProviderName;
-                            options.CounterName = ExpectedCounterName;
+                            options.InstrumentName = ExpectedCounterName;
                             options.HistogramMode = ExpectedHistogramMode;
                         });
                 },
@@ -500,7 +500,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                         .SetSystemDiagnosticsMetricsTrigger(options =>
                         {
                             options.ProviderName = ExpectedProviderName;
-                            options.CounterName = ExpectedCounterName;
+                            options.InstrumentName = ExpectedCounterName;
                             options.HistogramPercentiles = ExpectedHistogramPercentiles;
                         });
                 },
