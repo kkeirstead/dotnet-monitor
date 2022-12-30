@@ -1401,7 +1401,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The threshold level the counter must maintain (or higher) for the specified duration. Either GreaterThan or LessThan (or both) must be specified..
+        ///   Looks up a localized string similar to The threshold level the instrument must maintain (or higher) for the specified duration. Either GreaterThan or LessThan (or both) must be specified..
         /// </summary>
         public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_GreaterThan {
             get {
@@ -1437,7 +1437,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The threshold level the counter must maintain (or lower) for the specified duration. Either GreaterThan or LessThan (or both) must be specified..
+        ///   Looks up a localized string similar to The threshold level the instrument must maintain (or lower) for the specified duration. Either GreaterThan or LessThan (or both) must be specified..
         /// </summary>
         public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_LessThan {
             get {
@@ -1446,7 +1446,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the event source that provides the counter information..
+        ///   Looks up a localized string similar to The name of the event source that provides the instrument information..
         /// </summary>
         public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_ProviderName {
             get {
@@ -1455,7 +1455,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The sliding time window in which the counter must maintain its value as specified by the threshold levels in GreaterThan and LessThan..
+        ///   Looks up a localized string similar to The sliding time window in which the instrument must maintain its value as specified by the threshold levels in GreaterThan and LessThan..
         /// </summary>
         public static string DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_SlidingWindowDuration {
             get {
