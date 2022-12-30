@@ -253,6 +253,7 @@ This rule, named "HighCpuUsage", will trigger when a process named "MyProcessNam
             "DefaultLevel": "Warning",
             "UseAppFilters": false,
             "Duration": "00:00:30"
+          }
         }
       ]
     }
