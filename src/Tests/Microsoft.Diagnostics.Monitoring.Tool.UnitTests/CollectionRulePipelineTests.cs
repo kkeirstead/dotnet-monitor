@@ -161,17 +161,17 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                 });
         }
 
-#if NET7_0_OR_GREATER
         /// <summary>
         /// Test that the pipeline works with the SystemDiagnosticsMetrics trigger (gauge instrument).
         /// </summary>
-        [Fact]
-        public Task CollectionRulePipeline_SystemDiagnosticsMetricsTriggerTest_Gauge()
+        [Theory]
+        [MemberData(nameof(GetTfmsSupportingPortListener))]
+        public Task CollectionRulePipeline_SystemDiagnosticsMetricsTriggerTest_Gauge(TargetFrameworkMoniker appTfm)
         {
             CallbackActionService callbackService = new(_outputHelper);
 
             return CollectionRulePipelineTestsHelper.ExecuteScenario(
-                TargetFrameworkMoniker.Net70,
+                appTfm,
                 TestAppScenarios.Metrics.Name,
                 TestRuleName,
                 options =>
@@ -230,13 +230,14 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
         /// <summary>
         /// Test that the pipeline works with the SystemDiagnosticsMetrics trigger (histogram instrument).
         /// </summary>
-        [Fact]
-        public Task CollectionRulePipeline_SystemDiagnosticsMetricsTriggerTest_Histogram()
+        [Theory]
+        [MemberData(nameof(GetTfmsSupportingPortListener))]
+        public Task CollectionRulePipeline_SystemDiagnosticsMetricsTriggerTest_Histogram(TargetFrameworkMoniker appTfm)
         {
             CallbackActionService callbackService = new(_outputHelper);
 
             return CollectionRulePipelineTestsHelper.ExecuteScenario(
-                TargetFrameworkMoniker.Net70,
+                appTfm,
                 TestAppScenarios.Metrics.Name,
                 TestRuleName,
                 options =>
@@ -297,7 +298,6 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                     services.RegisterTestAction(callbackService);
                 });
         }
-#endif
 
         /// <summary>
         /// Test that the CollectionRulePipeline completes to due to rule duration limit.

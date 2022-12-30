@@ -758,7 +758,7 @@
     <comment>The description provided for the InstrumentName parameter on SystemDiagnosticsMetricsOptions.</comment>
   </data>
   <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_GreaterThan" xml:space="preserve">
-    <value>The threshold level the counter must maintain (or higher) for the specified duration. Either GreaterThan or LessThan (or both) must be specified.</value>
+    <value>The threshold level the instrument must maintain (or higher) for the specified duration. Either GreaterThan or LessThan (or both) must be specified.</value>
     <comment>The description provided for the GreaterThan parameter on SystemDiagnosticsMetricsOptions.</comment>
   </data>
   <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_HistogramMode" xml:space="preserve">
@@ -770,15 +770,15 @@
     <comment>The description provided for the HistogramPercentiles parameter on SystemDiagnosticsMetricsOptions.</comment>
   </data>
   <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_LessThan" xml:space="preserve">
-    <value>The threshold level the counter must maintain (or lower) for the specified duration. Either GreaterThan or LessThan (or both) must be specified.</value>
+    <value>The threshold level the instrument must maintain (or lower) for the specified duration. Either GreaterThan or LessThan (or both) must be specified.</value>
     <comment>The description provided for the LessThan parameter on SystemDiagnosticsMetricsOptions.</comment>
   </data>
   <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_ProviderName" xml:space="preserve">
-    <value>The name of the event source that provides the counter information.</value>
+    <value>The name of the event source that provides the instrument information.</value>
     <comment>The description provided for the ProviderName parameter on SystemDiagnosticsMetricsOptions.</comment>
   </data>
   <data name="DisplayAttributeDescription_SystemDiagnosticsMetricsOptions_SlidingWindowDuration" xml:space="preserve">
-    <value>The sliding time window in which the counter must maintain its value as specified by the threshold levels in GreaterThan and LessThan.</value>
+    <value>The sliding time window in which the instrument must maintain its value as specified by the threshold levels in GreaterThan and LessThan.</value>
     <comment>The description provided for the SlidingWindowDuration parameter on SystemDiagnosticsMetricsOptions.</comment>
   </data>
 </root>

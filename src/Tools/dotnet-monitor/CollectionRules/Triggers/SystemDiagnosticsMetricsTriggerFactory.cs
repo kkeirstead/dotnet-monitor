@@ -42,12 +42,12 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Triggers
                 LessThan = options.LessThan,
                 HistogramMode = options.HistogramMode,
                 HistogramPercentiles = options.HistogramPercentiles,
-                SlidingWindowDuration = options.SlidingWindowDuration.GetValueOrDefault(TimeSpan.Parse(EventCounterOptionsDefaults.SlidingWindowDuration))
+                SlidingWindowDuration = options.SlidingWindowDuration.GetValueOrDefault(TimeSpan.Parse(SystemDiagnosticsMetricsOptionsDefaults.SlidingWindowDuration)),
             };
 
             return EventPipeTriggerFactory.Create(
                 endpointInfo,
-                SystemDiagnosticsMetricsTrigger.CreateConfiguration(settings),
+                SystemDiagnosticsMetricsTrigger.CreateConfiguration(ref settings),
                 _traceEventTriggerFactory,
                 settings,
                 callback);
