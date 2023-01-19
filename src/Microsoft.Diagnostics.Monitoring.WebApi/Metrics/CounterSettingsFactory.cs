@@ -84,6 +84,9 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                     {
                         customCounterGroup.CounterNames = customProvider.CounterNames.ToArray();
                     }
+
+                    customCounterGroup.MetricsType = customProvider.MetricsType;
+
                     counterGroups.Add(customCounterGroup);
                 }
             }
@@ -104,6 +107,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                     {
                         customCounterGroup.CounterNames = customProvider.CounterNames.ToArray();
                     }
+
+                    customCounterGroup.MetricsType = customProvider.MetricsType;
 
                     counterGroups.Add(customCounterGroup);
                 }

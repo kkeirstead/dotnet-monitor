@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\diagnostics\src\Microsoft.Diagnostics.Monitoring.EventPipe\Microsoft.Diagnostics.Monitoring.EventPipe.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="OptionsDisplayStrings.Designer.cs">
       <DependentUpon>OptionsDisplayStrings.resx</DependentUpon>
       <DesignTime>True</DesignTime>
