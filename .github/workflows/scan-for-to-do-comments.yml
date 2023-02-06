@@ -1,4 +1,4 @@
-name: To Do Comments
+name: Scan For To Do Comments
 on:
   pull_request_review_comment:
     types: [created]
