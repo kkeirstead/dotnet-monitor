@@ -20,7 +20,6 @@ jobs:
           echo -n $trimmed_comment > ./pr/pr-title
           echo -n "${{ github.event.comment.html_url }}" > ./pr/pr-url
           echo -n "${{ github.event.comment.user.login }}" > ./pr/pr-user
-          git diff > ./pr/linter.diff
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
