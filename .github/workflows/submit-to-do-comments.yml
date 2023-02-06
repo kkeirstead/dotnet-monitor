@@ -17,9 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: |
-          title=$(cat ./pr-linter/pr-title)
-          user=$(cat ./pr-linter/pr-user)
-          url=$(cat ./pr-linter/pr-url)
+          title=$(cat ./pr-todo/pr-title)
+          user=$(cat ./pr-todo/pr-user)
+          url=$(cat ./pr-todo/pr-url)
           gh issue create --label "todo" --assignee "$user" --title "$title" --body "$url"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
