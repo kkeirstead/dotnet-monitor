@@ -1,4 +1,4 @@
-name: 'Submit To Do Comments'
+name: 'Submit To Do Issue'
 
 on:
   workflow_run:
@@ -10,7 +10,7 @@ permissions:
   issues: write
 
 jobs:
-  create-todo-issue:
+  submit-todo-issue:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
