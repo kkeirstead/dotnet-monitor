@@ -17,6 +17,6 @@ jobs:
         uses: actions/checkout@v3
       - run: |
           trimmed_comment=$(echo "${{ github.event.comment.body }}" | sed 's/#TODO //')
-          gh issue create --label "todo" --assignee "${{ github.event.comment.user.login }}" --title "$trimmed_comment" --body "${{ github.event.comment.html_url }}"
+          gh issue create --label "todo" --assignee "${{ github.event.comment.user.login }}" --title "$trimmed_comment" --body "${{ github.event.comment.html_url }} ${{ github.event.comment.url }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
