@@ -2,7 +2,7 @@ name: 'Submit To Do Comments'
 
 on:
   workflow_run:
-    workflows: ["To Do Comments"]
+    workflows: ["Scan For To Do Comments"]
     types:
       - completed
 
