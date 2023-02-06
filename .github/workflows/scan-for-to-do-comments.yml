@@ -6,7 +6,7 @@ on:
     types: [created]
 
 jobs:
-  create-todo-issue:
+  scan-for-todo-issue:
     runs-on: ubuntu-latest
     if: startsWith(github.event.comment.body, '/TODO') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
     steps:
