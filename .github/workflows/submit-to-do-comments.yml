@@ -1,4 +1,4 @@
-name: 'Submit to do comment'
+name: 'Submit To Do Comments'
 
 on:
   workflow_run:
@@ -12,7 +12,6 @@ permissions:
 jobs:
   create-todo-issue:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.comment.body, '/TODO') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
     steps:
       - name: Checkout
         uses: actions/checkout@v3
