@@ -24,12 +24,12 @@ jobs:
         with:
           workflow: ${{env.workflow_name}}
           run_id: ${{github.event.workflow_run.id }}
-          name: pr-todo
-          path: ./pr-todo
+          name: issue-todo
+          path: ./issue-todo
       - run: |
-          title=$(cat ./pr-todo/pr-title)
-          user=$(cat ./pr-todo/pr-user)
-          url=$(cat ./pr-todo/pr-url)
+          title=$(cat ./issue-todo/issue-title)
+          user=$(cat ./issue-todo/issue-user)
+          url=$(cat ./issue-todo/issue-url)
           gh issue create --label "todo" --assignee "$user" --title "$title" --body "$url"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
