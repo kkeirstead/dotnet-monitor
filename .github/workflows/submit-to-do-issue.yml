@@ -23,8 +23,6 @@ jobs:
               repo: context.repo.repo,
               username: context.payload.workflow_run.triggering_actor.login
             });
-      - name: Get result
-        run: echo "${{steps.check-user.outputs.result}}"
       - name: Checkout
         uses: actions/checkout@v3
       # Download the artifact from the workflow that kicked off this one.
@@ -38,7 +36,6 @@ jobs:
           name: issue-todo
           path: ./issue-todo
       - name: Submit Issue
-        if: ${{ steps.check-user.outputs.result == 'true' }}
         run: |
           title=$(cat ./issue-todo/issue-title)
           user=$(cat ./issue-todo/issue-user)
