@@ -8,7 +8,7 @@ on:
 jobs:
   scan-for-todo-issue:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.comment.body, '/TODO') && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
+    if: startsWith(github.event.comment.body, '/TODO')
     steps:
       - name: Checkout
         uses: actions/checkout@v3
