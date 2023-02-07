@@ -21,7 +21,7 @@ jobs:
             await github.rest.repos.checkCollaborator({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              username: context.payload.workflow_run.triggering_actor.login
+              username: "abcdefghijk"
             });
       - name: Checkout
         uses: actions/checkout@v3
