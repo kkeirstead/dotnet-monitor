@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Test
-        run: |
-          echo "${{ github.event.issue.actor }}
-          echo "${{ github.event.issue.url }}
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: "# Message with markdown.\nThanks for creating your first issue in the dotnet-monitor repo! Let us know what you think by filling in our [survey](https://aka.ms/dotnet-monitor-survey)."
