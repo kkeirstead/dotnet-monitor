@@ -1,4 +1,4 @@
-name: Respond To First Time Issue
+name: Issue Created
 on:
   issues:
     types:
