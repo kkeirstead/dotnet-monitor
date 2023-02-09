@@ -1,8 +1,9 @@
 name: Respond To First Time Issue
 on:
-  issues:
+  workflow_run:
+    workflows: ["Issue Created"]
     types:
-      - opened
+      - completed
 jobs:
   check-if-new-user:
     runs-on: ubuntu-latest
