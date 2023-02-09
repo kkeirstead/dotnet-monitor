@@ -1,0 +1,16 @@
+name: Respond To First Time Issue
+on:
+  issues:
+    types:
+      - opened
+jobs:
+  check-if-new-user:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Test
+        run: |
+          echo "${{ github.event.issue.actor }}
+          echo "${{ github.event.issue.url }}
