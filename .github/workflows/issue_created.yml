@@ -1,1 +1,11 @@
-
+name: Respond To First Time Issue
+on:
+  issues:
+    types:
+      - opened
+jobs:
+  issue-opened:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "A new issue was opened."
+        
