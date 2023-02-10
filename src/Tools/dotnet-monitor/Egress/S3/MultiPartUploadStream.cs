@@ -119,7 +119,7 @@ internal class MultiPartUploadStream : Stream
 
     public override void Write(byte[] buffer, int offset, int count)
     {
-        throw new NotSupportedException();
+        Task.Run(() => WriteAsync(buffer.AsMemory().Slice(offset, count), new CancellationToken()));
     }
 
     public override bool CanRead => false;
