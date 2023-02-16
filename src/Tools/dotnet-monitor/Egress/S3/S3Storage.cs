@@ -4,8 +4,10 @@
 using Amazon;
 using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
+using Amazon.Runtime.Internal;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Amazon.S3.Model.Internal.MarshallTransformations;
 using Amazon.S3.Transfer;
 using System;
 using System.Collections.Generic;
@@ -45,8 +47,14 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.S3
                     configuration.ServiceURL = options.Endpoint;
                 if (!string.IsNullOrEmpty(options.RegionName))
                 {
-                    configuration.RegionEndpoint = RegionEndpoint.GetBySystemName(options.RegionName);
-                    //configuration.AuthenticationRegion = options.RegionName;
+                    if (string.IsNullOrEmpty(configuration.ServiceURL))
+                    {
+                        configuration.RegionEndpoint = RegionEndpoint.GetBySystemName(options.RegionName);
+                    }
+                    else
+                    {
+                        configuration.AuthenticationRegion = options.RegionName;
+                    }
                 }
             }
             // use configured AWS profile
@@ -138,6 +146,22 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.S3
             return new PartETag(response.PartNumber, response.ETag);
 
         }
+
+/*        public PartETag UploadPart(string uploadId, int partNumber, int partSize, Stream inputStream, CancellationToken token)
+        {
+            var uploadRequest = new UploadPartRequest
+            {
+                BucketName = _bucketName,
+                Key = _objectId,
+                InputStream = inputStream,
+                PartSize = partSize,
+                UploadId = uploadId,
+                PartNumber = partNumber
+            };
+            var response = _s3Client.UploadPart(uploadRequest);
+            return new PartETag(response.PartNumber, response.ETag);
+
+        }*/
 
         public string GetTemporaryResourceUrl(DateTime expires)
         {

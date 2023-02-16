@@ -26,6 +26,7 @@ internal class MultiPartUploadStream : Stream
     private int _position;
     public const int MinimumSize = 5 * 1024 * 1024; // the minimum size of an upload part (except for the last part)
     private readonly int _bufferSize;
+    private MemoryStream _memoryStream = new MemoryStream();
 
     public MultiPartUploadStream(IS3Storage client, string bucketName, string objectKey, string uploadId, int bufferSize)
     {
@@ -47,6 +48,11 @@ internal class MultiPartUploadStream : Stream
 
     public async Task FinalizeAsync(CancellationToken cancellationToken)
     {
+        if (_memoryStream.Length != 0)
+        {
+            await _client.PutAsync(_memoryStream, cancellationToken);
+            return;
+        }
         if (Closed)
             throw new ObjectDisposedException(nameof(MultiPartUploadStream));
         if (_offset == 0)
@@ -119,7 +125,23 @@ internal class MultiPartUploadStream : Stream
 
     public override void Write(byte[] buffer, int offset, int count)
     {
-        Task.Run(() => WriteAsync(buffer.AsMemory().Slice(offset, count), new CancellationToken()));
+        _memoryStream.Write(buffer);
+    }
+
+    private static void DoWrite(bool allowPartialWrite)
+    {
+        /*
+        if (_offset == 0) // no data
+            return;
+
+        if (_offset < MinimumSize && !allowPartialWrite) // buffer not full
+            return;
+
+        await using var stream = new MemoryStream(_buffer, 0, _offset);
+        stream.Position = 0;
+        var eTag = await _client.UploadPartAsync(_uploadId, _parts.Count + 1, _offset, stream, cancellationToken); //var eTag = await _client.UploadPartAsync(_uploadId, _parts.Count, _offset, stream, cancellationToken);
+        _parts.Add(eTag);
+        _offset = 0;*/
     }
 
     public override bool CanRead => false;
