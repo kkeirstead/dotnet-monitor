@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading;
@@ -11,11 +10,8 @@ namespace Microsoft.Diagnostics.Monitoring.Extension.Common
 {
     internal abstract class EgressProvider<TOptions> where TOptions : class
     {
-        protected readonly ILogger _logger;
-
-        public EgressProvider(ILogger logger)
+        public EgressProvider()
         {
-            _logger = logger;
         }
 
         public abstract Task<string> EgressAsync(

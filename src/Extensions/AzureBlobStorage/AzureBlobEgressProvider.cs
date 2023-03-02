@@ -24,9 +24,17 @@ namespace Microsoft.Diagnostics.Monitoring.AzureBlobStorage
     internal partial class AzureBlobEgressProvider : EgressProvider<AzureBlobEgressProviderOptions>
     {
         private int BlobStorageBufferSize = 4 * 1024 * 1024;
+        private ILoggerFactory _loggerFactory;
+        private ILogger<AzureBlobEgressProvider> _logger;
 
-        public AzureBlobEgressProvider(ILogger logger) : base(logger)
+        public AzureBlobEgressProvider() : base()
         {
+            _loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+
+            _logger = _loggerFactory.CreateLogger<AzureBlobEgressProvider>();
         }
 
         public override async Task<string> EgressAsync(

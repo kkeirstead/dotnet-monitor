@@ -25,9 +25,17 @@ namespace Microsoft.Diagnostics.Monitoring.Extension.S3Storage
 #pragma warning restore CA1852
 
         internal StorageFactory ClientFactory = new();
+        private ILoggerFactory _loggerFactory;
+        private ILogger<S3StorageEgressProvider> _logger;
 
-        public S3StorageEgressProvider(ILogger logger) : base(logger)
+        public S3StorageEgressProvider()
         {
+            _loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+
+            _logger = _loggerFactory.CreateLogger<S3StorageEgressProvider>();
         }
 
         public override async Task<string> EgressAsync(
