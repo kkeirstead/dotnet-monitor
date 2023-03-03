@@ -71,25 +71,10 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress.S3
                 client = await ClientFactory.CreateAsync(options, artifactSettings, token);
                 uploadId = await client.InitMultiPartUploadAsync(artifactSettings.Metadata, token);
                 int copyBufferSize = options.CopyBufferSize.GetValueOrDefault(0x100000);
-                await using var stream = new MultiPartUploadStream(client, options.BucketName, artifactSettings.Name, uploadId, copyBufferSize);
+                await using var stream = new MultiPartUploadStream(client, options.BucketName, artifactSettings.Name, uploadId, copyBufferSize, token);
                 Logger?.EgressProviderInvokeStreamAction(EgressProviderTypes.S3Storage);
 
-                CancellationTokenSource source = new CancellationTokenSource();
-
-                Task writeSynchronousArtifacts = stream.StartAsyncLoop(source.Token);
-
                 await action(stream, token);
-
-                try
-                {
-                    source.Cancel();
-
-                    await writeSynchronousArtifacts;
-                }
-                catch (OperationCanceledException)
-                {
-                    // We intentionally cancel this token
-                }
 
                 await stream.FinalizeAsync(token); // force to push the last part
 
