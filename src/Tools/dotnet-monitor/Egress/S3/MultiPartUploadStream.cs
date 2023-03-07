@@ -31,6 +31,14 @@ internal class MultiPartUploadStream : Stream
     private Pipe pipe = new Pipe();
 
     Task _writeSynchronousArtifacts;
+    Stream _pipeWStream;
+    Stream _pipeRStream;
+
+
+    int byteCount;  // this is not safe, testing only
+    bool end;
+
+    SemaphoreSlim semaphore = new(1, 1);
 
     public MultiPartUploadStream(IS3Storage client, string bucketName, string objectKey, string uploadId, int bufferSize)
     {
@@ -40,6 +48,8 @@ internal class MultiPartUploadStream : Stream
         _bucketName = bucketName;
         _objectKey = objectKey;
         _uploadId = uploadId;
+        _pipeWStream = pipe.Writer.AsStream();
+        _pipeRStream = pipe.Reader.AsStream();
     }
 
     public MultiPartUploadStream(IS3Storage client, string bucketName, string objectKey, string uploadId, int bufferSize, CancellationToken token) : this(client, bucketName, objectKey, uploadId, bufferSize)
@@ -60,7 +70,11 @@ internal class MultiPartUploadStream : Stream
 
         await pipe.Writer.CompleteAsync();
 
+        _pipeWStream.Dispose();
+
         Console.WriteLine("Between S and M Finalize");
+
+        end = true;
 
         await _writeSynchronousArtifacts;
 
@@ -80,40 +94,31 @@ internal class MultiPartUploadStream : Stream
     {
         Console.WriteLine("StartAsyncLoop");
 
-        while (true)
+        var previousPipePosition = 0;
+
+        while (!end)
         {
             if (Closed)
                 throw new ObjectDisposedException(nameof(MultiPartUploadStream));
 
-            if (pipe.Writer.UnflushedBytes != 0)
+            await semaphore.WaitAsync(cancellationToken);
+
+            if (previousPipePosition != byteCount)
             {
-                Console.WriteLine("Unflushed bytes: " + pipe.Writer.UnflushedBytes);
-                _ = await pipe.Writer.FlushAsync(cancellationToken);
+                Console.WriteLine("Pipe position: " + byteCount);
 
-                ReadResult result = await pipe.Reader.ReadAsync(cancellationToken);
+                byteCount -= previousPipePosition;
 
-                if (result.IsCompleted)
-                {
-                    break;
-                }
+                byte[] buffer = new byte[byteCount];
 
-                await WriteAsync(result.Buffer.ToArray(), cancellationToken);
-                pipe.Reader.AdvanceTo(result.Buffer.Start, result.Buffer.End);
-            }
-            else
-            {
-                Console.WriteLine("Hit else");
+                _pipeRStream.Read(buffer, 0, byteCount);
 
-                ReadResult result;
-                pipe.Reader.TryRead(out result);
+                await WriteAsync(buffer.ToArray(), cancellationToken);
 
-                if (result.IsCompleted)
-                {
-                    break;
-                }
-
+                previousPipePosition = byteCount;
             }
 
+            semaphore.Release();
 
             await Task.Delay(500, cancellationToken); // arbitrary
         }
@@ -188,14 +193,16 @@ internal class MultiPartUploadStream : Stream
 
     public override void Write(byte[] buffer, int offset, int count)
     {
-        //Console.WriteLine("Write: " + offset + " | " + count);
-
         if (Closed)
             throw new ObjectDisposedException(nameof(MultiPartUploadStream));
 
-        pipe.Writer.Write(buffer.AsMemory().Slice(offset, count).Span);
+        _pipeWStream.Write(buffer, offset, count);
 
-        //pipe.Writer.Advance(count);
+        semaphore.Wait();
+
+        byteCount += count;
+
+        semaphore.Release();
     }
 
     public override bool CanRead => false;
