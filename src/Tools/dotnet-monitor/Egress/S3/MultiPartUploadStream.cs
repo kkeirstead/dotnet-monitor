@@ -30,7 +30,11 @@ internal class MultiPartUploadStream : Stream
 
     private Pipe pipe = new Pipe();
 
+    //SemaphoreSlim _semaphore = new SemaphoreSlim(0, 1);
     Task _writeSynchronousArtifacts;
+    Task _flush;
+
+    bool _isCompleted;
 
     public MultiPartUploadStream(IS3Storage client, string bucketName, string objectKey, string uploadId, int bufferSize)
     {
@@ -45,6 +49,7 @@ internal class MultiPartUploadStream : Stream
     public MultiPartUploadStream(IS3Storage client, string bucketName, string objectKey, string uploadId, int bufferSize, CancellationToken token) : this(client, bucketName, objectKey, uploadId, bufferSize)
     {
         _writeSynchronousArtifacts = StartAsyncLoop(token);
+        _flush = FlushLoop(token);
     }
 
     public override async Task FlushAsync(CancellationToken cancellationToken)
@@ -63,6 +68,7 @@ internal class MultiPartUploadStream : Stream
         Console.WriteLine("Between S and M Finalize");
 
         await _writeSynchronousArtifacts;
+        await _flush;
 
         Console.WriteLine("MiddleFinalize");
 
@@ -85,38 +91,58 @@ internal class MultiPartUploadStream : Stream
             if (Closed)
                 throw new ObjectDisposedException(nameof(MultiPartUploadStream));
 
-            if (pipe.Writer.UnflushedBytes != 0)
+            //await _semaphore.WaitAsync(cancellationToken);
+            Console.WriteLine("Inside SAL");
+
+            ReadResult result;
+            bool read = pipe.Reader.TryRead(out result);
+
+            if (read)
             {
-                Console.WriteLine("Unflushed bytes: " + pipe.Writer.UnflushedBytes);
-                _ = await pipe.Writer.FlushAsync(cancellationToken);
-
-                ReadResult result = await pipe.Reader.ReadAsync(cancellationToken);
-
                 if (result.IsCompleted)
                 {
+                    Console.WriteLine("SAL - is completed");
+                    _isCompleted = true;
+                    await pipe.Reader.CompleteAsync();
                     break;
                 }
 
                 await WriteAsync(result.Buffer.ToArray(), cancellationToken);
                 pipe.Reader.AdvanceTo(result.Buffer.Start, result.Buffer.End);
             }
-            else
-            {
-                Console.WriteLine("Hit else");
 
-                ReadResult result;
-                pipe.Reader.TryRead(out result);
+            await Task.Delay(20, cancellationToken); // arbitrary
+        }
+    }
+
+    public async Task FlushLoop(CancellationToken cancellationToken)
+    {
+        Console.WriteLine("FlushLoop");
+
+        while (!_isCompleted)
+        {
+            if (pipe.Writer.UnflushedBytes > 0)
+            {
+                Console.WriteLine($"Unflushed Bytes BEFORE: {pipe.Writer.UnflushedBytes}");
+
+                //await _semaphore.WaitAsync(cancellationToken);
+                FlushResult result = await pipe.Writer.FlushAsync(cancellationToken);
+
+                Console.WriteLine($"Unflushed Bytes AFTER: {pipe.Writer.UnflushedBytes}");
+
+                //_semaphore.Release();
 
                 if (result.IsCompleted)
                 {
+                    Console.WriteLine("Flush - is completed");
                     break;
                 }
-
             }
 
-
-            await Task.Delay(500, cancellationToken); // arbitrary
+            await Task.Delay(20, cancellationToken);
         }
+
+        Console.WriteLine("Exited flush loop");
     }
 
     public override void Flush()
@@ -142,6 +168,8 @@ internal class MultiPartUploadStream : Stream
 
     public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken)
     {
+        Console.WriteLine("WriteAsync");
+
         if (Closed)
             throw new ObjectDisposedException(nameof(MultiPartUploadStream));
 
@@ -188,12 +216,12 @@ internal class MultiPartUploadStream : Stream
 
     public override void Write(byte[] buffer, int offset, int count)
     {
-        //Console.WriteLine("Write: " + offset + " | " + count);
-
         if (Closed)
             throw new ObjectDisposedException(nameof(MultiPartUploadStream));
 
         pipe.Writer.Write(buffer.AsMemory().Slice(offset, count).Span);
+
+        //Console.WriteLine($"Write: | {offset} | {count}");
 
         //pipe.Writer.Advance(count);
     }
