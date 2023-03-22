@@ -31,7 +31,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace Microsoft.Diagnostics.Tools.Monitor
 {
@@ -217,10 +216,10 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             // Add the services to discover extensions
             services.AddSingleton<ExtensionDiscoverer>();
 
-            string nextToMeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string executingAssemblyFolder = settings.ExecutingAssemblyDirectory;
             string progDataFolder = settings.SharedConfigDirectory;
             string settingsFolder = settings.UserConfigDirectory;
-            string dotnetToolsFolder = ToolsExtensionRepository.DotnetToolsExtensionDirectoryPath;
+            string dotnetToolsFolder = settings.DotnetToolsExtensionDirectory;
 
             if (string.IsNullOrWhiteSpace(progDataFolder)
                 || string.IsNullOrWhiteSpace(settingsFolder)
@@ -230,7 +229,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             }
 
             // Add the folders we search to get extensions from
-            services.AddFolderExtensionRepository(nextToMeFolder);
+            services.AddFolderExtensionRepository(executingAssemblyFolder);
             services.AddFolderExtensionRepository(progDataFolder);
             services.AddFolderExtensionRepository(settingsFolder);
             services.AddToolsExtensionRepository(dotnetToolsFolder);
