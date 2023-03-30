@@ -203,6 +203,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 case EventType.Rate:
                     return "counter";
                 case EventType.Gauge:
+                case EventType.UpDownCounter: // In Promtheus, Counters are monotonically increasing - list UpDownCounter as a "gauge" in Prometheus.
                     return "gauge";
                 case EventType.Histogram:
                     return "summary";
