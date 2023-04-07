@@ -90,5 +90,27 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress
         {
             settings.Metadata.Add($"{ToolIdentifiers.StandardPrefix}{key}", value);
         }
+
+        public async Task<EgressResult> EndOfSessionEgressAsync(string providerName, Func<Stream, CancellationToken, Task> action, string fileName, string contentType, CancellationToken token)
+        {
+            IEgressExtension extension = _source.GetEgressProvider(providerName);
+
+            EgressArtifactSettings settings = new();
+            settings.Name = fileName;
+            settings.ContentType = contentType;
+
+            EgressArtifactResult result = await extension.EgressArtifact(
+                providerName,
+                settings,
+                action,
+                token);
+
+            if (!result.Succeeded)
+            {
+                throw new EgressException(Strings.ErrorMessage_EgressExtensionFailed);
+            }
+
+            return new EgressResult(result.ArtifactPath);
+        }
     }
 }

@@ -35,8 +35,31 @@ namespace Microsoft.Diagnostics.Monitoring.Extension.Common
             EgressArtifactResult result = new();
             try
             {
-                string jsonConfig = Console.ReadLine();
-                ExtensionEgressPayload configPayload = JsonSerializer.Deserialize<ExtensionEgressPayload>(jsonConfig);
+                StdInStream = Console.OpenStandardInput();
+
+                byte[] buffer = new byte[sizeof(long)];
+
+                int res1 = StdInStream.Read(buffer, 0, sizeof(long));
+
+                if (res1 != sizeof(long))
+                {
+                    throw new EgressException("Unable to read length of payload from stdin.");
+                }
+
+                long length = BitConverter.ToInt64(buffer);
+
+                byte[] buffer2 = new byte[length];
+
+                int res2 = StdInStream.Read(buffer2, 0, (int)(length));
+
+                if (res2 != length)
+                {
+                    throw new EgressException("Unable to read length of payload from stdin.");
+                }
+
+
+                //string jsonConfig = Console.ReadLine();
+                ExtensionEgressPayload configPayload = JsonSerializer.Deserialize<ExtensionEgressPayload>(buffer2);
 
                 using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
                 {
@@ -113,7 +136,7 @@ namespace Microsoft.Diagnostics.Monitoring.Extension.Common
         {
             const int DefaultBufferSize = 0x10000;
 
-            StdInStream = Console.OpenStandardInput();
+            //StdInStream = Console.OpenStandardInput();
             await StdInStream.CopyToAsync(outputStream, DefaultBufferSize, cancellationToken);
         }
     }

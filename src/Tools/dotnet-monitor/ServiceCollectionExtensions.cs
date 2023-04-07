@@ -66,6 +66,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             return ConfigureOptions<TemplateOptions>(services, configuration, ConfigurationKeys.Templates);
         }
 
+        public static IServiceCollection ConfigureSummary(this IServiceCollection services, IConfiguration configuration)
+        {
+            return ConfigureOptions<SummaryOptions>(services, configuration, ConfigurationKeys.Summary);
+        }
+
         public static IServiceCollection ConfigureInProcessFeatures(this IServiceCollection services, IConfiguration configuration)
         {
             return ConfigureOptions<InProcessFeaturesOptions>(services, configuration, ConfigurationKeys.InProcessFeatures)

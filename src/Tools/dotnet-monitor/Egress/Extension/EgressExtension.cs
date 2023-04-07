@@ -148,8 +148,21 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Egress
 
             parser.BeginReading();
 
-            await JsonSerializer.SerializeAsync<ExtensionEgressPayload>(p.StandardInput.BaseStream, payload, options: null, token);
-            await p.StandardInput.WriteAsync(NewLine, token);
+            Stream tempStream = new MemoryStream();
+            await JsonSerializer.SerializeAsync<ExtensionEgressPayload>(tempStream, payload, options: null, token);
+
+            long length = tempStream.Position;
+
+
+            await p.StandardInput.BaseStream.WriteAsync(BitConverter.GetBytes(length).AsMemory(), token);
+
+            tempStream.Position = 0;
+
+            await tempStream.CopyToAsync(p.StandardInput.BaseStream, token);
+
+
+            //await JsonSerializer.SerializeAsync<ExtensionEgressPayload>(p.StandardInput.BaseStream, payload, options: null, token);
+            //await p.StandardInput.WriteAsync(NewLine, token);
             await p.StandardInput.BaseStream.FlushAsync(token);
             _logger.ExtensionConfigured(pStart.FileName, p.Id);
 

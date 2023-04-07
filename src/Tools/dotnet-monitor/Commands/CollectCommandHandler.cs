@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,12 +31,46 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
                 IHost host = HostBuilderHelper.CreateHostBuilder(settings)
                     .Configure(authMode, noHttpEgress, settings)
                     .Build();
+                    //.ConfigureHostOptions to configure timeout
 
                 try
                 {
                     await host.StartAsync(token);
 
                     await host.WaitForShutdownAsync(token);
+
+                    if (true/*summaryOptions.Enabled*/)
+                    {
+                        CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromSeconds(100));
+
+                        var action = new Func<Stream, CancellationToken, Task>(async (stream, ct) =>
+                        {
+                            Console.WriteLine("Begin action.");
+                            JsonWriterOptions options = new() { Indented = true };
+                            var writer = new Utf8JsonWriter(stream, options);
+
+                            //await Task.Delay(400, ct);
+
+                            writer.WriteStartObject();
+                            writer.WriteString("Key1", "Summary Value.");
+                            writer.WriteString("Key2", "Summary Value.");
+
+                            writer.WriteEndObject();
+
+                            await writer.FlushAsync(ct);
+
+                            Console.WriteLine("End action: ");
+                        });
+
+                        var artifactName = "summary" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".json";
+                        // like what I'm doing in the validation, hook into the EgressAsync method and await it here
+                        // add a token for cancellation if it's taking too long or if the user cancels the process?
+                        await EgressOperation.EndOfSessionEgressAsync(host.Services, "monitorBlob", action, artifactName, ContentTypes.ApplicationJson, cts.Token);
+                    }
+                    //var summaryOptions = host.Services.GetService<SummaryOptions>();
+
+                    // Shut down -> 5 seconds (but can figure that)
+                    //Ihostapplicationlifetime -> >ApplicationStopping< / ApplicationStopped -> register callback
                 }
                 catch (MonitoringException)
                 {
@@ -51,6 +86,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
                 }
                 catch (OperationCanceledException) when (token.IsCancellationRequested)
                 {
+                    Console.WriteLine("Token was cancelled.");
                     // The host will throw a OperationCanceledException if it cannot shut down the
                     // hosted services gracefully within the shut down timeout period. Handle the
                     // exception and let the tool exit gracefully.
@@ -105,6 +141,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
 
                 services.ConfigureTemplates(context.Configuration);
 
+                services.ConfigureSummary(context.Configuration);
+
                 services.AddSingleton<IEndpointInfoSource, FilteredEndpointInfoSource>();
                 services.AddSingleton<ServerEndpointInfoSource>();
                 services.AddHostedServiceForwarder<ServerEndpointInfoSource>();
@@ -132,6 +170,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
                 services.AddSingleton<ILogsOperationFactory, LogsOperationFactory>();
                 services.AddSingleton<IMetricsOperationFactory, MetricsOperationFactory>();
                 services.AddSingleton<ITraceOperationFactory, TraceOperationFactory>();
+                services.AddSingleton<ISessionSummary, SessionSummary>();
             })
             .ConfigureContainer((HostBuilderContext context, IServiceCollection services) =>
             {

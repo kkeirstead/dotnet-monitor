@@ -37,6 +37,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         public const string Templates = nameof(RootOptions.Templates);
 
+        public const string Summary = nameof(RootOptions.Summary);
+
         public const string InternalHostBuilderSettings = nameof(InternalHostBuilderSettings);
     }
 }

@@ -35,5 +35,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         public CollectionRuleDefaultsOptions CollectionRuleDefaults { get; set; }
 
         public TemplateOptions Templates { get; set; }
+
+        public SummaryOptions Summary { get; set; }
     }
 }

@@ -20,5 +20,12 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             IEndpointInfo source,
             CollectionRuleMetadata collectionRuleMetadata,
             CancellationToken token);
+
+        Task<EgressResult> EndOfSessionEgressAsync(
+            string providerName,
+            Func<Stream, CancellationToken, Task> action,
+            string fileName,
+            string contentType,
+            CancellationToken token);
     }
 }
