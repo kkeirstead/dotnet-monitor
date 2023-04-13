@@ -25,7 +25,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             ServerUrlsBlockingConfigurationManager manager = new();
             manager.IsBlocking = true;
 
-            return new HostBuilder()
+            return new HostBuilder().ConfigureHostOptions((HostOptions options) =>
+                {
+                    // Set the default shutdown timeout to 1 minute.
+                    options.ShutdownTimeout = TimeSpan.FromMinutes(1);
+                })
                 .ConfigureHostConfiguration((IConfigurationBuilder builder) =>
                 {
                     // Configure default values

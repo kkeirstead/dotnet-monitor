@@ -22,8 +22,12 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
         private readonly IArtifactOperation _operation;
 
+        public OperationsSummary _operationSummary = new();
+
         public EgressOperation(Func<Stream, CancellationToken, Task> action, string endpointName, string artifactName, IProcessInfo processInfo, string contentType, KeyValueLogScope scope, string tags, CollectionRuleMetadata collectionRuleMetadata = null)
         {
+            UpdateSessionSummary(endpointName, artifactName, processInfo);
+
             _egress = (service, token) => service.EgressAsync(endpointName, action, artifactName, contentType, processInfo.EndpointInfo, collectionRuleMetadata, token);
             EgressProviderName = endpointName;
             _scope = scope;
@@ -46,8 +50,19 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             _scope = scope;
         }
 
+        private void UpdateSessionSummary(string endpointName, string artifactName, IProcessInfo processInfo)
+        {
+            _operationSummary = new();
+            _operationSummary.ArtifactName = artifactName;
+            _operationSummary.ProcessInfo = processInfo;
+            _operationSummary.EgressProvider = endpointName;
+        }
+
         public async Task<ExecutionResult<EgressResult>> ExecuteAsync(IServiceProvider serviceProvider, CancellationToken token)
         {
+            var summaryOptions = serviceProvider.GetService<ISessionSummary>();
+            summaryOptions.Operations.Add(_operationSummary);
+
             ILogger<EgressOperation> logger = serviceProvider
                 .GetRequiredService<ILoggerFactory>()
                 .CreateLogger<EgressOperation>();

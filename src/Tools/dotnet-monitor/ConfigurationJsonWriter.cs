@@ -27,7 +27,12 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             _writer = new Utf8JsonWriter(outputStream, options);
         }
 
-        public void Write(IConfiguration configuration, bool full, bool skipNotPresent, bool showSources = false)
+        public ConfigurationJsonWriter(Utf8JsonWriter writer)
+        {
+            _writer = writer ?? throw new ArgumentNullException(nameof(writer));
+        }
+
+        public void Write(IConfiguration configuration, bool full, bool skipNotPresent, bool showSources = false, bool configurationHeader = false)
         {
             _configuration = configuration;
             //Note that we avoid IConfigurationRoot.GetDebugView because it shows everything
@@ -36,7 +41,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             //CONSIDER There's probably room for making this code more generalized, to separate the output from the traversal
             //but it seemed like over-engineering.
 
-            using (new JsonObjectContext(_writer))
+            using (new JsonObjectContext(_writer, configurationHeader))
             {
                 ProcessChildSection(configuration, WebHostDefaults.ServerUrlsKey, skipNotPresent, showSources: showSources);
                 IConfigurationSection kestrel = ProcessChildSection(configuration, "Kestrel", skipNotPresent, includeChildSections: false, showSources: showSources);
@@ -302,10 +307,17 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         {
             private readonly Utf8JsonWriter Writer;
 
-            public JsonObjectContext(Utf8JsonWriter writer)
+            public JsonObjectContext(Utf8JsonWriter writer, bool configurationHeader = false)
             {
                 Writer = writer;
-                Writer.WriteStartObject();
+                if (configurationHeader)
+                {
+                    Writer.WriteStartObject("Configuration");
+                }
+                else
+                {
+                    Writer.WriteStartObject();
+                }
             }
 
             public void Dispose()
