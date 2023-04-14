@@ -42,10 +42,12 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
 
                     Console.WriteLine("Application is shutting down begin");
 
+                    var summaryOptions = host.Services.GetService<IOptions<SummaryOptions>>().Value;
+
                     var sessionSummary = host.Services.GetService<ISessionSummary>();
                     IConfiguration configuration = host.Services.GetRequiredService<IConfiguration>();
 
-                    if (true/*summaryOptions.Enabled*/)
+                    if (summaryOptions.Enabled)
                     {
                         //CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromSeconds(100));
 
@@ -120,7 +122,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
                         var artifactName = "summary" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".json";
                         // like what I'm doing in the validation, hook into the EgressAsync method and await it here
                         // add a token for cancellation if it's taking too long or if the user cancels the process?
-                        var result = Task.Run(async () => await EgressOperation.EndOfSessionEgressAsync(host.Services, "monitorBlob", action, artifactName, ContentTypes.ApplicationJson, CancellationToken.None));
+                        var result = Task.Run(async () => await EgressOperation.EndOfSessionEgressAsync(host.Services, summaryOptions.Egress, action, artifactName, ContentTypes.ApplicationJson, CancellationToken.None));
                         
 
                         for (int index = 0; index < int.MaxValue; ++index)

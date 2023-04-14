@@ -68,7 +68,9 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         public static IServiceCollection ConfigureSummary(this IServiceCollection services, IConfiguration configuration)
         {
-            return ConfigureOptions<SummaryOptions>(services, configuration, ConfigurationKeys.Summary);
+            return ConfigureOptions<SummaryOptions>(services, configuration, ConfigurationKeys.Summary)
+                .AddSingleton<SummaryOptions>();
+
         }
 
         public static IServiceCollection ConfigureInProcessFeatures(this IServiceCollection services, IConfiguration configuration)
