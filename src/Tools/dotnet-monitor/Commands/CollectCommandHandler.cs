@@ -94,21 +94,57 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
                             //writer.WriteEndObject();
                             foreach (OperationsSummary summary in sessionSummary.Operations)
                             {
-                                writer.WriteStartObject(summary.ArtifactName);
-                                writer.WriteStartObject("Process: ");
-                                writer.WriteString("ProcessName", summary.ProcessInfo.ProcessName);
-                                writer.WriteString("ProcessId", summary.ProcessInfo.EndpointInfo.ProcessId.ToString());
-                                writer.WriteString("UUID", summary.ProcessInfo.EndpointInfo.RuntimeInstanceCookie.ToString());
-                                writer.WriteString("Commandline", summary.ProcessInfo.EndpointInfo.CommandLine);
-                                writer.WriteEndObject();
-                                writer.WriteString("EgressProvider", summary.EgressProvider);
-                                writer.WriteString("StartTime", summary.Time.ToString());
-                                writer.WriteString("Duration", summary.Duration.ToString());
-                                writer.WriteString("Success", summary.Success.ToString());
+                                if (!string.IsNullOrEmpty(summary.ArtifactName))
+                                {
+                                    writer.WriteStartObject(summary.ArtifactName);
+                                    writer.WriteStartObject("Process: ");
+                                    writer.WriteString("ProcessName", summary.ProcessInfo.ProcessName);
+                                    writer.WriteString("ProcessId", summary.ProcessInfo.EndpointInfo.ProcessId.ToString());
+                                    writer.WriteString("UUID", summary.ProcessInfo.EndpointInfo.RuntimeInstanceCookie.ToString());
+                                    writer.WriteString("Commandline", summary.ProcessInfo.EndpointInfo.CommandLine);
+                                    writer.WriteEndObject();
+                                    writer.WriteString("EgressProvider", summary.EgressProvider);
+                                    writer.WriteString("StartTime", summary.Time.ToString());
+                                    writer.WriteString("Duration", summary.Duration.ToString());
+                                    writer.WriteString("Success", summary.Success.ToString());
+                                    writer.WriteEndObject();
+                                }
+                            }
+                            writer.WriteEndObject();
+
+                            writer.WriteStartObject("CollectionRules");
+
+                            foreach (var pair in sessionSummary.CollectionRules.CollectionRule)
+                            {
+                                writer.WriteStartObject(pair.Key);
+
+                                writer.WriteString("StartTime", pair.Value.StartTime.ToString());
+
+                                foreach (var processPair in pair.Value.Activity)
+                                {
+                                    writer.WriteStartObject(processPair.Key.ToString());
+
+                                    foreach (var activity in processPair.Value)
+                                    {
+                                        writer.WriteStartObject(activity.Timestamp.ToString());
+
+                                        writer.WriteString("State", activity.State);
+
+                                        writer.WriteEndObject();
+                                    }
+                                    writer.WriteEndObject();
+                                }
                                 writer.WriteEndObject();
                             }
-
                             writer.WriteEndObject();
+
+
+                            /*                            string userSettingsContent = JsonSerializer.Serialize(sessionSummary.CollectionRules);
+                                                        userSettingsContent = userSettingsContent.Substring(1);
+                                                        userSettingsContent = userSettingsContent.Substring(0, userSettingsContent.Length - 1); // trim braces
+                                                        writer.WriteRawValue(userSettingsContent); // no idea if this will work.
+                            */
+
 
                             writer.WriteEndObject();
 
@@ -116,7 +152,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
 
                             Console.WriteLine("End action.");
 
-                            await Task.Delay(20000, ct); // stalling
+                            await Task.Delay(1, ct);
                         });
 
                         var artifactName = "summary" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".json";
@@ -125,15 +161,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
                         var result = Task.Run(async () => await EgressOperation.EndOfSessionEgressAsync(host.Services, summaryOptions.Egress, action, artifactName, ContentTypes.ApplicationJson, CancellationToken.None));
                         
 
-                        for (int index = 0; index < int.MaxValue; ++index)
+                        for (int index = 0; index < int.MaxValue / 3; ++index)
                         {
-                            if (index % 1000000 == 0)
+                            if (index % 10000000 == 0)
                             {
                                 Console.WriteLine("2: " + index);
                             }
                         }
 
-                        result.Wait(10000);
+                        //result.Wait(10000);
 
                         await Task.Delay(1);
 

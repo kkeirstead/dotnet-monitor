@@ -32,19 +32,28 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
     public class CollectionRulesSummary
     {
-        public List<CollectionRuleSummary> CollectionRule { get; set; }
+        public Dictionary<string, CollectionRuleSummary> CollectionRule { get; set; } = new Dictionary<string, CollectionRuleSummary>();
     }
 
     public class CollectionRuleSummary
     {
-        public Dictionary<ProcessFilterDescriptor, List<CollectionRuleActivity>> Activity { get; set; }
-        public string Name { get; set; }
+        public Dictionary<string, CollectionRuleSessionSummary> Summary { get; set; } = new Dictionary<string, CollectionRuleSessionSummary>();
+        internal Dictionary<Guid, List<CollectionRuleActivity>> Activity { get; set; } = new Dictionary<Guid, List<CollectionRuleActivity>>(); // simplifying to just use runtime guid for now
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
     }
 
     public class CollectionRuleActivity
     {
+        public TimeSpan Timestamp { get; set; }
+        public string State { get; set; } // might use enum
+        public string CollectionRuleName { get; set; }
 
+    }
+
+    public class CollectionRuleSessionSummary
+    {
+        public int TotalCount { get; set; }
+        internal Dictionary<IProcessInfo, int> CountPerProcess { get; set; } = new Dictionary<IProcessInfo, int>();
     }
 }

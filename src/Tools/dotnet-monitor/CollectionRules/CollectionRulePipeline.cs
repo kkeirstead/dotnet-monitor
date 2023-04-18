@@ -6,7 +6,9 @@ using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Actions;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Triggers;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,16 +33,20 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
 
         private CollectionRulePipelineState _stateHolder;
 
+        private IServiceProvider _serviceProvider;
+
         public CollectionRulePipeline(
             ActionListExecutor actionListExecutor,
             ICollectionRuleTriggerOperations triggerOperations,
             CollectionRuleContext context,
-            Action startCallback)
+            Action startCallback,
+            IServiceProvider serviceProvider)
         {
             _actionListExecutor = actionListExecutor ?? throw new ArgumentNullException(nameof(actionListExecutor));
             Context = context ?? throw new ArgumentNullException(nameof(context));
             _startCallback = startCallback;
             _triggerOperations = triggerOperations ?? throw new ArgumentNullException(nameof(triggerOperations));
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -53,6 +59,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
         /// </remarks>
         protected override async Task OnRun(CancellationToken token)
         {
+            var sessionSummary = _serviceProvider.GetService<ISessionSummary>();
+
             if (!_triggerOperations.TryCreateFactory(Context.Options.Trigger.Type, out ICollectionRuleTriggerFactoryProxy factory))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, Strings.ErrorMessage_CouldNotMapToTrigger, Context.Options.Trigger.Type));
@@ -106,6 +114,44 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                             throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, Strings.ErrorMessage_TriggerFactoryFailed, Context.Options.Trigger.Type));
                         }
 
+
+                        if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out var ruleSummary))
+                        {
+                            if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                            {
+                                CollectionRuleActivity activity = new();
+                                activity.Timestamp = DateTime.Now.TimeOfDay;
+                                activity.State = nameof(CollectionRuleState.Running);
+
+                                if (processSummary[processSummary.Count - 1].State != nameof(CollectionRuleState.Running))
+                                    processSummary.Add(activity);
+                            }
+                            else
+                            {
+                                processSummary = new List<CollectionRuleActivity>();
+                                CollectionRuleActivity activity = new();
+                                activity.Timestamp = DateTime.Now.TimeOfDay;
+                                activity.State = nameof(CollectionRuleState.Running);
+                                processSummary.Add(activity);
+                                ruleSummary.Activity.Add(Context.EndpointInfo.RuntimeInstanceCookie, processSummary);
+                            }
+                        }
+                        else
+                        {
+                            CollectionRuleSummary summary = new();
+
+                            summary.StartTime = DateTime.Now.TimeOfDay;
+
+                            var processSummary = new List<CollectionRuleActivity>();
+                            CollectionRuleActivity activity = new();
+                            activity.Timestamp = DateTime.Now.TimeOfDay;
+                            activity.State = nameof(CollectionRuleState.Running);
+                            processSummary.Add(activity);
+                            summary.Activity.Add(Context.EndpointInfo.RuntimeInstanceCookie, processSummary);
+
+                            sessionSummary.CollectionRules.CollectionRule.Add(Context.Name, summary);
+                        }
+
                         // Start the trigger.
                         await trigger.StartAsync(linkedToken).ConfigureAwait(false);
 
@@ -141,6 +187,19 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
 
                     if (_stateHolder.BeginActionExecution(currentTimestamp))
                     {
+                        if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out var ruleSummary))
+                        {
+                            if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                            {
+                                CollectionRuleActivity activity = new();
+                                activity.Timestamp = DateTime.Now.TimeOfDay;
+                                activity.State = nameof(CollectionRuleState.ActionExecuting);
+
+                                if (processSummary[processSummary.Count - 1].State != nameof(CollectionRuleState.ActionExecuting))
+                                    processSummary.Add(activity);
+                            }
+                        }
+
                         bool actionsCompleted = false;
                         try
                         {
@@ -168,6 +227,16 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                             // actions, the pipeline can complete.
 
                             completePipeline = _stateHolder.CheckForActionCountLimitReached();
+
+                            if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out ruleSummary))
+                            {
+                                if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                                {
+                                    CollectionRuleActivity activity = new();
+                                    activity.Timestamp = DateTime.Now.TimeOfDay;
+                                    activity.State = _stateHolder.CurrentState.ToString(); // might not work
+                                }
+                            }
                         }
                     }
                     else

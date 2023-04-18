@@ -30,6 +30,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
         private readonly List<Task> _runTasks = new();
         private readonly ISystemClock _systemClock;
         private readonly ICollectionRuleTriggerOperations _triggerOperations;
+        private IServiceProvider _serviceProvider;
 
         public List<CollectionRulePipeline> Pipelines { get; set; } = new();
 
@@ -46,6 +47,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
+            _serviceProvider = serviceProvider;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _processInfo = processInfo ?? throw new ArgumentNullException(nameof(processInfo));
 
@@ -206,7 +208,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                     _actionListExecutor,
                     _triggerOperations,
                     context,
-                    () => startedSource.TrySetResult(null));
+                    () => startedSource.TrySetResult(null),
+                    _serviceProvider);
 
                 Pipelines.Add(pipeline);
 

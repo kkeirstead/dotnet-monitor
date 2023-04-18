@@ -11,6 +11,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor
     {
         public List<OperationsSummary> Operations { get; set; } = new();
         public Dictionary<TimeSpan, ConfigurationSummary> Configuration { get; set; }
-        public CollectionRulesSummary CollectionRules { get; set; }
+        public CollectionRulesSummary CollectionRules { get; set; } = new CollectionRulesSummary();
     }
 }
