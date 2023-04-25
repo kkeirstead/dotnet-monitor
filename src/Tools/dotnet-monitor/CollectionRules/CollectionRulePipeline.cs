@@ -115,41 +115,45 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                         }
 
 
-                        if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out var ruleSummary))
+                        lock (sessionSummary.CollectionRules.CollectionRule)
                         {
-                            if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                            if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out var ruleSummary))
                             {
-                                CollectionRuleActivity activity = new();
-                                activity.Timestamp = DateTime.Now.TimeOfDay;
-                                activity.State = nameof(CollectionRuleState.Running);
+                                if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                                {
+                                    CollectionRuleActivity activity = new();
+                                    activity.Timestamp = DateTime.Now.TimeOfDay;
+                                    activity.State = _stateHolder.CurrentState.ToString();
 
-                                if (processSummary[processSummary.Count - 1].State != nameof(CollectionRuleState.Running))
+                                    if (processSummary[processSummary.Count - 1].State != activity.State)
+                                        processSummary.Add(activity);
+                                }
+                                else
+                                {
+                                    processSummary = new List<CollectionRuleActivity>();
+                                    CollectionRuleActivity activity = new();
+                                    activity.Timestamp = DateTime.Now.TimeOfDay;
+                                    activity.State = _stateHolder.CurrentState.ToString();
+
                                     processSummary.Add(activity);
+                                    ruleSummary.Activity.Add(Context.EndpointInfo.RuntimeInstanceCookie, processSummary);
+                                }
                             }
                             else
                             {
-                                processSummary = new List<CollectionRuleActivity>();
+                                CollectionRuleSummary summary = new();
+
+                                summary.StartTime = DateTime.Now.TimeOfDay;
+
+                                var processSummary = new List<CollectionRuleActivity>();
                                 CollectionRuleActivity activity = new();
                                 activity.Timestamp = DateTime.Now.TimeOfDay;
                                 activity.State = nameof(CollectionRuleState.Running);
                                 processSummary.Add(activity);
-                                ruleSummary.Activity.Add(Context.EndpointInfo.RuntimeInstanceCookie, processSummary);
+                                summary.Activity.Add(Context.EndpointInfo.RuntimeInstanceCookie, processSummary);
+
+                                sessionSummary.CollectionRules.CollectionRule.Add(Context.Name, summary);
                             }
-                        }
-                        else
-                        {
-                            CollectionRuleSummary summary = new();
-
-                            summary.StartTime = DateTime.Now.TimeOfDay;
-
-                            var processSummary = new List<CollectionRuleActivity>();
-                            CollectionRuleActivity activity = new();
-                            activity.Timestamp = DateTime.Now.TimeOfDay;
-                            activity.State = nameof(CollectionRuleState.Running);
-                            processSummary.Add(activity);
-                            summary.Activity.Add(Context.EndpointInfo.RuntimeInstanceCookie, processSummary);
-
-                            sessionSummary.CollectionRules.CollectionRule.Add(Context.Name, summary);
                         }
 
                         // Start the trigger.
@@ -187,16 +191,19 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
 
                     if (_stateHolder.BeginActionExecution(currentTimestamp))
                     {
-                        if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out var ruleSummary))
+                        lock (sessionSummary.CollectionRules.CollectionRule)
                         {
-                            if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                            if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out var ruleSummary))
                             {
-                                CollectionRuleActivity activity = new();
-                                activity.Timestamp = DateTime.Now.TimeOfDay;
-                                activity.State = nameof(CollectionRuleState.ActionExecuting);
+                                if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                                {
+                                    CollectionRuleActivity activity = new();
+                                    activity.Timestamp = DateTime.Now.TimeOfDay;
+                                    activity.State = _stateHolder.CurrentState.ToString();
 
-                                if (processSummary[processSummary.Count - 1].State != nameof(CollectionRuleState.ActionExecuting))
-                                    processSummary.Add(activity);
+                                    if (processSummary[processSummary.Count - 1].State != activity.State)
+                                        processSummary.Add(activity);
+                                }
                             }
                         }
 
@@ -228,13 +235,16 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
 
                             completePipeline = _stateHolder.CheckForActionCountLimitReached();
 
-                            if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out ruleSummary))
+                            lock (sessionSummary.CollectionRules.CollectionRule)
                             {
-                                if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                                if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out var ruleSummary))
                                 {
-                                    CollectionRuleActivity activity = new();
-                                    activity.Timestamp = DateTime.Now.TimeOfDay;
-                                    activity.State = _stateHolder.CurrentState.ToString(); // might not work
+                                    if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                                    {
+                                        CollectionRuleActivity activity = new();
+                                        activity.Timestamp = DateTime.Now.TimeOfDay;
+                                        activity.State = _stateHolder.CurrentState.ToString(); 
+                                    }
                                 }
                             }
                         }
@@ -244,6 +254,22 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                         Context.ThrottledCallback?.Invoke();
 
                         Context.Logger.CollectionRuleThrottled(Context.Name);
+
+                        lock (sessionSummary.CollectionRules.CollectionRule)
+                        {
+                            if (sessionSummary.CollectionRules.CollectionRule.TryGetValue(Context.Name, out var ruleSummary))
+                            {
+                                if (ruleSummary.Activity.TryGetValue(Context.EndpointInfo.RuntimeInstanceCookie, out var processSummary))
+                                {
+                                    CollectionRuleActivity activity = new();
+                                    activity.Timestamp = DateTime.Now.TimeOfDay;
+                                    activity.State = CollectionRuleState.Throttled.ToString();
+
+                                    if (processSummary[processSummary.Count - 1].State != nameof(CollectionRuleState.Throttled))
+                                        processSummary.Add(activity);
+                                }
+                            }
+                        }
                     }
 
                     linkedToken.ThrowIfCancellationRequested();
