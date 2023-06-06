@@ -44,9 +44,9 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             _disposalSource.Dispose();
         }
 
-        public void AddExceptionInstance(IExceptionsNameCache cache, ulong exceptionId, string message, DateTime timestamp)
+        public void AddExceptionInstance(IExceptionsNameCache cache, ulong exceptionId, string message, DateTime timestamp, ulong[] stackFrameIds, int threadId)
         {
-            ExceptionInstanceEntry entry = new(cache, exceptionId, message, timestamp);
+            ExceptionInstanceEntry entry = new(cache, exceptionId, message, timestamp, stackFrameIds, threadId);
             // This should never fail to write because the behavior is to drop the oldest.
             _channel.Writer.TryWrite(entry);
         }
@@ -104,9 +104,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                         moduleName = NameFormatter.GetModuleName(entry.Cache.NameCache, exceptionClassData.ModuleId);
                     }
 
+                    CallStackResult callStackResult = GenerateCallStackResult(entry.StackFrameIds, entry.Cache, entry.ThreadId);
+
                     lock (_instances)
                     {
-                        _instances.Add(new ExceptionInstance(exceptionTypeName, moduleName, entry.Message, entry.Timestamp));
+                        _instances.Add(new ExceptionInstance(exceptionTypeName, moduleName, entry.Message, entry.Timestamp, callStackResult));
                     }
                 }
 
@@ -114,14 +116,78 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             }
         }
 
+        internal static CallStackResult GenerateCallStackResult(ulong[] stackFrameIds, IExceptionsNameCache cache, int threadId)
+        {
+            CallStackResult callStackResult = new CallStackResult();
+            CallStack callStack = new();
+            callStack.ThreadId = (uint)threadId;
+
+            foreach (var stackFrameId in stackFrameIds)
+            {
+                if (cache.TryGetStackFrameIds(stackFrameId, out ulong methodId, out int ilOffset))
+                {
+                    if (cache.NameCache.FunctionData.TryGetValue(methodId, out FunctionData functionData))
+                    {
+                        callStackResult.NameCache.FunctionData.TryAdd(methodId, functionData);
+
+                        foreach (var typeArg in functionData.TypeArgs)
+                        {
+                            GetClassData(typeArg, null, cache, callStackResult);
+                        }
+
+                        foreach (var parameter in functionData.Parameters)
+                        {
+                            GetClassData(parameter, null, cache, callStackResult);
+                        }
+
+                        GetClassData(functionData.ParentClass, functionData.ModuleId, cache, callStackResult);
+
+                        if (cache.NameCache.ModuleData.TryGetValue(functionData.ModuleId, out ModuleData moduleData))
+                        {
+                            callStackResult.NameCache.ModuleData.TryAdd(functionData.ModuleId, moduleData);
+                        }
+                    }
+
+                    CallStackFrame frame = new()
+                    {
+                        FunctionId = methodId,
+                        Offset = (ulong)ilOffset
+                    };
+
+                    callStack.Frames.Add(frame);
+                }
+            }
+
+            callStackResult.Stacks.Add(callStack);
+
+            return callStackResult;
+        }
+
+        private static void GetClassData(ulong key, ulong? moduleId, IExceptionsNameCache cache, CallStackResult callStackResult)
+        {
+            if (cache.NameCache.ClassData.TryGetValue(key, out ClassData classData))
+            {
+                callStackResult.NameCache.ClassData.TryAdd(key, classData);
+
+                ModuleScopedToken moduleScopedToken = new(moduleId ?? classData.ModuleId, classData.Token);
+
+                if (cache.NameCache.TokenData.TryGetValue(moduleScopedToken, out TokenData tokenData))
+                {
+                    callStackResult.NameCache.TokenData.TryAdd(moduleScopedToken, tokenData);
+                }
+            }
+        }
+
         private sealed class ExceptionInstanceEntry
         {
-            public ExceptionInstanceEntry(IExceptionsNameCache cache, ulong exceptionId, string message, DateTime timestamp)
+            public ExceptionInstanceEntry(IExceptionsNameCache cache, ulong exceptionId, string message, DateTime timestamp, ulong[] stackFrameIds, int threadId)
             {
                 Cache = cache;
                 ExceptionId = exceptionId;
                 Message = message;
                 Timestamp = timestamp;
+                StackFrameIds = stackFrameIds;
+                ThreadId = threadId;
             }
 
             public IExceptionsNameCache Cache { get; }
@@ -131,6 +197,10 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             public string Message { get; }
 
             public DateTime Timestamp { get; }
+
+            public ulong[] StackFrameIds { get; }
+
+            public int ThreadId { get; }
         }
     }
 }

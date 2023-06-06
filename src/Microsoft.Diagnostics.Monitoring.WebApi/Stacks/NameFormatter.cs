@@ -24,6 +24,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Stacks
         private const char GenericStart = '[';
         private const char GenericSeparator = ',';
         private const char GenericEnd = ']';
+        private const char OpenParentheses = '(';
+        private const char ClosedParentheses = ')';
 
         public static void BuildClassName(StringBuilder builder, NameCache cache, FunctionData functionData)
         {
@@ -114,6 +116,26 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Stacks
                 else if (i == parameters.Length - 1)
                 {
                     builder.Append(GenericEnd);
+                }
+            }
+        }
+
+        public static void BuildMethodParameters(StringBuilder builder, NameCache cache, ulong[] parameters)
+        {
+            for (int i = 0; i < parameters?.Length; i++)
+            {
+                if (i == 0)
+                {
+                    builder.Append(OpenParentheses);
+                }
+                BuildClassName(builder, cache, parameters[i]);
+                if (i < parameters.Length - 1)
+                {
+                    builder.Append(GenericSeparator);
+                }
+                else if (i == parameters.Length - 1)
+                {
+                    builder.Append(ClosedParentheses);
                 }
             }
         }

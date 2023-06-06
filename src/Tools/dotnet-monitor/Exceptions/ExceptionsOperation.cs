@@ -4,10 +4,12 @@
 using Microsoft.Diagnostics.Monitoring;
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.Monitoring.WebApi.Exceptions;
+using Microsoft.Diagnostics.Monitoring.WebApi.Stacks;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -96,6 +98,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                 writer.WriteString("typeName", instance.TypeName);
                 writer.WriteString("moduleName", instance.ModuleName);
                 writer.WriteString("message", instance.Message);
+
+                MemoryStream outputStream = new();
+                StacksFormatter formatter = StackUtilities.CreateFormatter(StackFormat.Json, outputStream);
+                await formatter.FormatStack(instance.CallStackResult, token);
+                outputStream.Position = 0;
+
+                writer.WritePropertyName("callStack");
+                writer.WriteRawValue(new StreamReader(outputStream).ReadToEnd());
+
                 writer.WriteEndObject();
             }
 
@@ -116,6 +127,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             // exception will appear as:
 
             // First chance exception. <TypeName>: <Message>
+            //   at Class.Method
 
             await using StreamWriter writer = new(stream, leaveOpen: true);
 
@@ -125,6 +137,25 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                     Strings.OutputFormatString_FirstChanceException,
                     instance.TypeName,
                     instance.Message));
+
+            if (instance.CallStackResult.Stacks.Any())
+            {
+                CallStack stack = instance.CallStackResult.Stacks.First(); // We know the result only has a single stack
+
+                foreach (CallStackFrame frame in stack.Frames)
+                {
+                    Monitoring.WebApi.Models.CallStackFrame frameModel = StacksFormatter.CreateFrameModel(frame, instance.CallStackResult.NameCache);
+
+                    await writer.WriteLineAsync(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            Strings.OutputFormatString_FirstChanceExceptionStackFrame,
+                            frameModel.ClassName,
+                            frameModel.MethodName));
+                }
+            }
+
+            await writer.WriteLineAsync();
 
             await writer.FlushAsync();
         }

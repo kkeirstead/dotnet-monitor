@@ -8,6 +8,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Exceptions
     internal interface IExceptionsNameCache
     {
         public bool TryGetExceptionId(ulong exceptionId, out ulong exceptionClassId, out ulong throwingMethodId, out int ilOffset);
+        public bool TryGetStackFrameIds(ulong stackFrameId, out ulong methodId, out int ilOffset);
 
         NameCache NameCache { get; }
     }
