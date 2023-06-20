@@ -42,12 +42,8 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
         {
             List<ICounterPayload> payload = new();
 
-            PercentilePayload payload1 = new(MeterName, InstrumentName, "DisplayName", string.Empty, string.Empty, Value1, new Quantile(0.5, Value1), Timestamp);
-            PercentilePayload payload2 = new(MeterName, InstrumentName, "DisplayName", string.Empty, string.Empty, Value2, new Quantile(0.95, Value2), Timestamp);
-            PercentilePayload payload3 = new(MeterName, InstrumentName, "DisplayName", string.Empty, string.Empty, Value3, new Quantile(0.99, Value3), Timestamp);
-
             payload.Add(new AggregatePercentilePayload(MeterName, InstrumentName, "DisplayName", string.Empty, string.Empty,
-                new PercentilePayload[] { payload1, payload2, payload3 },
+                new Quantile[] { new Quantile(0.5, Value1), new Quantile(0.95, Value2), new Quantile(0.99, Value3) },
                 Timestamp));
 
             using MemoryStream stream = await GetMetrics(payload);

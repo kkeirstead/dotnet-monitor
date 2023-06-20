@@ -64,7 +64,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
         public void AddMetric(ICounterPayload metric)
         {
-            if (metric is AggregatePercentilePayload payload && !payload.Payloads.Any())
+            if (metric is AggregatePercentilePayload payload && !payload.Quantiles.Any())
             {
                 // If histogram data is not generated in the monitored app, we can get Histogram events that do not contain quantiles.
                 // For now, we will ignore these events.
@@ -141,10 +141,10 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                     if (metric is AggregatePercentilePayload aggregatePayload)
                     {
                         // Summary quantiles must appear from smallest to largest
-                        foreach (PercentilePayload percentilePayload in aggregatePayload.Payloads.OrderBy(p => p.Quantile.Percentage))
+                        foreach (Quantile quantile in aggregatePayload.Quantiles.OrderBy(q => q.Percentage))
                         {
-                            string metricValue = PrometheusDataModel.GetPrometheusNormalizedValue(metric.Unit, percentilePayload.Value);
-                            string metricLabels = GetMetricLabels(metric, percentilePayload.Quantile.Percentage);
+                            string metricValue = PrometheusDataModel.GetPrometheusNormalizedValue(metric.Unit, quantile.Value);
+                            string metricLabels = GetMetricLabels(metric, quantile.Percentage);
                             await WriteMetricDetails(writer, metric, metricName, metricValue, metricLabels);
                         }
                     }
