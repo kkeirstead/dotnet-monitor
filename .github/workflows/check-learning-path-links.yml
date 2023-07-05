@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
           path: head
 
       - name: Get base commit for the PR
@@ -43,7 +44,6 @@ jobs:
         with:
           repoURLToSearch: 'https://github.com/dotnet/dotnet-monitor'
           learningPathsDirectory: 'documentation/learningPath'
-          textToAdd: '### Was this documentation helpful? [Share feedback](https://www.research.net/r/DGDQWXH?src={insertFileName})'
           paths: ${{ env.updated_files }}
 
       - name: Generate artifacts
