@@ -6,10 +6,6 @@ on:
 permissions:
   pull-requests: read
   
-env:
-  base_branch: "$GITHUB_BASE_REF" + ""
-
-
 jobs:
   check-learning-path-links:
     name: 'Check Learning Path Links'
