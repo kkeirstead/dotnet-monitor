@@ -5,6 +5,10 @@ on:
 
 permissions:
   pull-requests: read
+  
+env:
+  base_branch: "$GITHUB_BASE_REF" + ""
+
 
 jobs:
   check-learning-path-links:
@@ -27,17 +31,16 @@ jobs:
 
       - name: Get base commit for the PR
         run: |
-          git fetch origin "$GITHUB_BASE_REF"
-          base_sha=$(git rev-parse "origin/$GITHUB_BASE_REF")
+          merge_dir=$("origin/$(GITHUB_BASE_REF)/merge")
+          git fetch origin "$merge_dir"
+          base_sha=$(git rev-parse "origin/$merge_dir")
           echo "base_sha=$base_sha" >> $GITHUB_ENV
-          echo "Merging ${GITHUB_SHA} into ${GITHUB_BASE_REF}"
+          echo "Merging ${GITHUB_SHA} into ${merge_dir}"
 
       - name: Get changed files
         run: |
           changed_source_files=$(git diff-tree --no-commit-id --name-only -r "$base_sha" "$GITHUB_SHA" -- documentation ':!merge/documentation/releaseNotes/*' | { grep "**.md$" || test $? = 1; })
           echo "Files to validate: '${changed_source_files}'"
-          changed_source_files=$(echo "$changed_source_files" | xargs | sed 's/ documentation/,documentation/g')
-          echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
 
       - name: Check Learning Path Links
         uses: kkeirstead/LearningPathFileChecks@main
