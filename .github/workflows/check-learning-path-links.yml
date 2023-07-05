@@ -27,7 +27,7 @@ jobs:
 
       - name: Get base commit for the PR
         run: |
-          merge_dir=$(GITHUB_BASE_REF)
+          merge_dir="$(GITHUB_BASE_REF)"
           merge_dir="${merge_dir}/merge"
           git fetch origin "$merge_dir"
           base_sha=$(git rev-parse "origin/$merge_dir")
