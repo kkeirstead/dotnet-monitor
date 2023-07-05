@@ -40,7 +40,7 @@ jobs:
           echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
 
       - name: Check Learning Path Links
-        uses: ./.github/actions/LearningPathFileChecks
+        uses: kkeirstead/LearningPathFileChecks@main
         with:
           repoURLToSearch: 'https://github.com/dotnet/dotnet-monitor'
           learningPathsDirectory: 'documentation/learningPath'
