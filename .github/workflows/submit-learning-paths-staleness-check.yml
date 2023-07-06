@@ -46,8 +46,8 @@ jobs:
         name: Submit Comment
         with:
           script: |
-            modifiedFiles=$(cat ./learning-path-review/modifiedFiles)
-            manuallyReview=$(cat ./learning-path-review/manuallyReview)
+            modifiedFiles="test1"
+            manuallyReview="test2"
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
