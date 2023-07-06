@@ -2,3 +2,4 @@
 ### Was this documentation helpful? [Share feedback](https://www.research.net/r/DGDQWXH?src=documentation%2FlearningPath%2Farchitecture)
 
 # Architecture
+This is a test of a deleted [file](https://github.com/dotnet/dotnet-monitor/blob/v7.0.1/src/Tools/dotnet-monitor/OutputFormat.cs).
