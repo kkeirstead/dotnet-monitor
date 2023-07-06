@@ -13,12 +13,14 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options
     [DebuggerDisplay("Trigger: Type = {Type}")]
     internal sealed partial class CollectionRuleTriggerOptions
     {
+
         [Display(
             ResourceType = typeof(OptionsDisplayStrings),
             Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_CollectionRuleTriggerOptions_Type))]
         [Required]
         public string Type { get; set; }
 
+        
         [Display(
             ResourceType = typeof(OptionsDisplayStrings),
             Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_CollectionRuleTriggerOptions_Settings))]
