@@ -36,15 +36,9 @@ jobs:
       - name: Get changed files
         working-directory: ./merge
         run: |
-          trimmed_comment=$(echo "$COMMENT_BODY" | sed 's|/TODO ||I')
-          mkdir -p ./issue
-          echo -n "$trimmed_comment" > ./issue/issue-title
-          echo -n "$COMMENT_URL" > ./issue/issue-url
-          echo -n "$COMMENT_AUTHOR" > ./issue/issue-user
-        env:
-          COMMENT_BODY: ${{ github.event.comment.body }}
-          COMMENT_URL: ${{ github.event.comment.html_url }}
-          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+          changed_source_files=$(git diff-tree --no-commit-id --name-only -r "$base_sha" "$GITHUB_SHA" | { grep "**.cs$" || test $? = 1; })
+          echo "Files to validate: '${changed_source_files}'"
+          echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
 
 
       - name: Check Learning Path Links
