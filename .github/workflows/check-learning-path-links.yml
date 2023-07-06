@@ -27,13 +27,10 @@ jobs:
 
       - name: Get base commit for the PR
         run: |
-          merge_dir="${GITHUB_BASE_REF}"
-          merge_dir="${merge_dir}/merge"
-          echo "$merge_dir"
-          git fetch origin "$merge_dir"
-          base_sha=$(git rev-parse "origin/$merge_dir")
+          git fetch origin "$GITHUB_BASE_REF"
+          base_sha=$(git rev-parse "origin/$GITHUB_BASE_REF")
           echo "base_sha=$base_sha" >> $GITHUB_ENV
-          echo "Merging ${GITHUB_SHA} into ${merge_dir}"
+          echo "Merging ${GITHUB_SHA} into ${GITHUB_BASE_REF}"
 
       - name: Get changed files
         run: |
