@@ -55,7 +55,7 @@ jobs:
             const modifiedFiles="test1"
             const manuallyReview="test2"
             github.rest.issues.createComment({
-              issue_number: context.issue.number,
+              issue_number: 206,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: "Changed files in the Learning Path: $modifiedFiles \n\n Files that should be manually reviewed: $manuallyReview"
