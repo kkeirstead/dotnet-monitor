@@ -12,12 +12,14 @@ permissions:
   pull-requests: write
 
 
-jobs:
+jobs:  
   submit-learning-paths-staleness-check:
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       issues: write
+      pull-requests: write
 
     steps:
       - uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
