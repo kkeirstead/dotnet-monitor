@@ -26,6 +26,7 @@ jobs:
           path: head
 
       - name: Get base commit for the PR
+        working-directory: ./merge
         run: |
           git fetch origin "$GITHUB_BASE_REF"
           base_sha=$(git rev-parse "origin/$GITHUB_BASE_REF")
