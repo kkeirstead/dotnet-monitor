@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
         with:
-          persist-credentials: false
+          persist-credentials: true
 
       # Download the artifact from the workflow that kicked off this one.
       # The default artifact download action doesn't support cross-workflow
@@ -58,6 +58,4 @@ jobs:
               repo: context.repo.repo,
               body: "Changed files in the Learning Path: $modifiedFiles \n\n Files that should be manually reviewed: $manuallyReview"
             })
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
