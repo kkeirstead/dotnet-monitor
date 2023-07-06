@@ -52,6 +52,6 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: Changed files in the Learning Path: $modifiedFiles \n\n Files that should be manually reviewed: $manuallyReview"
+              body: "Changed files in the Learning Path: $modifiedFiles \n\n Files that should be manually reviewed: $manuallyReview"
             })
 
