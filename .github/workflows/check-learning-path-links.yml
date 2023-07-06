@@ -36,26 +36,46 @@ jobs:
       - name: Get changed files
         working-directory: ./merge
         run: |
-          changed_source_files=$(git diff-tree --no-commit-id --name-only -r "$base_sha" "$GITHUB_SHA" | { grep "**.cs$" || test $? = 1; })
-          echo "Files to validate: '${changed_source_files}'"
-          echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
+          trimmed_comment=$(echo "$COMMENT_BODY" | sed 's|/TODO ||I')
+          mkdir -p ./issue
+          echo -n "$trimmed_comment" > ./issue/issue-title
+          echo -n "$COMMENT_URL" > ./issue/issue-url
+          echo -n "$COMMENT_AUTHOR" > ./issue/issue-user
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          COMMENT_URL: ${{ github.event.comment.html_url }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+
 
       - name: Check Learning Path Links
+        id: check-links
         uses: kkeirstead/LearningPathFileChecks@main
         with:
           repoURLToSearch: 'https://github.com/dotnet/dotnet-monitor'
           learningPathsDirectory: 'documentation/learningPath'
           paths: ${{ env.updated_files }}
 
-      - name: Generate artifacts
+      - name: Generate artifacts (Suggestion)
         working-directory: ./merge
         run: |
           mkdir -p ./pr
           cp "$GITHUB_EVENT_PATH" ./pr/pr-event.json
           git diff > ./pr/linter.diff
+          
+      - name: Generate artifacts (Comment)
+        working-directory: ./merge
+        run: |
+          mkdir -p ./learning-path-review
+          echo -n "${{ steps.check-links.outputs.result }}" > ./learning-path-review/fileNames
 
-      - name: Upload artifacts
+      - name: Upload artifacts (Suggestion)
         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
         with:
           name: pr-linter
           path: merge/pr/
+
+      - name: Upload artifacts (Comment)
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
+        with:
+          name: learning-path-review
+          path: merge/learning-path-review/
