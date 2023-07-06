@@ -44,6 +44,6 @@ jobs:
       - name: Submit Comment
         run: |
           fileNames=$(cat ./learning-path-review/fileNames)
-          gh pr comment --body "Files to manually review: $fileNames"
+          gh pr comment --body "Changed files in the Learning Path: $modifiedFiles \n\n Files that should be manually reviewed: $manuallyReview"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
