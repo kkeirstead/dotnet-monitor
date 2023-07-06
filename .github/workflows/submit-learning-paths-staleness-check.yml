@@ -6,7 +6,11 @@ on:
     types:
       - completed
 
-permissions: {}
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 
 jobs:
   submit-learning-paths-staleness-check:
