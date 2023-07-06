@@ -1,0 +1,49 @@
+name: 'Submit Learning Paths Staleness Check'
+
+on:
+  workflow_run:
+    workflows: ["Check Learning Path Links"]
+    types:
+      - completed
+
+permissions: {}
+
+jobs:
+  submit-learning-paths-staleness-check:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410
+        id: check-user
+        with:
+          script: |
+            await github.rest.repos.checkCollaborator({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: context.payload.workflow_run.triggering_actor.login
+            });
+
+      - name: Checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+        with:
+          persist-credentials: false
+
+      # Download the artifact from the workflow that kicked off this one.
+      # The default artifact download action doesn't support cross-workflow
+      # artifacts, so use a 3rd party one.
+      - name: 'Download linting results'
+        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615
+        with:
+          workflow: ${{env.workflow_name}}
+          run_id: ${{github.event.workflow_run.id }}
+          name: learning-path-review
+          path: ./learning-path-review
+      - name: Submit Comment
+        run: |
+          fileNames=$(cat ./learning-path-review/fileNames)
+          gh pr comment --body "Files to manually review: $fileNames"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
