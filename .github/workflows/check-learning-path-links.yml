@@ -38,6 +38,7 @@ jobs:
         run: |
           changed_source_files=$(git diff-tree --no-commit-id --name-only -r "$base_sha" "$GITHUB_SHA" | { grep "**.cs$" || test $? = 1; })
           echo "Files to validate: '${changed_source_files}'"
+          echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
 
       - name: Check Learning Path Links
         uses: kkeirstead/LearningPathFileChecks@main
@@ -47,6 +48,7 @@ jobs:
           paths: ${{ env.updated_files }}
 
       - name: Generate artifacts
+        working-directory: ./merge
         run: |
           mkdir -p ./pr
           cp "$GITHUB_EVENT_PATH" ./pr/pr-event.json
