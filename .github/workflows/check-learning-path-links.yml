@@ -29,6 +29,7 @@ jobs:
         run: |
           merge_dir="${GITHUB_BASE_REF}"
           merge_dir="${merge_dir}/merge"
+          echo "$merge_dir"
           git fetch origin "$merge_dir"
           base_sha=$(git rev-parse "origin/$merge_dir")
           echo "base_sha=$base_sha" >> $GITHUB_ENV
