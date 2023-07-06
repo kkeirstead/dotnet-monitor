@@ -28,3 +28,4 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options
         public object Settings { get; internal set; }
     }
 }
+
