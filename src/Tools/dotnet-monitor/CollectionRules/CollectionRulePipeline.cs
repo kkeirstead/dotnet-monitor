@@ -96,7 +96,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
 
                         Context.Logger.CollectionRuleTriggerStarted(Context.Name, Context.Options.Trigger.Type);
 
-                        trigger = factory.Create(
+                        trigger =     factory.Create(
                             Context.EndpointInfo,
                             () => triggerSatisfiedSource.TrySetResult(null),
                             Context.Options.Trigger.Settings);
