@@ -54,9 +54,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            const modifiedFiles = 'hello';
-            const manuallyReview = 'world';
-            const comment_body = `Changed files in the Learning Path: ${{ modifiedFiles }} \n\n Files that should be manually reviewed: ${{ modifiedFiles }}`;
+            modifiedFiles = $(cat ./learning-path-review/modifiedFiles);
+            manuallyReview = $(cat ./learning-path-review/manuallyReview);
+            comment_body = "test";
             github.rest.issues.createComment({
               issue_number: context.payload.workflow_run.pull_requests[0].number,
               owner: context.repo.owner,
