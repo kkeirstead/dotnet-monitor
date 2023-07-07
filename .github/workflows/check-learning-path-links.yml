@@ -61,7 +61,6 @@ jobs:
           mkdir -p ./learning-path-review
           echo -n "${{ steps.check-links.outputs.manuallyReview }}" > ./learning-path-review/manuallyReview
           echo -n "${{ steps.check-links.outputs.modifiedFiles }}" > ./learning-path-review/modifiedFiles
-          echo -n "${{ context.issue.number }}" > ./learning-path-review/issueNumber
 
       - name: Upload artifacts (Suggestion)
         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce
