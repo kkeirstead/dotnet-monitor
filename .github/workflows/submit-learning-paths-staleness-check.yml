@@ -53,7 +53,7 @@ jobs:
           modifiedFiles=$(cat ./learning-path-review/modifiedFiles)
           manuallyReview=$(cat ./learning-path-review/manuallyReview)
           echo 'modifiedFiles=$modifiedFiles' >> $GITHUB_ENV
-          echo 'workflow_name=$manuallyReview' >> $GITHUB_ENV
+          echo 'manuallyReview=$manuallyReview' >> $GITHUB_ENV
           
       - uses: actions/github-script@v6
         name: Submit Comment
@@ -63,8 +63,8 @@ jobs:
           MANUALLY_REVIEW: ${{ env.manuallyReview }}
         with:
           script: |
-            modifiedFiles = `${MODIFIED_FILES}`;
-            manuallyReview = `${MANUALLY_REVIEW}`;
+            modifiedFiles = process.env.MODIFIED_FILES;
+            manuallyReview = process.env.MANUALLY_REVIEW;
             comment_body = "Changed files in the Learning Path:" + modifiedFiles + "\n\n Files that should be manually reviewed:" + manuallyReview;
             github.rest.issues.createComment({
               issue_number: context.payload.workflow_run.pull_requests[0].number,
