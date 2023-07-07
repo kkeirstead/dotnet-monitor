@@ -52,8 +52,8 @@ jobs:
         run: |
           modifiedFiles=$(cat ./learning-path-review/modifiedFiles)
           manuallyReview=$(cat ./learning-path-review/manuallyReview)
-          echo 'modifiedFiles=$modifiedFiles' >> $GITHUB_ENV
-          echo 'manuallyReview=$manuallyReview' >> $GITHUB_ENV
+          echo "modifiedFiles=$modifiedFiles" >> $GITHUB_ENV
+          echo "manuallyReview=$manuallyReview" >> $GITHUB_ENV
           
       - uses: actions/github-script@v6
         name: Submit Comment
