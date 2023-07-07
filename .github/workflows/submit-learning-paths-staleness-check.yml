@@ -65,7 +65,7 @@ jobs:
           script: |
             modifiedFiles = process.env.MODIFIED_FILES;
             manuallyReview = process.env.MANUALLY_REVIEW;
-            comment_body = "Changed files in the Learning Path:" + modifiedFiles + "\n\n Files that should be manually reviewed:" + manuallyReview;
+            comment_body = "Changed files in the Learning Path:\n\n" + modifiedFiles.replace(",", "\n") + "\n\n---------\n\n Files that should be manually reviewed:\n\n" + manuallyReview.replace(",", "\n");
             github.rest.issues.createComment({
               issue_number: context.payload.workflow_run.pull_requests[0].number,
               owner: context.repo.owner,
