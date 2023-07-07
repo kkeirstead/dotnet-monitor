@@ -57,7 +57,7 @@ jobs:
           
       - uses: actions/github-script@v6
         name: Submit Comment
-        if: ${{ env.ModifiedFiles != '' }}
+        if: ${{ env.modifiedFiles != '' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODIFIED_FILES: ${{ env.modifiedFiles }}
