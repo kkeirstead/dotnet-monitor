@@ -52,10 +52,12 @@ jobs:
         name: Submit Comment
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODIFIED_FILES: ${{ cat ./learning-path-review/modifiedFiles }}
+          MANUALLY_REVIEW: ${{ cat ./learning-path-review/manuallyReview }}
         with:
           script: |
-            modifiedFiles = "$(cat ./learning-path-review/modifiedFiles)";
-            manuallyReview = "$(cat ./learning-path-review/manuallyReview)";
+            modifiedFiles = `${MODIFIED_FILES}`;
+            manuallyReview = `${MANUALLY_REVIEW}`;
             comment_body = "Changed files in the Learning Path:" + modifiedFiles + "\n\n Files that should be manually reviewed:" + manuallyReview;
             github.rest.issues.createComment({
               issue_number: context.payload.workflow_run.pull_requests[0].number,
