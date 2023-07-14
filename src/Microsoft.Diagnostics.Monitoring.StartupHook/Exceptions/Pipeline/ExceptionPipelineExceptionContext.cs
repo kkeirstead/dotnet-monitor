@@ -8,6 +8,12 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Pipeline
 {
     internal readonly ref struct ExceptionPipelineExceptionContext
     {
+        public ExceptionPipelineExceptionContext(DateTime timestamp)
+            :this(timestamp, Guid.Empty, ActivityIdFormat.Unknown)
+
+        {
+        }
+
         public ExceptionPipelineExceptionContext(DateTime timestamp, Guid activityId, ActivityIdFormat activityIdFormat)
             : this(timestamp, activityId, activityIdFormat, isInnerException: false)
         {

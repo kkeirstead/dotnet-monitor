@@ -4,6 +4,7 @@
 using Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Identification;
 using Microsoft.Diagnostics.Monitoring.TestCommon;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using Xunit;
@@ -82,6 +83,7 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
 
             source.ExceptionInstance(id, groupId, message, frameIds, timestamp, innerExceptionIds);
 
+            ActivityIdFormat a = ActivityIdFormat.
             ExceptionInstance instance = Assert.Single(listener.Exceptions);
             Assert.Equal(id, instance.Id);
             Assert.Equal(groupId, instance.GroupId);

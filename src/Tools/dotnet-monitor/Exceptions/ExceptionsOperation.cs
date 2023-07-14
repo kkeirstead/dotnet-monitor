@@ -103,6 +103,12 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                 writer.WriteString("moduleName", instance.ModuleName);
                 writer.WriteString("message", instance.Message);
 
+                if (instance.ActivityId != Guid.Empty)
+                {
+                    writer.WriteString("activityId", instance.ActivityId);
+                    writer.WriteString("activityIdFormat", instance.ActivityIdFormat.ToString());
+                }
+
                 writer.WriteStartObject("callStack");
                 writer.WriteNumber("threadId", instance.CallStack.ThreadId);
                 writer.WriteString("threadName", instance.CallStack.ThreadName);
