@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Diagnostics;
+using System.Diagnostics.Tracing;
 
 namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions
 {
@@ -16,5 +18,37 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions
         public Exception Exception { get; }
 
         public DateTime Timestamp { get; }
+
+        private Guid _activityId;
+
+        private ActivityIdFormat _activityIdFormat;
+
+        /// <summary>
+        /// Gets the activity ID for the thread on which the event was written.
+        /// </summary>
+        public Guid ActivityId
+        {
+            get
+            {
+                if (_activityId == Guid.Empty)
+                {
+                    _activityId = EventSource.CurrentThreadActivityId;
+                    var format = Activity.DefaultIdFormat;
+                    Console.WriteLine(format);
+                }
+
+                return _activityId;
+            }
+        }
+
+        public ActivityIdFormat ActivityIdFormat
+        {
+            get
+            {
+                _activityIdFormat = Activity.DefaultIdFormat;
+
+                return _activityIdFormat;
+            }
+        }
     }
 }
