@@ -18,7 +18,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Exceptions
             ulong[] stackFrameIds,
             int threadId,
             ulong[] innerExceptionIds,
-            Guid activityId,
+            string activityId,
             ActivityIdFormat activityIdFormat);
 
         IReadOnlyList<IExceptionInstance> GetSnapshot();

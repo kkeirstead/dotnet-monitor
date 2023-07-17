@@ -55,7 +55,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             ulong[] stackFrameIds,
             int threadId,
             ulong[] innerExceptionIds,
-            Guid activityId,
+            string activityId,
             ActivityIdFormat activityIdFormat)
         {
             ExceptionInstanceEntry entry = new(cache, exceptionId, groupId, message, timestamp, stackFrameIds, threadId, innerExceptionIds, activityId, activityIdFormat);
@@ -170,7 +170,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                 ulong[] stackFrameIds,
                 int threadId,
                 ulong[] innerExceptionIds,
-                Guid activityId,
+                string activityId,
                 ActivityIdFormat activityIdFormat)
             {
                 Cache = cache;
@@ -201,7 +201,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
             public ulong[] InnerExceptionIds { get; }
 
-            public Guid ActivityId { get; }
+            public string ActivityId { get; }
 
             public ActivityIdFormat ActivityIdFormat { get; }
         }

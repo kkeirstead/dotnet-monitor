@@ -84,7 +84,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                         traceEvent.GetPayload<ulong[]>(ExceptionEvents.ExceptionInstancePayloads.StackFrameIds),
                         traceEvent.ThreadID,
                         traceEvent.GetPayload<ulong[]>(ExceptionEvents.ExceptionInstancePayloads.InnerExceptionIds),
-                        traceEvent.GetPayload<Guid>(ExceptionEvents.ExceptionInstancePayloads.ActivityId),
+                        traceEvent.GetPayload<string>(ExceptionEvents.ExceptionInstancePayloads.ActivityId),
                         traceEvent.GetPayload<ActivityIdFormat>(ExceptionEvents.ExceptionInstancePayloads.ActivityIdFormat));
                     break;
                 case "FunctionDescription":

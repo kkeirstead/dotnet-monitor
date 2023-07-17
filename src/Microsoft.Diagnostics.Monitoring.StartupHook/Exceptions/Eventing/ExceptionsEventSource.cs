@@ -39,7 +39,7 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
             ulong[] StackFrameIds,
             DateTime Timestamp,
             ulong[] InnerExceptionIds,
-            Guid ActivityId,
+            string? ActivityId,
             ActivityIdFormat ActivityIdFormat)
         {
             Span<EventData> data = stackalloc EventData[8];
@@ -49,14 +49,17 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
             Span<byte> innerExceptionIdsSpan = stackalloc byte[GetArrayDataSize(InnerExceptionIds)];
             FillArrayData(innerExceptionIdsSpan, InnerExceptionIds);
 
+            using PinnedData activityIdPinned = PinnedData.Create(ActivityId);
+
+
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ExceptionId], ExceptionId);
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ExceptionGroupId], ExceptionGroupId);
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ExceptionMessage], namePinned);
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.StackFrameIds], stackFrameIdsSpan);
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.Timestamp], Timestamp.ToFileTimeUtc());
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.InnerExceptionIds], innerExceptionIdsSpan);
-            SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ActivityId], ActivityId); // not sure this will work
-            SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ActivityIdFormat], ActivityIdFormat); // not sure this will work
+            SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ActivityId], activityIdPinned);
+            SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ActivityIdFormat], ActivityIdFormat);
 
             WriteEventWithFlushing(ExceptionEvents.EventIds.ExceptionInstance, data);
         }

@@ -501,7 +501,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                 _instanceThreshold = instanceThreshold;
             }
 
-            public void AddExceptionInstance(IExceptionsNameCache cache, ulong exceptionId, ulong groupId, string message, DateTime timestamp, ulong[] stackFrameIds, int threadId, ulong[] innerExceptionIds, Guid activityId, ActivityIdFormat activityIdFormat)
+            public void AddExceptionInstance(IExceptionsNameCache cache, ulong exceptionId, ulong groupId, string message, DateTime timestamp, ulong[] stackFrameIds, int threadId, ulong[] innerExceptionIds, string activityId, ActivityIdFormat activityIdFormat)
             {
                 string moduleName = string.Empty;
                 StringBuilder typeBuilder = new();
@@ -548,7 +548,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                 return _instances;
             }
 
-            public sealed record class ExceptionInstance(ulong Id, string ModuleName, string TypeName, string Message, DateTime Timestamp, CallStack CallStack, ulong[] InnerExceptionIds, Guid ActivityId, ActivityIdFormat ActivityIdFormat)
+            public sealed record class ExceptionInstance(ulong Id, string ModuleName, string TypeName, string Message, DateTime Timestamp, CallStack CallStack, ulong[] InnerExceptionIds, string ActivityId, ActivityIdFormat ActivityIdFormat)
                 : IExceptionInstance
             {
             }

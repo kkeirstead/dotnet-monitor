@@ -9,17 +9,17 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Pipeline
     internal readonly ref struct ExceptionPipelineExceptionContext
     {
         public ExceptionPipelineExceptionContext(DateTime timestamp)
-            :this(timestamp, Guid.Empty, ActivityIdFormat.Unknown)
+            :this(timestamp, Guid.Empty.ToString(), ActivityIdFormat.Unknown)
 
         {
         }
 
-        public ExceptionPipelineExceptionContext(DateTime timestamp, Guid activityId, ActivityIdFormat activityIdFormat)
+        public ExceptionPipelineExceptionContext(DateTime timestamp, string activityId, ActivityIdFormat activityIdFormat)
             : this(timestamp, activityId, activityIdFormat, isInnerException: false)
         {
         }
 
-        public ExceptionPipelineExceptionContext(DateTime timestamp, Guid activityId, ActivityIdFormat activityIdFormat, bool isInnerException)
+        public ExceptionPipelineExceptionContext(DateTime timestamp, string activityId, ActivityIdFormat activityIdFormat, bool isInnerException)
         {
             Timestamp = timestamp;
             IsInnerException = isInnerException;
@@ -31,7 +31,7 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Pipeline
 
         public DateTime Timestamp { get; }
 
-        public Guid ActivityId { get; }
+        public string ActivityId { get; }
 
         public ActivityIdFormat ActivityIdFormat { get; }
     }

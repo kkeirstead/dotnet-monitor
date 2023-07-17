@@ -103,7 +103,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                 writer.WriteString("moduleName", instance.ModuleName);
                 writer.WriteString("message", instance.Message);
 
-                if (instance.ActivityId != Guid.Empty)
+                if (!string.IsNullOrEmpty(instance.ActivityId) && instance.ActivityId != Guid.Empty.ToString())
                 {
                     writer.WriteString("activityId", instance.ActivityId);
                     writer.WriteString("activityIdFormat", instance.ActivityIdFormat.ToString());
