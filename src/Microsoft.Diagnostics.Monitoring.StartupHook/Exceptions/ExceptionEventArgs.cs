@@ -33,8 +33,6 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions
                 if (_activityId == Guid.Empty)
                 {
                     _activityId = EventSource.CurrentThreadActivityId;
-                    var format = Activity.DefaultIdFormat;
-                    Console.WriteLine(format);
                 }
 
                 return _activityId;
