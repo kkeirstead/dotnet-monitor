@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Diagnostics;
 
 namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Pipeline
 {
@@ -34,6 +35,14 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Pipeline
 
         private void ExceptionSource_ExceptionThrown(object? sender, ExceptionEventArgs args)
         {
+            if (Activity.Current != null)
+            {
+                Console.WriteLine("Activity Id: " + Activity.Current.Id);
+            }
+            else
+            {
+                Console.WriteLine("No Activity Id");
+            }
             // DESIGN: While async patterns are typically favored over synchronous patterns,
             // this is intentionally synchronous. Use cases for making this asynchronous typically
             // involve I/O operations, however those can be dispatched to other threads if necessary
