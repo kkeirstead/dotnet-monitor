@@ -74,8 +74,8 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
             ulong[] StackFrameIds,
             DateTime Timestamp,
             ulong[] InnerExceptionIds,
-            string? ActivityId,
-            ActivityIdFormat ActivityIdFormat)
+            string? activityId,
+            ActivityIdFormat? activityIdFormat)
         {
             Span<EventData> data = stackalloc EventData[8];
             using PinnedData namePinned = PinnedData.Create(ExceptionMessage);
@@ -83,7 +83,8 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
             FillArrayData(stackFrameIdsSpan, StackFrameIds);
             Span<byte> innerExceptionIdsSpan = stackalloc byte[GetArrayDataSize(InnerExceptionIds)];
             FillArrayData(innerExceptionIdsSpan, InnerExceptionIds);
-            using PinnedData activityIdPinned = PinnedData.Create(ActivityId);
+            using PinnedData activityIdPinned = PinnedData.Create("test");
+            //using PinnedData activityIdFormatPinned = PinnedData.Create(ActivityIdFormat != null ? ActivityIdFormat!.ToString() : null);
 
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ExceptionId], ExceptionId);
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ExceptionGroupId], ExceptionGroupId);
@@ -92,7 +93,15 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.Timestamp], Timestamp.ToFileTimeUtc());
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.InnerExceptionIds], innerExceptionIdsSpan);
             SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ActivityId], activityIdPinned);
-            SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ActivityIdFormat], ActivityIdFormat);
+
+            if (activityIdFormat != null)
+            {
+                SetValue(ref data[ExceptionEvents.ExceptionInstancePayloads.ActivityIdFormat], ActivityIdFormat.W3C);
+            }
+            else
+            {
+                // do nothing FOR NOW
+            }
 
             WriteEventCore(ExceptionEvents.EventIds.ExceptionInstance, data);
 

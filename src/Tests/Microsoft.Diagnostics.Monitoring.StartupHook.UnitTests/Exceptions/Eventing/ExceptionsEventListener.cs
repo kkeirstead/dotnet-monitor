@@ -41,7 +41,7 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
                                 ToType<DateTime>(eventData.Payload[ExceptionEvents.ExceptionInstancePayloads.Timestamp]),
                                 ToArray<ulong>(eventData.Payload[ExceptionEvents.ExceptionInstancePayloads.InnerExceptionIds]),
                                 ToString(eventData.Payload[ExceptionEvents.ExceptionInstancePayloads.ActivityId]),
-                                ToEnum<ActivityIdFormat>(eventData.Payload[ExceptionEvents.ExceptionInstancePayloads.ActivityIdFormat])
+                                ToActivityIdFormat(eventData.Payload[ExceptionEvents.ExceptionInstancePayloads.ActivityIdFormat])
                             ));
                         break;
                     case ExceptionEvents.EventIds.ExceptionGroup:
@@ -118,11 +118,16 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
             return ToType<ulong>(value);
         }
 
-        private static T ToEnum<T>(object? value)
+        private static ActivityIdFormat? ToActivityIdFormat(object? value)
         {
-            if (value != null && Enum.TryParse(typeof(T), value!.ToString()!, out object? result))
+            if (value == null)
             {
-                return (T)result!;
+                return null;
+            }
+
+            if (Enum.TryParse(value!.ToString(), out ActivityIdFormat result))
+            {
+                return result;
             }
 
             throw new InvalidCastException();
@@ -157,7 +162,7 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
 
     internal sealed class ExceptionInstance
     {
-        public ExceptionInstance(ulong id, ulong groupId, string? message, ulong[] frameIds, DateTime timestamp, ulong[] innerExceptionIds, string activityId, ActivityIdFormat activityIdFormat)
+        public ExceptionInstance(ulong id, ulong groupId, string? message, ulong[] frameIds, DateTime timestamp, ulong[] innerExceptionIds, string? activityId, ActivityIdFormat? activityIdFormat)
         {
             Id = id;
             GroupId = groupId;
@@ -183,6 +188,6 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions.Eventing
 
         public string? ActivityId { get; }
 
-        public ActivityIdFormat ActivityIdFormat { get; }
+        public ActivityIdFormat? ActivityIdFormat { get; }
     }
 }

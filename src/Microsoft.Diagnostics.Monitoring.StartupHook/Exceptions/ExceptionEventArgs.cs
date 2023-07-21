@@ -8,7 +8,7 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions
 {
     internal sealed class ExceptionEventArgs : EventArgs
     {
-        public ExceptionEventArgs(Exception exception, DateTime timestamp, string activityId, ActivityIdFormat activityIdFormat)
+        public ExceptionEventArgs(Exception exception, DateTime timestamp, string? activityId, ActivityIdFormat? activityIdFormat)
         {
             Exception = exception;
             Timestamp = timestamp;
@@ -20,8 +20,8 @@ namespace Microsoft.Diagnostics.Monitoring.StartupHook.Exceptions
 
         public DateTime Timestamp { get; }
 
-        public string ActivityId { get; }
+        public string? ActivityId { get; }
 
-        public ActivityIdFormat ActivityIdFormat { get; }
+        public ActivityIdFormat? ActivityIdFormat { get; }
     }
 }
