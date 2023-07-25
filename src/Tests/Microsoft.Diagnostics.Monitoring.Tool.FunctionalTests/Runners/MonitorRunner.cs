@@ -50,6 +50,11 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests.Runners
         public bool EnableCallStacksFeature { get; set; }
 
         /// <summary>
+        /// Determines whether the exceptions feature is enabled.
+        /// </summary>
+        public bool EnableExceptionsFeature { get; set; }
+
+        /// <summary>
         /// Gets the task for the underlying <see cref="DotNetRunner"/>'s
         /// <see cref="DotNetRunner.ExitedTask"/> which is used to wait for process exit.
         /// </summary>
@@ -173,6 +178,12 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests.Runners
             if (EnableCallStacksFeature)
             {
                 _adapter.Environment.Add(ExperimentalFlags.Feature_CallStacks, "true");
+            }
+
+            // Enable experimental exceptions feature
+            if (EnableExceptionsFeature)
+            {
+                _adapter.Environment.Add(ExperimentalFlags.Feature_Exceptions, "true");
             }
 
             // Ensures that the TestStartupHook is loaded early so it helps resolve other test assemblies

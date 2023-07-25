@@ -65,6 +65,7 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon
 
             public static class Commands
             {
+                public const string Continue = nameof(Continue);
                 public const string Begin = nameof(Begin);
                 public const string End = nameof(End);
             }
