@@ -62,12 +62,12 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests
                 {
                     int processId = await appRunner.ProcessIdTask;
 
-                    await appRunner.SendCommandAsync(TestAppScenarios.Exceptions.Commands.Begin);
+                    //await appRunner.SendCommandAsync(TestAppScenarios.Exceptions.Commands.Begin);
                     //await appRunner.SendCommandAsync(TestAppScenarios.Exceptions.Commands.End);
 
-                    await Task.Delay(60000); // TESTING ONLY
+                    //await Task.Delay(60000); // TESTING ONLY
 
-                    /*
+                    
                     ResponseStreamHolder holder = await apiClient.CaptureExceptionsAsync(WebApi.Exceptions.ExceptionsFormat.PlainText);
 
                     Assert.NotNull(holder);
@@ -83,7 +83,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests
 
                     var fullString = builder.ToString();
 
-                    await appRunner.SendCommandAsync(TestAppScenarios.AsyncWait.Commands.Continue);*/ // this will break stuff
+                    await appRunner.SendCommandAsync(TestAppScenarios.AsyncWait.Commands.Continue);
                 },
                 configureApp: runner =>
                 {

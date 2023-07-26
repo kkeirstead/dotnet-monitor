@@ -170,7 +170,6 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon.Runners
             // How to set this to the right path?
             _adapter.Environment.Add("DOTNET_STARTUP_HOOKS", "C:\\Users\\kkeirstead\\dotnet-monitor\\artifacts\\bin\\Microsoft.Diagnostics.Monitoring.StartupHook\\Debug\\net6.0\\Microsoft.Diagnostics.Monitoring.StartupHook.dll");
 
-
             await _adapter.StartAsync(token).ConfigureAwait(false);
 
             if (waitForReady)

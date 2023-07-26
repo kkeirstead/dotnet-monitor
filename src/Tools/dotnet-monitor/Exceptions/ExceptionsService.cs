@@ -52,8 +52,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             {
                 try
                 {
-                    await Task.Delay(30000, stoppingToken); // TESTING ONLY
-
                     // Get default process
                     IProcessInfo pi = await _diagnosticServices.GetProcessAsync(processKey: null, stoppingToken);
 
@@ -65,7 +63,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                         // This exception is not user visible.
                         throw new NotSupportedException();
                     }
-
 
                     // Validate that the process is configured correctly for collecting exceptions.
                     if (!await _startupHookValidator.CheckAsync(pi.EndpointInfo, stoppingToken))
