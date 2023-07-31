@@ -65,7 +65,7 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests
                     //await appRunner.SendCommandAsync(TestAppScenarios.Exceptions.Commands.Begin);
                     //await appRunner.SendCommandAsync(TestAppScenarios.Exceptions.Commands.End);
 
-                    //await Task.Delay(60000); // TESTING ONLY
+                    await Task.Delay(5000); // TESTING ONLY
 
                     
                     ResponseStreamHolder holder = await apiClient.CaptureExceptionsAsync(WebApi.Exceptions.ExceptionsFormat.PlainText);
@@ -83,6 +83,8 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests
 
                     var fullString = builder.ToString();
 
+                    Assert.NotEmpty(fullString);
+
                     await appRunner.SendCommandAsync(TestAppScenarios.AsyncWait.Commands.Continue);
                 },
                 configureApp: runner =>
@@ -93,6 +95,9 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests
                 {
                     runner.ConfigurationFromEnvironment.EnableInProcessFeatures();
                     runner.EnableExceptionsFeature = true;
+
+                    runner.ConfigurationFromEnvironment
+                        .EnableInProcessFeatures();
                 });
         }
 

@@ -44,6 +44,33 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon
 
         public static class Exceptions
         {
+            public const string Name = nameof(Metrics);
+
+            public static class Commands
+            {
+                public const string Continue = nameof(Exceptions);
+                public const string Begin = nameof(Begin);
+                public const string End = nameof(End);
+            }
+
+            public static class SubScenarios
+            {
+                public const string SingleException = nameof(SingleException);
+                public const string RepeatException = nameof(RepeatException);
+                public const string AsyncException = nameof(AsyncException);
+                public const string FrameworkException = nameof(FrameworkException);
+                public const string CustomException = nameof(CustomException);
+                public const string EsotericStackFrameTypes = nameof(EsotericStackFrameTypes);
+                public const string ReversePInvokeException = nameof(ReversePInvokeException);
+                public const string DynamicMethodException = nameof(DynamicMethodException);
+                public const string ArrayException = nameof(ArrayException);
+                public const string InnerUnthrownException = nameof(InnerUnthrownException);
+                public const string InnerThrownException = nameof(InnerThrownException);
+                public const string AggregateException = nameof(AggregateException);
+                public const string ReflectionTypeLoadException = nameof(ReflectionTypeLoadException);
+            }
+
+            /*
             public const string Name = nameof(Exceptions);
 
             public static class SubScenarios
@@ -68,7 +95,7 @@ namespace Microsoft.Diagnostics.Monitoring.TestCommon
                 public const string Continue = nameof(Continue);
                 public const string Begin = nameof(Begin);
                 public const string End = nameof(End);
-            }
+            }*/
         }
 
         public static class Stacks

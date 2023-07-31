@@ -187,7 +187,10 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.FunctionalTests.Runners
             }
 
             // Ensures that the TestStartupHook is loaded early so it helps resolve other test assemblies
-            _adapter.Environment.Add(ToolIdentifiers.EnvironmentVariables.StartupHooks, TestStartupHookPath);
+            //_adapter.Environment.Add(ToolIdentifiers.EnvironmentVariables.StartupHooks, TestStartupHookPath);
+            //_adapter.Environment.Add("DOTNET_STARTUP_HOOKS", "C:\\Users\\kkeirstead\\dotnet-monitor\\artifacts\\bin\\Microsoft.Diagnostics.Monitoring.StartupHook\\Debug\\net6.0\\Microsoft.Diagnostics.Monitoring.StartupHook.dll");
+
+            //_adapter.Environment.Add(ToolIdentifiers.EnvironmentVariables.StartupHooks, "Microsoft.Diagnostics.Monitoring.StartupHook");
 
             // Allow TestHostingStartup to participate in host building in the tool
             _adapter.Environment.Add("ASPNETCORE_HOSTINGSTARTUPASSEMBLIES", TestHostingStartupAssemblyName);
