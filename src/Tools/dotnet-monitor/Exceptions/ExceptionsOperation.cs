@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,11 +28,13 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
         private readonly ExceptionsFormat _format;
         private readonly IExceptionsStore _store;
+        ExceptionsConfiguration _configuration;
 
-        public ExceptionsOperation(IExceptionsStore store, ExceptionsFormat format)
+        public ExceptionsOperation(IExceptionsStore store, ExceptionsFormat format, ExceptionsConfiguration configuration)
         {
             _store = store;
             _format = format;
+            _configuration = configuration;
         }
 
         public string ContentType => _format switch
@@ -47,7 +50,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
         public async Task ExecuteAsync(Stream outputStream, TaskCompletionSource<object> startCompletionSource, CancellationToken token)
         {
             startCompletionSource?.TrySetResult(null);
-
 
             IReadOnlyList<IExceptionInstance> exceptions = _store.GetSnapshot();
 
@@ -77,10 +79,36 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
         private async Task WriteJson(Stream stream, IReadOnlyList<IExceptionInstance> instances, CancellationToken token)
         {
-            foreach (IExceptionInstance instance in instances)
+            foreach (IExceptionInstance instance in FilterExceptions(instances))
             {
                 await WriteJsonInstance(stream, instance, token);
             }
+        }
+
+        private List<IExceptionInstance> FilterExceptions(IReadOnlyList<IExceptionInstance> instances)
+        {
+            List<IExceptionInstance> filteredInstances = new List<IExceptionInstance>();
+            foreach (IExceptionInstance instance in instances)
+            {
+                if (_configuration.Include.Count > 0)
+                {
+                    // filter out exceptions that don't match the filter
+                    if (_configuration.Include.Contains(instance.TypeName, StringComparer.CurrentCultureIgnoreCase))
+                    {
+                        filteredInstances.Add(instance);
+                    }
+                }
+                else
+                {
+                    // filter out exceptions that match the filter
+                    if (!_configuration.Exclude.Contains(instance.TypeName, StringComparer.CurrentCultureIgnoreCase))
+                    {
+                        filteredInstances.Add(instance);
+                    }
+                }
+            }
+
+            return filteredInstances;
         }
 
         private async Task WriteJsonInstance(Stream stream, IExceptionInstance instance, CancellationToken token)
@@ -151,11 +179,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             await stream.WriteAsync(JsonRecordDelimiter, token);
         }
 
-        private static async Task WriteText(Stream stream, IReadOnlyList<IExceptionInstance> instances, CancellationToken token)
+        private async Task WriteText(Stream stream, IReadOnlyList<IExceptionInstance> instances, CancellationToken token)
         {
-            Dictionary<ulong, IExceptionInstance> priorInstances = new(instances.Count);
-            foreach (IExceptionInstance currentInstance in instances)
+            var filteredInstances = FilterExceptions(instances);
+
+            Dictionary<ulong, IExceptionInstance> priorInstances = new(filteredInstances.Count);
+            foreach (IExceptionInstance currentInstance in filteredInstances)
             {
+                // filter out exceptions that don't match the filter
+
                 // Skip writing the exception if it does not have a call stack, which
                 // indicates that the exception was not thrown. It is likely to be referenced
                 // as an inner exception of a thrown exception.
