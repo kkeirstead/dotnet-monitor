@@ -3,6 +3,7 @@
 
 using Microsoft.Diagnostics.Monitoring.Options;
 using Microsoft.Diagnostics.Monitoring.WebApi;
+using Microsoft.Diagnostics.Monitoring.WebApi.Models;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options;
 using System.Collections.Generic;
 
@@ -25,6 +26,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         public DiagnosticPortOptions DiagnosticPort { get; set; }
 
         public EgressOptions Egress { get; set; }
+
+        public ExceptionsConfiguration Exceptions { get; set; }
 
         public MetricsOptions Metrics { get; set; }
 

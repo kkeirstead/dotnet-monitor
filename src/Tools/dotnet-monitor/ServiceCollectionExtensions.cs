@@ -9,6 +9,7 @@ using Microsoft.Diagnostics.Monitoring.EventPipe.Triggers.EventCounter;
 using Microsoft.Diagnostics.Monitoring.Options;
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.Monitoring.WebApi.Exceptions;
+using Microsoft.Diagnostics.Monitoring.WebApi.Models;
 using Microsoft.Diagnostics.Tools.Monitor.Auth;
 using Microsoft.Diagnostics.Tools.Monitor.Auth.ApiKey;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules;
@@ -48,6 +49,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             return ConfigureOptions<GlobalCounterOptions>(services, configuration, ConfigurationKeys.GlobalCounter)
                 .AddSingleton<IValidateOptions<GlobalCounterOptions>, DataAnnotationValidateOptions<GlobalCounterOptions>>();
 
+        }
+
+        public static IServiceCollection ConfigureExceptionsConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            return ConfigureOptions<ExceptionsConfiguration>(services, configuration, ConfigurationKeys.Exceptions);
         }
 
         public static IServiceCollection ConfigureCollectionRuleDefaults(this IServiceCollection services, IConfiguration configuration)

@@ -79,36 +79,46 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
         private async Task WriteJson(Stream stream, IReadOnlyList<IExceptionInstance> instances, CancellationToken token)
         {
-            foreach (IExceptionInstance instance in FilterExceptions(instances))
+            foreach (IExceptionInstance instance in FilterExceptions(_configuration, instances))
             {
                 await WriteJsonInstance(stream, instance, token);
             }
         }
 
-        private List<IExceptionInstance> FilterExceptions(IReadOnlyList<IExceptionInstance> instances)
+        internal static List<IExceptionInstance> FilterExceptions(ExceptionsConfiguration configuration, IReadOnlyList<IExceptionInstance> instances)
         {
             List<IExceptionInstance> filteredInstances = new List<IExceptionInstance>();
             foreach (IExceptionInstance instance in instances)
             {
-                if (_configuration.Include.Count > 0)
+                if (FilterException(configuration, instance))
                 {
-                    // filter out exceptions that don't match the filter
-                    if (_configuration.Include.Contains(instance.TypeName, StringComparer.CurrentCultureIgnoreCase))
-                    {
-                        filteredInstances.Add(instance);
-                    }
-                }
-                else
-                {
-                    // filter out exceptions that match the filter
-                    if (!_configuration.Exclude.Contains(instance.TypeName, StringComparer.CurrentCultureIgnoreCase))
-                    {
-                        filteredInstances.Add(instance);
-                    }
+                    filteredInstances.Add(instance);
                 }
             }
 
             return filteredInstances;
+        }
+
+        internal static bool FilterException(ExceptionsConfiguration configuration, IExceptionInstance instance)
+        {
+            if (configuration.Include.Count > 0)
+            {
+                // filter out exceptions that don't match the filter
+                if (configuration.Include.Contains(instance.TypeName, StringComparer.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                // filter out exceptions that match the filter
+                if (!configuration.Exclude.Contains(instance.TypeName, StringComparer.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private async Task WriteJsonInstance(Stream stream, IExceptionInstance instance, CancellationToken token)
@@ -181,7 +191,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
         private async Task WriteText(Stream stream, IReadOnlyList<IExceptionInstance> instances, CancellationToken token)
         {
-            var filteredInstances = FilterExceptions(instances);
+            var filteredInstances = FilterExceptions(_configuration, instances);
 
             Dictionary<ulong, IExceptionInstance> priorInstances = new(filteredInstances.Count);
             foreach (IExceptionInstance currentInstance in filteredInstances)

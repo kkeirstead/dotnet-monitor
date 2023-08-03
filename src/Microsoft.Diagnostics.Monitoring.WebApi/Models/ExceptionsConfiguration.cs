@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace Microsoft.Diagnostics.Monitoring.WebApi.Models
 {
@@ -12,13 +11,17 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Models
         /// <summary>
         /// The list of exceptions to include.
         /// </summary>
-        [JsonPropertyName("include")]
+        [Display(
+            ResourceType = typeof(OptionsDisplayStrings),
+            Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_CorsConfiguration_AllowedOrigins))]
         public List<string> Include { get; set; } = new();
 
         /// <summary>
         /// The list of exceptions to exclude.
         /// </summary>
-        [JsonPropertyName("exclude")]
+        [Display(
+            ResourceType = typeof(OptionsDisplayStrings),
+            Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_CorsConfiguration_AllowedOrigins))]
         public List<string> Exclude { get; set; } = new();
     }
 }

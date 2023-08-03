@@ -545,6 +545,11 @@ namespace Microsoft.Diagnostics.Monitoring.Tool.UnitTests
                 return _instances;
             }
 
+            public void AddExceptionInstance(WebApi.Models.ExceptionsConfiguration configuration, IExceptionsNameCache cache, ulong exceptionId, ulong groupId, string message, DateTime timestamp, ulong[] stackFrameIds, int threadId, ulong[] innerExceptionIds, string activityId, ActivityIdFormat activityIdFormat)
+            {
+                throw new NotImplementedException();
+            }
+
             public sealed record class ExceptionInstance(ulong Id, string ModuleName, string TypeName, string Message, DateTime Timestamp, CallStack CallStack, ulong[] InnerExceptionIds, string ActivityId, ActivityIdFormat ActivityIdFormat)
                 : IExceptionInstance
             {

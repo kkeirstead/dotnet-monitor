@@ -3,9 +3,12 @@
 
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.Monitoring.WebApi.Exceptions;
+using Microsoft.Diagnostics.Monitoring.WebApi.Models;
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Tools.Monitor.StartupHook;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -26,6 +29,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
         private readonly IDiagnosticServices _diagnosticServices;
         private readonly IInProcessFeatures _inProcessFeatures;
         private readonly StartupHookValidator _startupHookValidator;
+        private readonly ExceptionsConfiguration _configuration;
 
         private EventExceptionsPipeline _pipeline;
 
@@ -33,12 +37,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             StartupHookValidator startupHookValidator,
             IDiagnosticServices diagnosticServices,
             IInProcessFeatures inProcessFeatures,
-            IExceptionsStore exceptionsStore)
+            IExceptionsStore exceptionsStore,
+            IServiceProvider serviceProvider)
         {
             _diagnosticServices = diagnosticServices;
             _exceptionsStore = exceptionsStore;
             _inProcessFeatures = inProcessFeatures;
             _startupHookValidator = startupHookValidator;
+            _configuration = serviceProvider.GetRequiredService<IOptionsMonitor<ExceptionsConfiguration>>().CurrentValue;
+
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -76,6 +83,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                     DiagnosticsClient client = new(pi.EndpointInfo.Endpoint);
 
                     EventExceptionsPipelineSettings settings = new();
+                    settings.Configuration = _configuration; // could bake this into the constructor
                     _pipeline = new EventExceptionsPipeline(client, settings, _exceptionsStore);
 
                     // Monitor for exceptions

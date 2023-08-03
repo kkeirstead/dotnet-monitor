@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using CallStackModel = Microsoft.Diagnostics.Monitoring.WebApi.Models.CallStack;
+using ExceptionsConfiguration = Microsoft.Diagnostics.Monitoring.WebApi.Models.ExceptionsConfiguration;
 
 namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 {
@@ -23,10 +24,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
         private readonly CancellationTokenSource _disposalSource = new();
         private readonly List<ExceptionInstance> _instances = new();
         private readonly Task _processingTask;
+        private ExceptionsConfiguration _configuration = new();
 
         private long _disposalState;
 
-        public ExceptionsStore()
+        public ExceptionsStore() // can I dependency inject configuration here?
         {
             _channel = CreateChannel();
             _processingTask = ProcessEntriesAsync(_disposalSource.Token);
@@ -58,9 +60,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             string activityId,
             ActivityIdFormat activityIdFormat)
         {
-            ExceptionInstanceEntry entry = new(cache, exceptionId, groupId, message, timestamp, stackFrameIds, threadId, innerExceptionIds, activityId, activityIdFormat);
-            // This should never fail to write because the behavior is to drop the oldest.
-            _channel.Writer.TryWrite(entry);
+            AddExceptionInstance(new(), cache, exceptionId, groupId, message, timestamp, stackFrameIds, threadId, innerExceptionIds, activityId, activityIdFormat);
         }
 
         public IReadOnlyList<IExceptionInstance> GetSnapshot()
@@ -120,7 +120,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
                     lock (_instances)
                     {
-                        _instances.Add(new ExceptionInstance(
+                        var exceptionInstance = new ExceptionInstance(
                             entry.ExceptionId,
                             exceptionTypeName,
                             moduleName,
@@ -129,7 +129,12 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                             callStack,
                             entry.InnerExceptionIds,
                             entry.ActivityId,
-                            entry.ActivityIdFormat));
+                            entry.ActivityIdFormat);
+
+                        if (ExceptionsOperation.FilterException(_configuration, exceptionInstance))
+                        {
+                            _instances.Add(exceptionInstance);
+                        }
                     }
                 }
 
@@ -157,6 +162,14 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             }
 
             return StackUtilities.TranslateCallStackToModel(callStack, cache.NameCache);
+        }
+
+        public void AddExceptionInstance(Monitoring.WebApi.Models.ExceptionsConfiguration configuration, IExceptionsNameCache cache, ulong exceptionId, ulong groupId, string message, DateTime timestamp, ulong[] stackFrameIds, int threadId, ulong[] innerExceptionIds, string activityId, ActivityIdFormat activityIdFormat)
+        {
+            _configuration = configuration;
+            ExceptionInstanceEntry entry = new(cache, exceptionId, groupId, message, timestamp, stackFrameIds, threadId, innerExceptionIds, activityId, activityIdFormat);
+            // This should never fail to write because the behavior is to drop the oldest.
+            _channel.Writer.TryWrite(entry);
         }
 
         private sealed class ExceptionInstanceEntry

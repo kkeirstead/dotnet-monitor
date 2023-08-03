@@ -21,6 +21,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         public const string Egress = nameof(RootOptions.Egress);
 
+        public const string Exceptions = nameof(RootOptions.Exceptions);
+
         public const string Metrics = nameof(RootOptions.Metrics);
 
         public const string Storage = nameof(RootOptions.Storage);

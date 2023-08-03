@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Threading;
 using System.Threading.Tasks;
+using ExceptionsConfiguration = Microsoft.Diagnostics.Monitoring.WebApi.Models.ExceptionsConfiguration;
 
 namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 {
@@ -19,6 +20,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
     {
         private readonly EventExceptionsPipelineNameCache _cache = new();
         private readonly IExceptionsStore _store;
+        private readonly ExceptionsConfiguration _configuration;
 
         public EventExceptionsPipeline(IpcEndpoint endpoint, EventExceptionsPipelineSettings settings, IExceptionsStore store)
             : this(new DiagnosticsClient(endpoint), settings, store)
@@ -31,6 +33,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             ArgumentNullException.ThrowIfNull(store, nameof(store));
 
             _store = store;
+            _configuration = settings.Configuration;
         }
 
         protected override MonitoringSourceConfiguration CreateConfiguration()
@@ -76,6 +79,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
                     break;
                 case "ExceptionInstance":
                     _store.AddExceptionInstance(
+                        _configuration,
                         _cache,
                         traceEvent.GetPayload<ulong>(ExceptionEvents.ExceptionInstancePayloads.ExceptionId),
                         traceEvent.GetPayload<ulong>(ExceptionEvents.ExceptionInstancePayloads.ExceptionGroupId),
@@ -140,5 +144,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
         {
             Duration = Timeout.InfiniteTimeSpan;
         }
+
+        public ExceptionsConfiguration Configuration { get; set; } = new ExceptionsConfiguration();
     }
 }
