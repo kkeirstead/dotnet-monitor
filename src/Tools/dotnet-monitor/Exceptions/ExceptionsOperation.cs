@@ -25,13 +25,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
         private const char MethodParameterTypesStart = '(';
         private const char MethodParameterTypesEnd = ')';
 
+        private readonly ExceptionsConfiguration _configuration;
         private readonly ExceptionsFormat _format;
         private readonly IExceptionsStore _store;
 
-        public ExceptionsOperation(IExceptionsStore store, ExceptionsFormat format)
+        public ExceptionsOperation(IExceptionsStore store, ExceptionsFormat format, ExceptionsConfiguration configuration)
         {
             _store = store;
             _format = format;
+            _configuration = configuration;
         }
 
         public string ContentType => _format switch
@@ -77,10 +79,46 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
         private async Task WriteJson(Stream stream, IReadOnlyList<IExceptionInstance> instances, CancellationToken token)
         {
-            foreach (IExceptionInstance instance in instances)
+            foreach (IExceptionInstance instance in FilterExceptions(_configuration, instances))
             {
                 await WriteJsonInstance(stream, instance, token);
             }
+        }
+
+        internal static List<IExceptionInstance> FilterExceptions(ExceptionsConfiguration configuration, IReadOnlyList<IExceptionInstance> instances)
+        {
+            List<IExceptionInstance> filteredInstances = new List<IExceptionInstance>();
+            foreach (IExceptionInstance instance in instances)
+            {
+                if (FilterException(configuration, instance))
+                {
+                    filteredInstances.Add(instance);
+                }
+            }
+
+            return filteredInstances;
+        }
+
+        internal static bool FilterException(ExceptionsConfiguration configuration, IExceptionInstance instance)
+        {
+            if (configuration.Include.Count > 0)
+            {
+                // filter out exceptions that don't match the filter
+                if (configuration.ShouldInclude(instance))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                // filter out exceptions that match the filter
+                if (configuration.ShouldExclude(instance))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private async Task WriteJsonInstance(Stream stream, IExceptionInstance instance, CancellationToken token)
@@ -151,10 +189,12 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
             await stream.WriteAsync(JsonRecordDelimiter, token);
         }
 
-        private static async Task WriteText(Stream stream, IReadOnlyList<IExceptionInstance> instances, CancellationToken token)
+        private async Task WriteText(Stream stream, IReadOnlyList<IExceptionInstance> instances, CancellationToken token)
         {
-            Dictionary<ulong, IExceptionInstance> priorInstances = new(instances.Count);
-            foreach (IExceptionInstance currentInstance in instances)
+            var filteredInstances = FilterExceptions(_configuration, instances);
+
+            Dictionary<ulong, IExceptionInstance> priorInstances = new(filteredInstances.Count);
+            foreach (IExceptionInstance currentInstance in filteredInstances)
             {
                 // Skip writing the exception if it does not have a call stack, which
                 // indicates that the exception was not thrown. It is likely to be referenced

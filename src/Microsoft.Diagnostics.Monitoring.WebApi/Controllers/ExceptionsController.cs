@@ -53,7 +53,42 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
                 return this.NotAcceptable();
             }
 
-            IArtifactOperation operation = _operationFactory.Create(_exceptionsStore, format.Value);
+            IArtifactOperation operation = _operationFactory.Create(_exceptionsStore, format.Value, new());
+
+            return new OutputStreamResult(operation);
+        }
+
+        /// <summary>
+        /// Gets the exceptions from the default process.
+        /// </summary>
+        /// <param name="configuration">The exceptions configuration describing which exceptions to capture.</param>
+        [HttpPost("exceptions", Name = nameof(CaptureExceptionsCustom))]
+        [ProducesWithProblemDetails(ContentTypes.ApplicationNdJson, ContentTypes.ApplicationJsonSequence, ContentTypes.TextPlain)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [EgressValidation]
+        public ActionResult CaptureExceptionsCustom(
+            [FromBody]
+
+/* Unmerged change from project 'Microsoft.Diagnostics.Monitoring.WebApi (net6.0)'
+Before:
+            Models.ExceptionsConfiguration configuration)
+After:
+            ExceptionsConfiguration configuration)
+*/
+            Exceptions.ExceptionsConfiguration configuration)
+        {
+            if (!_inProcessFeatures.IsExceptionsEnabled)
+            {
+                return NotFound();
+            }
+
+            ExceptionsFormat? format = ComputeFormat(Request.GetTypedHeaders().Accept);
+            if (!format.HasValue)
+            {
+                return this.NotAcceptable();
+            }
+
+            IArtifactOperation operation = _operationFactory.Create(_exceptionsStore, format.Value, configuration);
 
             return new OutputStreamResult(operation);
         }
