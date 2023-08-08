@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -101,24 +102,27 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
         internal static bool FilterException(ExceptionsConfiguration configuration, IExceptionInstance instance)
         {
+            bool shouldInclude = true;
             if (configuration.Include.Count > 0)
             {
+                shouldInclude = false;
                 // filter out exceptions that don't match the filter
                 if (configuration.ShouldInclude(instance))
                 {
-                    return true;
+                    shouldInclude = true;
                 }
             }
-            else
+
+            if (configuration.Exclude.Count > 0)
             {
                 // filter out exceptions that match the filter
                 if (configuration.ShouldExclude(instance))
                 {
-                    return false;
+                    shouldInclude = false;
                 }
             }
 
-            return true;
+            return shouldInclude;
         }
 
         private async Task WriteJsonInstance(Stream stream, IExceptionInstance instance, CancellationToken token)
