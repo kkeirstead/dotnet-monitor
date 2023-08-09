@@ -68,14 +68,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
         [EgressValidation]
         public ActionResult CaptureExceptionsCustom(
             [FromBody]
-
-/* Unmerged change from project 'Microsoft.Diagnostics.Monitoring.WebApi (net6.0)'
-Before:
-            Models.ExceptionsConfiguration configuration)
-After:
             ExceptionsConfiguration configuration)
-*/
-            Exceptions.ExceptionsConfiguration configuration)
         {
             if (!_inProcessFeatures.IsExceptionsEnabled)
             {
