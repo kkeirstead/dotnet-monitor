@@ -16,7 +16,7 @@
       - 'daily': sets the blob group release name to 'daily' so a release type does not have to be assigned.
       - 'release': sets the blob group release name to 'release'. Can be used for prereleases and full releases.
     -->
-    <BlobGroupBuildQuality>release</BlobGroupBuildQuality>
+    <BlobGroupBuildQuality>daily</BlobGroupBuildQuality>
     <!--
       This should be set to true for official releases.
     -->
