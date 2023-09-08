@@ -167,8 +167,8 @@
     <comment>Gets a string similar to "File system egress failed.".</comment>
   </data>
   <data name="ErrorMessage_EgressMissingCredentials" xml:space="preserve">
-    <value>SharedAccessSignature, AccountKey, or ManagedIdentityClientId must be specified.</value>
-    <comment>Gets a string similar to "SharedAccessSignature, AccountKey, or ManagedIdentityClientId must be specified.".</comment>
+    <value>SharedAccessSignature, AccountKey, ManagedIdentityClientId, or UseWorkloadIdentityFromEnvironment must be specified.</value>
+    <comment>Gets a string similar to "SharedAccessSignature, AccountKey, ManagedIdentityClientId, or UseWorkflowIdentity must be specified.".</comment>
   </data>
   <data name="ErrorMessage_EgressProviderDoesNotExist" xml:space="preserve">
     <value>Egress provider '{0}' does not exist.</value>
@@ -406,6 +406,10 @@
   <data name="HelpDescription_OptionDiagnosticPort" xml:space="preserve">
     <value>The fully qualified path and filename of the diagnostic port to which runtime instances can connect.</value>
     <comment>Gets the string to display in help that explains what the '--diagnostic-port' option does.</comment>
+  </data>
+  <data name="HelpDescription_OptionExitOnStdinDisconnect" xml:space="preserve">
+    <value>If specified, dotnet-monitor will monitor `stdin`, and if it closes, will exit. This is useful when dotnet-monitor is started remotely without a pseudo-terminal, and the caller wishes for it to exit when the connection is dropped (example: `docker exec -i ...`).</value>
+    <comment>Gets the string to display in help that explains what the '--exit-on-stdin-disconnect' option does.</comment>
   </data>
   <data name="HelpDescription_OptionLevel" xml:space="preserve">
     <value>Configuration level. Unredacted configuration can show sensitive information.</value>
@@ -724,7 +728,7 @@
     <value>Experimental feature '{name}' is enabled.</value>
   </data>
   <data name="LogFormatString_FailedInitializeSharedLibraryStorage" xml:space="preserve">
-    <value>Failed to initialize shared library storage.</value>
+    <value>Failed to initialize shared library storage. Some monitoring features may be unavailable.</value>
   </data>
   <data name="LogFormatString_GetEnvironmentVariable" xml:space="preserve">
     <value>Getting the environment variable {variableName} from process {processId}.</value>
@@ -838,6 +842,9 @@
 1 Format Parameter:
 1. url: The URL that could not have a listener attached to it</comment>
   </data>
+  <data name="LogFormatString_UnableToWatchForDisconnect" xml:space="preserve">
+    <value>Unable to watch 'stdin' for disconnect.</value>
+  </data>
   <data name="LogFormatString_WritingMessageToQueueFailed" xml:space="preserve">
     <value>Unable to send message to the queue {0}.</value>
     <comment>Gets the format string that is printed in the 59:WritingMessageToQueueFailed event.
@@ -879,11 +886,6 @@
     <value>Configuration Providers (High to Low Priority):</value>
     <comment>Gets the string for displaying the configuration providers with the --show-sources flag.</comment>
   </data>
-  <data name="OutputFormatString_FirstChanceException" xml:space="preserve">
-    <value>First chance exception. {0}: {1}</value>
-    <comment>{0} = Exception type name
-{1} = Exception message</comment>
-  </data>
   <data name="Placeholder_NotPresent" xml:space="preserve">
     <value>:NOT PRESENT:</value>
     <comment>Gets a string similar to ":NOT PRESENT:".</comment>
@@ -910,5 +912,51 @@
 2 Format Parameters:
 0. providerName: The name of the provider that failed validation.
 1. errorMessage: The validation failure message</comment>
+  </data>
+  <data name="FeatureName_ParameterCapturing" xml:space="preserve">
+    <value>Parameter Capturing</value>
+  </data>
+  <data name="ErrorMessage_UnableToFindHostingStartupAssembly" xml:space="preserve">
+    <value>Unable to find hosting startup assembly at determined path.</value>
+  </data>
+  <data name="LogFormatString_UnableToApplyHostingStartup" xml:space="preserve">
+    <value>Unable to apply hosting startup.</value>
+  </data>
+  <data name="LogFormatString_UnableToApplyInProcessFeatureFlags" xml:space="preserve">
+    <value>Unable to apply in process feature flags.</value>
+  </data>
+  <data name="LogFormatString_ProfilerRuntimeIdentifier" xml:space="preserve">
+    <value>Using '{runtimeIdentifier}' profiler runtime identifier. Source: {source}</value>
+  </data>
+  <data name="LogFormatString_EndpointInitializationFailed" xml:space="preserve">
+    <value>Unable to fully initialize endpoint for process {processId}. Some monitoring features may be unavailable.</value>
+  </data>
+  <data name="LogFormatString_EndpointRemovalFailed" xml:space="preserve">
+    <value>Unable to fully remove endpoint for process {processId}.</value>
+  </data>
+  <data name="LogFormatString_StartupHookApplyFailed" xml:space="preserve">
+    <value>Failed to apply the startup hook. Not all in process features will be available.</value>
+    <comment>Gets a string similar to "Failed to apply the startup hook. Not all in process features will be available."</comment>
+  </data>
+  <data name="ErrorMessage_SharedFileDiffersFromSource" xml:space="preserve">
+    <value>The shared file '{0}' is different from source file '{1}'.</value>
+  </data>
+  <data name="ErrorMessage_ParameterCapturingNotAvailable" xml:space="preserve">
+    <value>Parameter capturing is not available in the process. {0}</value>
+    <comment>Gets the format string for parameter capturing not being available
+1 Format Parameters:
+0. reason: The reason why the feature is unavailable.</comment>
+  </data>
+  <data name="ParameterCapturingNotAvailable_Reason_PreventedHostingStartup" xml:space="preserve">
+    <value>The process has prevented hosting startup assemblies from loading using the ASPNETCORE_PREVENTHOSTINGSTARTUP environment variable.</value>
+  </data>
+  <data name="ParameterCapturingNotAvailable_Reason_HostingStartupDidNotLoad" xml:space="preserve">
+    <value>This feature is only available on processes using ASP.NET Core. If the process is using ASP.NET Core and has successfully started, ensure that it has not been configured to prevent hosting startup assemblies from loading.</value>
+  </data>
+  <data name="ParameterCapturingNotAvailable_Reason_ManagedMessagingDidNotLoad" xml:space="preserve">
+    <value>An internal error occurred that has prevented communication with the process.</value>
+  </data>
+  <data name="ParameterCapturingNotAvailable_Reason_UnsupportedRuntime" xml:space="preserve">
+    <value>The process needs to be using .NET 7 or newer.</value>
   </data>
 </root>

@@ -169,7 +169,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SharedAccessSignature, AccountKey, or ManagedIdentityClientId must be specified..
+        ///   Looks up a localized string similar to SharedAccessSignature, AccountKey, ManagedIdentityClientId, or UseWorkloadIdentityFromEnvironment must be specified..
         /// </summary>
         internal static string ErrorMessage_EgressMissingCredentials {
             get {
@@ -421,6 +421,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter capturing is not available in the process. {0}.
+        /// </summary>
+        internal static string ErrorMessage_ParameterCapturingNotAvailable {
+            get {
+                return ResourceManager.GetString("ErrorMessage_ParameterCapturingNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} parameter value &apos;{1}&apos; is not allowed..
         /// </summary>
         internal static string ErrorMessage_ParameterNotAllowed {
@@ -444,6 +453,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         internal static string ErrorMessage_RejectedJwk {
             get {
                 return ResourceManager.GetString("ErrorMessage_RejectedJwk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The shared file &apos;{0}&apos; is different from source file &apos;{1}&apos;..
+        /// </summary>
+        internal static string ErrorMessage_SharedFileDiffersFromSource {
+            get {
+                return ResourceManager.GetString("ErrorMessage_SharedFileDiffersFromSource", resourceCulture);
             }
         }
         
@@ -508,6 +526,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         internal static string ErrorMessage_UnableToDetermineTargetPlatform {
             get {
                 return ResourceManager.GetString("ErrorMessage_UnableToDetermineTargetPlatform", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to find hosting startup assembly at determined path..
+        /// </summary>
+        internal static string ErrorMessage_UnableToFindHostingStartupAssembly {
+            get {
+                return ResourceManager.GetString("ErrorMessage_UnableToFindHostingStartupAssembly", resourceCulture);
             }
         }
         
@@ -584,6 +611,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter Capturing.
+        /// </summary>
+        internal static string FeatureName_ParameterCapturing {
+            get {
+                return ResourceManager.GetString("FeatureName_ParameterCapturing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Monitor logs and metrics in a .NET application send the results to a chosen destination..
         /// </summary>
         internal static string HelpDescription_CommandCollect {
@@ -634,6 +670,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         internal static string HelpDescription_OptionDiagnosticPort {
             get {
                 return ResourceManager.GetString("HelpDescription_OptionDiagnosticPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If specified, dotnet-monitor will monitor `stdin`, and if it closes, will exit. This is useful when dotnet-monitor is started remotely without a pseudo-terminal, and the caller wishes for it to exit when the connection is dropped (example: `docker exec -i ...`)..
+        /// </summary>
+        internal static string HelpDescription_OptionExitOnStdinDisconnect {
+            get {
+                return ResourceManager.GetString("HelpDescription_OptionExitOnStdinDisconnect", resourceCulture);
             }
         }
         
@@ -1124,6 +1169,24 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to fully initialize endpoint for process {processId}. Some monitoring features may be unavailable..
+        /// </summary>
+        internal static string LogFormatString_EndpointInitializationFailed {
+            get {
+                return ResourceManager.GetString("LogFormatString_EndpointInitializationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to fully remove endpoint for process {processId}..
+        /// </summary>
+        internal static string LogFormatString_EndpointRemovalFailed {
+            get {
+                return ResourceManager.GetString("LogFormatString_EndpointRemovalFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected timeout from process {processId}. Process will no longer be monitored..
         /// </summary>
         internal static string LogFormatString_EndpointTimeout {
@@ -1268,7 +1331,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to initialize shared library storage..
+        ///   Looks up a localized string similar to Failed to initialize shared library storage. Some monitoring features may be unavailable..
         /// </summary>
         internal static string LogFormatString_FailedInitializeSharedLibraryStorage {
             get {
@@ -1385,6 +1448,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Using &apos;{runtimeIdentifier}&apos; profiler runtime identifier. Source: {source}.
+        /// </summary>
+        internal static string LogFormatString_ProfilerRuntimeIdentifier {
+            get {
+                return ResourceManager.GetString("LogFormatString_ProfilerRuntimeIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The queue {0} does not exist; ensure that the {queueName} and {queueAccountUri} fields are set correctly..
         /// </summary>
         internal static string LogFormatString_QueueDoesNotExist {
@@ -1448,6 +1520,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to apply the startup hook. Not all in process features will be available..
+        /// </summary>
+        internal static string LogFormatString_StartupHookApplyFailed {
+            get {
+                return ResourceManager.GetString("LogFormatString_StartupHookApplyFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The DOTNET_STARTUP_HOOKS environment variable is missing from target process {processId}..
         /// </summary>
         internal static string LogFormatString_StartupHookEnvironmentMissing {
@@ -1475,6 +1556,24 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to apply hosting startup..
+        /// </summary>
+        internal static string LogFormatString_UnableToApplyHostingStartup {
+            get {
+                return ResourceManager.GetString("LogFormatString_UnableToApplyHostingStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to apply in process feature flags..
+        /// </summary>
+        internal static string LogFormatString_UnableToApplyInProcessFeatureFlags {
+            get {
+                return ResourceManager.GetString("LogFormatString_UnableToApplyInProcessFeatureFlags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to apply profiler..
         /// </summary>
         internal static string LogFormatString_UnableToApplyProfiler {
@@ -1489,6 +1588,15 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         internal static string LogFormatString_UnableToListenToAddress {
             get {
                 return ResourceManager.GetString("LogFormatString_UnableToListenToAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to watch &apos;stdin&apos; for disconnect..
+        /// </summary>
+        internal static string LogFormatString_UnableToWatchForDisconnect {
+            get {
+                return ResourceManager.GetString("LogFormatString_UnableToWatchForDisconnect", resourceCulture);
             }
         }
         
@@ -1583,11 +1691,38 @@ namespace Microsoft.Diagnostics.Tools.Monitor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to First chance exception. {0}: {1}.
+        ///   Looks up a localized string similar to This feature is only available on processes using ASP.NET Core. If the process is using ASP.NET Core and has successfully started, ensure that it has not been configured to prevent hosting startup assemblies from loading..
         /// </summary>
-        internal static string OutputFormatString_FirstChanceException {
+        internal static string ParameterCapturingNotAvailable_Reason_HostingStartupDidNotLoad {
             get {
-                return ResourceManager.GetString("OutputFormatString_FirstChanceException", resourceCulture);
+                return ResourceManager.GetString("ParameterCapturingNotAvailable_Reason_HostingStartupDidNotLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An internal error occurred that has prevented communication with the process..
+        /// </summary>
+        internal static string ParameterCapturingNotAvailable_Reason_ManagedMessagingDidNotLoad {
+            get {
+                return ResourceManager.GetString("ParameterCapturingNotAvailable_Reason_ManagedMessagingDidNotLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The process has prevented hosting startup assemblies from loading using the ASPNETCORE_PREVENTHOSTINGSTARTUP environment variable..
+        /// </summary>
+        internal static string ParameterCapturingNotAvailable_Reason_PreventedHostingStartup {
+            get {
+                return ResourceManager.GetString("ParameterCapturingNotAvailable_Reason_PreventedHostingStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The process needs to be using .NET 7 or newer..
+        /// </summary>
+        internal static string ParameterCapturingNotAvailable_Reason_UnsupportedRuntime {
+            get {
+                return ResourceManager.GetString("ParameterCapturingNotAvailable_Reason_UnsupportedRuntime", resourceCulture);
             }
         }
         

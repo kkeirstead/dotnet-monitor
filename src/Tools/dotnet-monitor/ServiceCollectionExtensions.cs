@@ -26,8 +26,11 @@ using Microsoft.Diagnostics.Tools.Monitor.Egress.Extension;
 using Microsoft.Diagnostics.Tools.Monitor.Egress.FileSystem;
 using Microsoft.Diagnostics.Tools.Monitor.Exceptions;
 using Microsoft.Diagnostics.Tools.Monitor.Extensibility;
+using Microsoft.Diagnostics.Tools.Monitor.HostingStartup;
 using Microsoft.Diagnostics.Tools.Monitor.LibrarySharing;
+using Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing;
 using Microsoft.Diagnostics.Tools.Monitor.Profiler;
+using Microsoft.Diagnostics.Tools.Monitor.Stacks;
 using Microsoft.Diagnostics.Tools.Monitor.StartupHook;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +41,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace Microsoft.Diagnostics.Tools.Monitor
 {
@@ -68,8 +70,20 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         public static IServiceCollection ConfigureInProcessFeatures(this IServiceCollection services, IConfiguration configuration)
         {
-            return ConfigureOptions<InProcessFeaturesOptions>(services, configuration, ConfigurationKeys.InProcessFeatures)
-                .AddSingleton<IPostConfigureOptions<InProcessFeaturesOptions>, InProcessFeaturesPostConfigureOptions>();
+            ConfigureOptions<CallStacksOptions>(services, configuration, ConfigurationKeys.InProcessFeatures_CallStacks)
+                .AddSingleton<IPostConfigureOptions<CallStacksOptions>, CallStacksPostConfigureOptions>();
+
+            ConfigureOptions<ExceptionsOptions>(services, configuration, ConfigurationKeys.InProcessFeatures_Exceptions)
+                .AddSingleton<IPostConfigureOptions<ExceptionsOptions>, ExceptionsPostConfigureOptions>();
+
+            ConfigureOptions<ParameterCapturingOptions>(services, configuration, ConfigurationKeys.InProcessFeatures_ParameterCapturing)
+             .AddSingleton<IPostConfigureOptions<ParameterCapturingOptions>, ParameterCapturingPostConfigureOptions>();
+
+            ConfigureOptions<InProcessFeaturesOptions>(services, configuration, ConfigurationKeys.InProcessFeatures)
+                .AddSingleton<InProcessFeaturesService>()
+                .AddSingleton<IEndpointInfoSourceCallbacks, InProcessFeaturesEndpointInfoSourceCallbacks>();
+
+            return services;
         }
 
         public static IServiceCollection ConfigureMetrics(this IServiceCollection services, IConfiguration configuration)
@@ -121,6 +135,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         public static IServiceCollection ConfigureCollectionRules(this IServiceCollection services)
         {
             services.RegisterCollectionRuleAction<CollectDumpActionFactory, CollectDumpOptions>(KnownCollectionRuleActions.CollectDump);
+            services.RegisterCollectionRuleAction<CollectExceptionsActionFactory, CollectExceptionsOptions>(KnownCollectionRuleActions.CollectExceptions);
             services.RegisterCollectionRuleAction<CollectGCDumpActionFactory, CollectGCDumpOptions>(KnownCollectionRuleActions.CollectGCDump);
             services.RegisterCollectionRuleAction<CollectLiveMetricsActionFactory, CollectLiveMetricsOptions>(KnownCollectionRuleActions.CollectLiveMetrics);
             services.RegisterCollectionRuleAction<CollectLogsActionFactory, CollectLogsOptions>(KnownCollectionRuleActions.CollectLogs);
@@ -246,7 +261,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         {
             services.TryAddSingleton<IDotnetToolsFileSystem, DefaultDotnetToolsFileSystem>();
 
-            string executingAssemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string progDataFolder = settings.SharedConfigDirectory;
             string settingsFolder = settings.UserConfigDirectory;
 
@@ -257,7 +271,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             }
 
             // Add the folders we search to get extensions from
-            services.AddFolderExtensionRepository(executingAssemblyFolder);
+            services.AddFolderExtensionRepository(AppContext.BaseDirectory);
             services.AddFolderExtensionRepository(progDataFolder);
             services.AddFolderExtensionRepository(settingsFolder);
 
@@ -319,6 +333,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             services.AddSingletonForwarder<ISharedLibraryService, SharedLibraryService>();
             services.AddHostedServiceForwarder<SharedLibraryService>();
             services.TryAddSingleton<ISharedLibraryInitializer, DefaultSharedLibraryInitializer>();
+            services.AddSingleton<DefaultSharedLibraryPathProvider>();
             return services;
         }
 
@@ -331,12 +346,25 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         public static IServiceCollection ConfigureExceptions(this IServiceCollection services)
         {
-            services.AddSingleton<IExceptionsOperationFactory, ExceptionsOperationFactory>();
-            // The exceptions store for the default process; long term, create a store for each process
-            // that wants to participate in exception collection.
-            services.AddSingleton<IExceptionsStore, ExceptionsStore>();
-            services.AddHostedService<ExceptionsService>();
-            services.AddSingleton<StartupHookValidator>();
+            services.AddTransient<IExceptionsOperationFactory, ExceptionsOperationFactory>();
+            services.AddScoped<IExceptionsStore, ExceptionsStore>();
+            services.AddScoped<IExceptionsStoreCallbackFactory, ExceptionsStoreLimitsCallbackFactory>();
+            services.AddScoped<IDiagnosticLifetimeService, ExceptionsService>();
+            return services;
+        }
+
+        public static IServiceCollection ConfigureHostingStartup(this IServiceCollection services)
+        {
+            services.AddScoped<HostingStartupService>();
+            services.AddScopedForwarder<IDiagnosticLifetimeService, HostingStartupService>();
+            return services;
+        }
+
+        public static IServiceCollection ConfigureStartupHook(this IServiceCollection services)
+        {
+            services.AddTransient<StartupHookValidator>();
+            services.AddScoped<StartupHookService>();
+            services.AddScopedForwarder<IDiagnosticLifetimeService, StartupHookService>();
             return services;
         }
 
@@ -355,6 +383,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             });
             services.AddSingleton<IStartupLogger, EgressStartupLogger>();
             return services;
+        }
+
+        public static void AddScopedForwarder<TService, TImplementation>(this IServiceCollection services) where TImplementation : class, TService where TService : class
+        {
+            services.AddScoped<TService, TImplementation>(sp => sp.GetRequiredService<TImplementation>());
         }
 
         private static void AddSingletonForwarder<TService, TImplementation>(this IServiceCollection services) where TImplementation : class, TService where TService : class

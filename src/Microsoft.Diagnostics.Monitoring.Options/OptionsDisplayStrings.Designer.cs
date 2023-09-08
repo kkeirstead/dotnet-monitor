@@ -259,11 +259,29 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the egress provider to which the dump is egressed..
+        ///   Looks up a localized string similar to Enables or disables the call stacks feature. By default, this feature is enabled if in-process features are enabled..
         /// </summary>
-        public static string DisplayAttributeDescription_CollectDumpOptions_Egress {
+        public static string DisplayAttributeDescription_CallStacksOptions_Enabled {
             get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectDumpOptions_Egress", resourceCulture);
+                return ResourceManager.GetString("DisplayAttributeDescription_CallStacksOptions_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The duration of time in which the artifact is collected..
+        /// </summary>
+        public static string DisplayAttributeDescription_CollectArtifactOptions_Duration {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_CollectArtifactOptions_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the egress provider to which the artifact is egressed..
+        /// </summary>
+        public static string DisplayAttributeDescription_CollectArtifactOptions_Egress {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_CollectArtifactOptions_Egress", resourceCulture);
             }
         }
         
@@ -277,11 +295,11 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the egress provider to which the GC dump is egressed..
+        ///   Looks up a localized string similar to The format used to display the exceptions..
         /// </summary>
-        public static string DisplayAttributeDescription_CollectGCDumpOptions_Egress {
+        public static string DisplayAttributeDescription_CollectExceptionsOptions_Format {
             get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectGCDumpOptions_Egress", resourceCulture);
+                return ResourceManager.GetString("DisplayAttributeDescription_CollectExceptionsOptions_Format", resourceCulture);
             }
         }
         
@@ -496,24 +514,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The duration of time in which live metrics are collected..
-        /// </summary>
-        public static string DisplayAttributeDescription_CollectLiveMetricsOptions_Duration {
-            get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectLiveMetricsOptions_Duration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the egress provider to which the live metrics are egressed..
-        /// </summary>
-        public static string DisplayAttributeDescription_CollectLiveMetricsOptions_Egress {
-            get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectLiveMetricsOptions_Egress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Determines if the default counter providers should be used..
         /// </summary>
         public static string DisplayAttributeDescription_CollectLiveMetricsOptions_IncludeDefaultProviders {
@@ -550,24 +550,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The duration of time in which logs are collected..
-        /// </summary>
-        public static string DisplayAttributeDescription_CollectLogsOptions_Duration {
-            get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectLogsOptions_Duration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the egress provider to which the logs are egressed..
-        /// </summary>
-        public static string DisplayAttributeDescription_CollectLogsOptions_Egress {
-            get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectLogsOptions_Egress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A custom mapping of logger categories to log levels that describes at what level a log statement that matches one of the given categories should be captured..
         /// </summary>
         public static string DisplayAttributeDescription_CollectLogsOptions_FilterSpecs {
@@ -595,15 +577,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of the egress provider to which the call stacks are egressed..
-        /// </summary>
-        public static string DisplayAttributeDescription_CollectStacksOptions_Egress {
-            get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectStacksOptions_Egress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The format used to display the call stacks..
         /// </summary>
         public static string DisplayAttributeDescription_CollectStacksOptions_Format {
@@ -618,24 +591,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         public static string DisplayAttributeDescription_CollectTraceOptions_BufferSizeMegabytes {
             get {
                 return ResourceManager.GetString("DisplayAttributeDescription_CollectTraceOptions_BufferSizeMegabytes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The duration of time in which trace events are collected..
-        /// </summary>
-        public static string DisplayAttributeDescription_CollectTraceOptions_Duration {
-            get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectTraceOptions_Duration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The name of the egress provider to which the trace is egressed..
-        /// </summary>
-        public static string DisplayAttributeDescription_CollectTraceOptions_Egress {
-            get {
-                return ResourceManager.GetString("DisplayAttributeDescription_CollectTraceOptions_Egress", resourceCulture);
             }
         }
         
@@ -955,6 +910,24 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enables or disables the exceptions feature. By default, this feature is enabled if in-process features are enabled..
+        /// </summary>
+        public static string DisplayAttributeDescription_ExceptionsOptions_Enabled {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_ExceptionsOptions_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of top-level exceptions to keep in the cache before automatically removing older exceptions. A top-level exception is one that is not an inner exception of another exception..
+        /// </summary>
+        public static string DisplayAttributeDescription_ExceptionsOptions_TopLevelLimit {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_ExceptionsOptions_TopLevelLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The arguments to pass to the executable..
         /// </summary>
         public static string DisplayAttributeDescription_ExecuteOptions_Arguments {
@@ -1037,11 +1010,38 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options for the in-process call stacks feature..
+        /// </summary>
+        public static string DisplayAttributeDescription_InProcessFeaturesOptions_CallStacks {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_InProcessFeaturesOptions_CallStacks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allows features that require diagnostic components to be loaded into target processes to be enabled. These features may have minimal performance impact on target processes..
         /// </summary>
         public static string DisplayAttributeDescription_InProcessFeaturesOptions_Enabled {
             get {
                 return ResourceManager.GetString("DisplayAttributeDescription_InProcessFeaturesOptions_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options for the in-process exceptions feature..
+        /// </summary>
+        public static string DisplayAttributeDescription_InProcessFeaturesOptions_Exceptions {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_InProcessFeaturesOptions_Exceptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options for the in-process parameter capturing feature..
+        /// </summary>
+        public static string DisplayAttributeDescription_InProcessFeaturesOptions_ParameterCapturing {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_InProcessFeaturesOptions_ParameterCapturing", resourceCulture);
             }
         }
         
@@ -1262,6 +1262,15 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enables or disables the parameter capturing feature. By default, this feature is not enabled..
+        /// </summary>
+        public static string DisplayAttributeDescription_ParameterCapturingOptions_Enabled {
+            get {
+                return ResourceManager.GetString("DisplayAttributeDescription_ParameterCapturingOptions_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Performs a match based on the contents of the command passed to launch the process on the system; this typically includes the executable path and arguments to the process..
         /// </summary>
         public static string DisplayAttributeDescription_ProcessFilterDescriptor_CommandLine {
@@ -1478,7 +1487,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} field, {1} field, or {2} field is required..
+        ///   Looks up a localized string similar to The {0} field, {1} field, {2} field, or {3} field is required..
         /// </summary>
         public static string ErrorMessage_CredentialsMissing {
             get {
