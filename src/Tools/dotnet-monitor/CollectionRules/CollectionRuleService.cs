@@ -31,6 +31,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
         private readonly CollectionRulesConfigurationProvider _provider;
         private readonly DiagnosticPortOptions _portOptions;
         private readonly IServiceProvider _serviceProvider;
+        private readonly EgressOperationService _egressOperationService;
 
         private long _disposalState;
 
@@ -38,13 +39,16 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
             IServiceProvider serviceProvider,
             ILogger<CollectionRuleService> logger,
             CollectionRulesConfigurationProvider provider,
-            IOptions<DiagnosticPortOptions> portOptions
+            IOptions<DiagnosticPortOptions> portOptions,
+            EgressOperationService egressOperationService
             )
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _portOptions = portOptions.Value ?? throw new ArgumentNullException(nameof(portOptions));
+            _egressOperationService = egressOperationService;
+
 
             BoundedChannelOptions containersToRemoveChannelOptions = new(PendingRemovalChannelCapacity)
             {

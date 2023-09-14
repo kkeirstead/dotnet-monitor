@@ -22,7 +22,9 @@
 typedef struct _UNPROCESSED_INSTRUMENTATION_REQUEST
 {
     FunctionID functionId;
+    UINT32 fieldTypeToken;
     std::vector<ULONG32> boxingTypes;
+    ULONG64 lineNumber;
 } UNPROCESSED_INSTRUMENTATION_REQUEST;
 
 enum class ProbeWorkerInstruction

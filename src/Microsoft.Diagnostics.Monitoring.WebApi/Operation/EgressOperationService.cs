@@ -4,6 +4,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +15,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
         private IEgressOperationQueue _queue;
         private IServiceProvider _serviceProvider;
         private EgressOperationStore _operationsStore;
+
+        public List<string> Hits { get; set; }
 
         public EgressOperationService(IServiceProvider serviceProvider,
             EgressOperationStore operationStore)
@@ -51,7 +54,30 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                     await egressRequest.EgressOperation.Started.WaitAsync(token).ConfigureAwait(false);
                     _operationsStore.MarkOperationAsRunning(egressRequest.OperationId);
 
+                    // Spin another task here every (second?) that checks the stub for events
+
+                    CancellationTokenSource source = new();
+
+                    CancellationToken taskToken = source.Token;
+                    Task t = new Task(() =>
+                    {
+                        while (!taskToken.IsCancellationRequested) // bad
+                        {
+                            if (egressRequest.EgressOperation.Operation != null)
+                            {
+                                Hits = egressRequest.EgressOperation.Operation.Hits;
+                            }
+                            //egressRequest.EgressOperation.
+
+                            Task.Delay(1000);
+                        }
+                    }, taskToken);
+
+                    t.Start();
+
                     ExecutionResult<EgressResult> result = await executeTask.WaitAsync(token).ConfigureAwait(false);
+
+                    source.Cancel(); // stop the loop
 
                     //It is possible that this operation never completes, due to infinite duration operations.
                     _operationsStore.CompleteOperation(egressRequest.OperationId, result);

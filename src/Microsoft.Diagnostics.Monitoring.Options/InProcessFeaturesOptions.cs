@@ -33,5 +33,7 @@ namespace Microsoft.Diagnostics.Monitoring.Options
             Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_InProcessFeaturesOptions_ParameterCapturing))]
         [Experimental]
         public ParameterCapturingOptions ParameterCapturing { get; set; }
+
+        //public TripWireOptions TripWire { get; set; }
     }
 }

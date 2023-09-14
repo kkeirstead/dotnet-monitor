@@ -6,6 +6,7 @@ EXPORTS
     DllMain                            PRIVATE
     RequestFunctionProbeRegistration   PRIVATE
     RequestFunctionProbeInstallation   PRIVATE
+    RequestFunctionProbeInstallation2  PRIVATE
     RequestFunctionProbeUninstallation PRIVATE
     RegisterFunctionProbeCallbacks     PRIVATE
     UnregisterFunctionProbeCallbacks   PRIVATE

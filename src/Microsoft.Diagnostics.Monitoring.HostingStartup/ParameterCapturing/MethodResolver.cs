@@ -15,6 +15,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
 
         private readonly Dictionary<string, List<Module>> _nameToModules = new(StringComparer.Ordinal);
         private readonly Dictionary<DeclaringTypeDescription, List<MethodInfo>> _declaringTypeToMethods = new();
+        private readonly Dictionary<DeclaringTypeDescription, List<FieldInfo>> _declaringTypeToFields = new();
 
         public MethodResolver()
         {
@@ -57,6 +58,61 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
             }
 
             return matchingMethods;
+        }
+
+
+        // Add a FieldDescription type and remove the need for MethodDescription
+        public List<FieldInfo> ResolveFieldDescription(FieldDescription fieldDescription)
+        {
+            // A single description can match multiple FieldInfos
+            List<FieldInfo> matchingFields = new();
+
+            List<FieldInfo> possibleFields = GetFieldsForDeclaringType(fieldDescription);
+            foreach (FieldInfo field in possibleFields)
+            {
+                if (field.Name == fieldDescription.FieldName)
+                {
+                    matchingFields.Add(field);
+                }
+            }
+
+            return matchingFields;
+        }
+
+        private List<FieldInfo> GetFieldsForDeclaringType(FieldDescription methodDescription)
+        {
+            // Maintain a cache for all fields for a given module+type.
+            DeclaringTypeDescription declType = new(methodDescription.ModuleName, methodDescription.TypeName);
+            if (_declaringTypeToFields.TryGetValue(declType, out List<FieldInfo>? fields))
+            {
+                return fields;
+            }
+
+            List<FieldInfo> declaringTypeFields = new();
+            if (_nameToModules.TryGetValue(methodDescription.ModuleName, out List<Module>? possibleModules))
+            {
+                foreach (Module module in possibleModules)
+                {
+                    try
+                    {
+                        var allFields = module.Assembly.GetType(methodDescription.TypeName)?.GetFields();
+
+                        if (allFields == null)
+                        {
+                            continue;
+                        }
+
+                        declaringTypeFields.AddRange(allFields);
+                    }
+                    catch
+                    {
+                        // CONSIDER: Are there certain exceptions we don't want to swallow here?
+                    }
+                }
+            }
+
+            _declaringTypeToFields.Add(declType, declaringTypeFields);
+            return declaringTypeFields;
         }
 
         private List<MethodInfo> GetMethodsForDeclaringType(MethodDescription methodDescription)

@@ -72,7 +72,34 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Pip
 
                     try
                     {
+                        // Spin another task here every (second?) that checks the stub for events
+
+                        CancellationTokenSource source = new();
+
+                        CancellationToken token = source.Token;
+                        Task t = new Task(() =>
+                        {
+                            int hitsCounter = 0;
+                            while (!token.IsCancellationRequested) // bad
+                            {
+                                if (FunctionProbesStub.Instance != null && FunctionProbesStub.Instance.Hits.Count > hitsCounter)
+                                {
+                                    _callbacks.TestingOnly(request.Payload.RequestId, FunctionProbesStub.Instance.Hits);
+                                    hitsCounter = FunctionProbesStub.Instance.Hits.Count;
+                                }
+                                Task.Delay(1000);
+                            }
+                        }, token);
+
+                        t.Start();
+                        
+                        
+
                         await request.StopRequest.Task.WaitAsync(cts.Token).ConfigureAwait(false);
+
+
+                        source.Cancel(); // stop the loop
+                        
                     }
                     catch (OperationCanceledException)
                     {
@@ -105,15 +132,48 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Pip
         {
             try
             {
-                MethodResolver resolver = new();
+                MethodResolver methodResolver = new();
+
                 List<MethodInfo> methods = new(request.Configuration.Methods.Length);
+
+                List<FieldInfo> fields = new(100); //request.Configuration.Fields.Length
+
+                List<FieldDescription> TEST_fieldDescriptions = new()
+                {
+                    new FieldDescription()
+                    {
+                        TypeName = "ParameterCapturingTesting.Controllers.HomeController",
+                        FieldName = "myGlobalNum",
+                        ModuleName = "ParameterCapturingTesting.dll",
+                    }
+
+                };
+
+                List<FieldDescription> fieldsFailedToResolve = new();
+
+
+                for (int i = 0; i < TEST_fieldDescriptions.Count; ++i)
+                {
+                    FieldDescription fieldDescription = TEST_fieldDescriptions[i];
+                    List<FieldInfo> resolvedFields = methodResolver.ResolveFieldDescription(fieldDescription);
+
+                    if (resolvedFields.Count == 0)
+                    {
+                        fieldsFailedToResolve.Add(fieldDescription);
+                    }
+
+                    fields.AddRange(resolvedFields);
+                }
+
+
+
                 List<MethodDescription> methodsFailedToResolve = new();
 
                 for (int i = 0; i < request.Configuration.Methods.Length; i++)
                 {
                     MethodDescription methodDescription = request.Configuration.Methods[i];
 
-                    List<MethodInfo> resolvedMethods = resolver.ResolveMethodDescription(methodDescription);
+                    List<MethodInfo> resolvedMethods = methodResolver.ResolveMethodDescription(methodDescription);
                     if (resolvedMethods.Count == 0)
                     {
                         methodsFailedToResolve.Add(methodDescription);
@@ -128,7 +188,13 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Pip
                     throw ex;
                 }
 
-                await _probeManager.StartCapturingAsync(methods, token).ConfigureAwait(false);
+                if (fieldsFailedToResolve.Count > 0)
+                {
+                    throw new Exception("Put something real here.");
+                }
+
+                await _probeManager.StartCapturingAsync2(methods, fields, token).ConfigureAwait(false);
+                //await _probeManager.StartCapturingAsync(methods, token).ConfigureAwait(false);
                 _callbacks.CapturingStart(request, methods);
 
                 return true;

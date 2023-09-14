@@ -48,6 +48,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
         private readonly IGCDumpOperationFactory _gcdumpOperationFactory;
         private readonly IStacksOperationFactory _stacksOperationFactory;
 
+        private readonly EgressOperationService _egressOperationService;
+
         public DiagController(IServiceProvider serviceProvider, ILogger<DiagController> logger)
             : base(serviceProvider.GetRequiredService<IDiagnosticServices>(), serviceProvider.GetRequiredService<EgressOperationStore>(), logger)
         {
@@ -63,6 +65,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
             _captureParametersFactory = serviceProvider.GetRequiredService<ICaptureParametersOperationFactory>();
             _gcdumpOperationFactory = serviceProvider.GetRequiredService<IGCDumpOperationFactory>();
             _stacksOperationFactory = serviceProvider.GetRequiredService<IStacksOperationFactory>();
+
+            _egressOperationService = serviceProvider.GetRequiredService<EgressOperationService>();
         }
 
         /// <summary>
@@ -593,6 +597,21 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
                 IInProcessOperation operation = _captureParametersFactory.Create(processInfo.EndpointInfo, configuration, duration);
                 return await InProcessResult(Utilities.ArtifactType_Parameters, processInfo, operation, tags);
             }, processKey, Utilities.ArtifactType_Parameters);
+        }
+
+        /// <summary>
+        /// Gets information about the trip wires in Dotnet-Monitor
+        /// </summary>
+        [HttpGet("tripwires", Name = nameof(GetTripWires))]
+        [ProducesWithProblemDetails(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(typeof(DotnetMonitorInfo), StatusCodes.Status200OK)]
+        public ActionResult<List<string>> GetTripWires()
+        {
+            return this.InvokeService(() =>
+            {
+                Logger.WrittenToHttpStream();
+                return new ActionResult<List<string>>(_egressOperationService.Hits);
+            }, Logger);
         }
 
         [HttpGet("stacks", Name = nameof(CaptureStacks))]

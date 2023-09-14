@@ -16,6 +16,7 @@ using namespace std;
 
 typedef void (STDMETHODCALLTYPE *ProbeRegistrationCallback)(HRESULT);
 typedef void (STDMETHODCALLTYPE *ProbeInstallationCallback)(HRESULT);
+typedef void (STDMETHODCALLTYPE *ProbeInstallationCallback2)(HRESULT);
 typedef void (STDMETHODCALLTYPE *ProbeUninstallationCallback)(HRESULT);
 typedef void (STDMETHODCALLTYPE *ProbeFaultCallback)(ULONG64);
 
@@ -23,6 +24,7 @@ typedef struct _PROBE_MANAGEMENT_CALLBACKS
 {
     ProbeRegistrationCallback pProbeRegistrationCallback;
     ProbeInstallationCallback pProbeInstallationCallback;
+    ProbeInstallationCallback2 pProbeInstallationCallback2;
     ProbeUninstallationCallback pProbeUninstallationCallback;
     ProbeFaultCallback pProbeFaultCallback;
 } PROBE_MANAGEMENT_CALLBACKS;
@@ -293,6 +295,71 @@ STDAPI DLLEXPORT RequestFunctionProbeInstallation(
     return S_OK;
 }
 
+STDAPI DLLEXPORT RequestFunctionProbeInstallation2(
+    ULONG64 functionIds[],
+    ULONG32 fieldTypeToken,
+    ULONG32 count,
+    ULONG64 lineNumber,
+    ULONG32 argumentBoxingTypes[],
+    ULONG32 argumentCounts[])
+{
+    HRESULT hr;
+
+    //
+    // This method receives N (where n is "count") function IDs that probes should be installed into.
+    //
+    // Along with this, boxing types are provided for every argument in all of the functions, and the number of 
+    // arguments for each function can be found using argumentCounts.
+    //
+    // The boxing types are passed in as a flattened multidimensional array (argumentBoxingTypes).
+    //
+    //
+
+    //
+    // This method un-flattens the passed in data, reconstructing it into an easier-to-understand format
+    // before passing off the request to the worker thread.
+    //
+
+    START_NO_OOM_THROW_REGION;
+
+    vector<UNPROCESSED_INSTRUMENTATION_REQUEST> requests;
+    requests.reserve(count);
+
+    ULONG32 offset = 0;
+    for (ULONG32 i = 0; i < count; i++)
+    {
+        if (UINT32_MAX - offset < argumentCounts[i])
+        {
+            return E_INVALIDARG;
+        }
+
+        vector<ULONG32> tokens;
+        tokens.reserve(argumentCounts[i]);
+        for (ULONG32 j = 0; j < argumentCounts[i]; j++)
+        {
+            tokens.push_back(argumentBoxingTypes[offset + j]);
+        }
+        offset += argumentCounts[i];
+
+        UNPROCESSED_INSTRUMENTATION_REQUEST request;
+        request.functionId = static_cast<FunctionID>(functionIds[i]);
+        request.fieldTypeToken = fieldTypeToken; // THIS IS NOT A SAFE WAY TO DO IT, BUT OK FOR HACKING NOW -> NEED TO ASSOCIATE THE REQUIRED FIELD WITH THE RIGHT METHOD
+        request.boxingTypes = tokens;
+        request.lineNumber = lineNumber;
+
+        requests.push_back(request);
+    }
+
+    PROBE_WORKER_PAYLOAD payload = {};
+    payload.instruction = ProbeWorkerInstruction::INSTALL_PROBES;
+    payload.requests = requests;
+    IfFailRet(g_probeManagementQueue.Enqueue(payload));
+
+    END_NO_OOM_THROW_REGION;
+
+    return S_OK;
+}
+
 STDAPI DLLEXPORT RequestFunctionProbeUninstallation()
 {
     HRESULT hr;
@@ -358,6 +425,8 @@ HRESULT ProbeInstrumentation::InstallProbes(vector<UNPROCESSED_INSTRUMENTATION_R
         // Consider allowing the caller to specify one.
         processedRequest.uniquifier = static_cast<ULONG64>(req.functionId);
         processedRequest.boxingTypes = req.boxingTypes;
+        processedRequest.lineNumber = req.lineNumber;
+        processedRequest.fieldDef = static_cast<ULONG32>(req.fieldTypeToken);
 
         IfFailLogRet(m_pCorProfilerInfo->GetFunctionInfo2(
             req.functionId,

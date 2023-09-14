@@ -6,7 +6,9 @@ using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Tracing;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,6 +29,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
 
     internal sealed class EventParameterCapturingPipeline : EventSourcePipeline<EventParameterCapturingPipelineSettings>
     {
+        public List<string> Hits { get; set; }
+
         public EventParameterCapturingPipeline(IpcEndpoint endpoint, EventParameterCapturingPipelineSettings settings)
             : base(new DiagnosticsClient(endpoint), settings)
 
@@ -100,6 +104,17 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
                     }
                 case "Flush":
                     break;
+
+
+                case "CapturingTesting":
+                    {
+                        Guid requestId = traceEvent.GetPayload<Guid>(ParameterCapturingEvents.CapturingActivityPayload.RequestId);
+                        string hits = traceEvent.GetPayload<string>(ParameterCapturingEvents.CapturingActivityPayload.Hits);
+
+                        Hits = hits.Split(';').ToList();
+
+                        break;
+                    }
 #if DEBUG
                 default:
                     throw new NotSupportedException("Unhandled event: " + traceEvent.EventName);
@@ -118,6 +133,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
         public EventHandler<Guid> OnStartedCapturing;
         public EventHandler<Guid> OnStoppedCapturing;
         public EventHandler<Guid> OnUnknownRequestId;
+
+        public EventHandler<Guid> OnTestingOnly;
 
         public EventHandler<CapturingFailedArgs> OnCapturingFailed;
         public EventHandler<ServiceStateUpdateArgs> OnServiceStateUpdate;

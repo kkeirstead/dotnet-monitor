@@ -16,16 +16,16 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
         public EgressProcessInfo ProcessInfo { get; private set; }
         public string EgressProviderName { get { return null; } }
-        public bool IsStoppable => _operation.IsStoppable;
+        public bool IsStoppable => Operation.IsStoppable;
         public ISet<string> Tags { get; private set; }
-        public Task Started => _operation.Started;
+        public Task Started => Operation.Started;
 
-        private readonly IInProcessOperation _operation;
+        public IInProcessOperation Operation { get; set; }
 
         public InProcessEgressOperation(IProcessInfo processInfo, KeyValueLogScope scope, string tags, IInProcessOperation operation)
         {
             _scope = scope;
-            _operation = operation;
+            Operation = operation;
             Tags = Utilities.SplitTags(tags);
 
             ProcessInfo = new EgressProcessInfo(processInfo.ProcessName, processInfo.EndpointInfo.ProcessId, processInfo.EndpointInfo.RuntimeInstanceCookie);
@@ -39,7 +39,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
             return await ExecutionHelper.InvokeAsync(async (token) =>
             {
-                await _operation.ExecuteAsync(token);
+                await Operation.ExecuteAsync(token);
 
                 logger.GeneratedInProcessArtifact();
 
@@ -58,7 +58,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
         public Task StopAsync(CancellationToken token)
         {
-            return _operation.StopAsync(token);
+            return Operation.StopAsync(token);
         }
 
         private static ILogger<InProcessEgressOperation> CreateLogger(IServiceProvider serviceProvider)

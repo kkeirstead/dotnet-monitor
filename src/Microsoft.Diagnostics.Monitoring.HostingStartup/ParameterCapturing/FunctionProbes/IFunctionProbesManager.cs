@@ -13,6 +13,8 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
     {
         public Task StartCapturingAsync(IList<MethodInfo> methods, CancellationToken token);
 
+        public Task StartCapturingAsync2(IList<MethodInfo> methods, IList<FieldInfo> fields, CancellationToken token);
+
         public Task StopCapturingAsync(CancellationToken token);
 
         public event EventHandler<InstrumentedMethod> OnProbeFault;

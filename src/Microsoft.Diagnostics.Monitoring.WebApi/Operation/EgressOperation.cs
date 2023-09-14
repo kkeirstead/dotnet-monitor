@@ -21,6 +21,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
         public Task Started => _operation.Started;
 
+        public IInProcessOperation Operation { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         private readonly IArtifactOperation _operation;
 
         public EgressOperation(IArtifactOperation operation, string endpointName, IProcessInfo processInfo, KeyValueLogScope scope, string tags, CollectionRuleMetadata collectionRuleMetadata = null)

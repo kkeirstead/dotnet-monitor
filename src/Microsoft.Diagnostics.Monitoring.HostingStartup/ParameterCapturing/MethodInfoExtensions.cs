@@ -12,6 +12,11 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
             return (ulong)method.MethodHandle.Value.ToInt64();
         }
 
+        public static ulong GetFunctionId(this FieldInfo field)
+        {
+            return (ulong)field.FieldHandle.Value.ToInt64();
+        }
+
         public static bool HasImplicitThis(this MethodInfo method)
         {
             return method.CallingConvention.HasFlag(CallingConventions.HasThis);

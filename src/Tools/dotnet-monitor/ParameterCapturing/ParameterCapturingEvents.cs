@@ -16,6 +16,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
             public const int FailedToCapture = 4;
             public const int UnknownRequestId = 5;
             public const int ServiceStateUpdate = 6;
+
+            public const int TestingOnly = 7;
         }
 
 
@@ -31,6 +33,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
         public static class CapturingActivityPayload
         {
             public const int RequestId = 0;
+            public const int Hits = 1;
         }
 
         public static class UnknownRequestIdPayload

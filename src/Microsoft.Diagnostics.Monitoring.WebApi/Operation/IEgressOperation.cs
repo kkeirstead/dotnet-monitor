@@ -23,5 +23,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
         Task StopAsync(CancellationToken token);
 
         void Validate(IServiceProvider serviceProvider);
+
+        public IInProcessOperation Operation { get; set; }
     }
 }

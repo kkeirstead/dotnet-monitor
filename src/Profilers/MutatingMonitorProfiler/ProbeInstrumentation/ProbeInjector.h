@@ -15,9 +15,12 @@ typedef struct _INSTRUMENTATION_REQUEST
 {
     ULONG64 uniquifier;
     std::vector<ULONG32> boxingTypes;
+    ULONG64 lineNumber; // Experimental
 
     ModuleID moduleId;
     mdMethodDef methodDef;
+
+    mdFieldDef fieldDef; // Experimental
 
     std::shared_ptr<AssemblyProbePrepData> pAssemblyData;
 } INSTRUMENTATION_REQUEST;
@@ -26,6 +29,12 @@ class ProbeInjector
 {
     public:
         static HRESULT InstallProbe(
+            ICorProfilerInfo* pICorProfilerInfo,
+            ICorProfilerFunctionControl* pICorProfilerFunctionControl,
+            FaultingProbeCallback pFaultingProbeCallback,
+            const INSTRUMENTATION_REQUEST& request);
+
+        static HRESULT InstallProbe2(
             ICorProfilerInfo* pICorProfilerInfo,
             ICorProfilerFunctionControl* pICorProfilerFunctionControl,
             FaultingProbeCallback pFaultingProbeCallback,

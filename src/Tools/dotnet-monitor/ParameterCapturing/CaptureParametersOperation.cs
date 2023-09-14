@@ -29,9 +29,14 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
         private readonly TaskCompletionSource _capturingStoppedCompletionSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
         private readonly TaskCompletionSource _capturingStartedCompletionSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
+
+        public Dictionary<Guid, int> CountersForRequestId = new();
+
         public bool IsStoppable => true;
 
         public Task Started => _capturingStartedCompletionSource.Task;
+
+        public List<string> Hits { get; set; }
 
         public CaptureParametersOperation(IEndpointInfo endpointInfo, ProfilerChannel profilerChannel, ILogger logger, CaptureParametersConfiguration configuration, TimeSpan duration)
         {
@@ -106,6 +111,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
                 settings.OnServiceStateUpdate += OnServiceStateUpdate;
                 settings.OnUnknownRequestId += OnUnknownRequestId;
 
+                settings.OnTestingOnly += OnTestingOnly;
+
                 await using EventParameterCapturingPipeline eventTracePipeline = new(_endpointInfo.Endpoint, settings);
                 Task runPipelineTask = eventTracePipeline.StartAsync(token);
 
@@ -120,7 +127,27 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
                     token);
 
                 await _capturingStartedCompletionSource.Task.WaitAsync(token).ConfigureAwait(false);
+
+                CancellationTokenSource source = new();
+
+                CancellationToken taskToken = source.Token;
+                Task t = new Task(() =>
+                {
+                    while (!taskToken.IsCancellationRequested) // bad
+                    {
+                        Hits = eventTracePipeline.Hits; // just always update
+
+                        Task.Delay(1000);
+                    }
+                }, taskToken);
+
+                t.Start();
+
+
+
                 await _capturingStoppedCompletionSource.Task.WaitAsync(token).ConfigureAwait(false);
+
+                source.Cancel(); // stop the loop
             }
             catch (OperationCanceledException)
             {
@@ -147,6 +174,18 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
             }
 
             _ = _capturingStartedCompletionSource.TrySetResult();
+        }
+
+        private void OnTestingOnly(object sender, Guid requestId)
+        {
+            if (requestId != _requestId)
+            {
+                return;
+            }
+
+            CountersForRequestId[requestId] += 1;
+
+            _logger.LogWarning("RequestId: " + requestId + " | Value" + CountersForRequestId[requestId]);
         }
 
         private void OnStoppedCapturing(object sender, Guid requestId)

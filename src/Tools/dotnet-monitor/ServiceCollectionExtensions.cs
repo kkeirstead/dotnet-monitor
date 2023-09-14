@@ -79,6 +79,9 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             ConfigureOptions<ParameterCapturingOptions>(services, configuration, ConfigurationKeys.InProcessFeatures_ParameterCapturing)
              .AddSingleton<IPostConfigureOptions<ParameterCapturingOptions>, ParameterCapturingPostConfigureOptions>();
 
+            ConfigureOptions<TripWireOptions>(services, configuration, ConfigurationKeys.InProcessFeatures_TripWires)
+             .AddSingleton<IPostConfigureOptions<TripWireOptions>, TripWiresPostConfigureOptions>();
+
             ConfigureOptions<InProcessFeaturesOptions>(services, configuration, ConfigurationKeys.InProcessFeatures)
                 .AddSingleton<InProcessFeaturesService>()
                 .AddSingleton<IEndpointInfoSourceCallbacks, InProcessFeaturesEndpointInfoSourceCallbacks>();

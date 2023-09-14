@@ -31,6 +31,20 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Eve
             WriteEventWithFlushing(ParameterCapturingEvents.EventIds.CapturingStop, data);
         }
 
+        [Event(ParameterCapturingEvents.EventIds.TestingOnly)]
+        public void CapturingTesting(Guid RequestId, string hits)
+        {
+            Span<EventData> data = stackalloc EventData[2];
+
+            using PinnedData joinedHitsPinned = PinnedData.Create(hits);
+
+
+            SetValue(ref data[ParameterCapturingEvents.CapturingActivityPayload.RequestId], RequestId);
+            SetValue(ref data[ParameterCapturingEvents.CapturingActivityPayload.Hits], joinedHitsPinned);
+
+            WriteEventWithFlushing(ParameterCapturingEvents.EventIds.TestingOnly, data);
+        }
+
         [Event(ParameterCapturingEvents.EventIds.ServiceStateUpdate)]
         public void ServiceStateUpdate(
             ParameterCapturingEvents.ServiceState State,

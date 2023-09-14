@@ -29,6 +29,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         public static readonly string InProcessFeatures_ParameterCapturing = ConfigurationPath.Combine(InProcessFeatures, "ParameterCapturing");
 
+        public static readonly string InProcessFeatures_TripWires = ConfigurationPath.Combine(InProcessFeatures, "TripWires");
+
         public const string Egress = nameof(Egress);
 
         public const string Egress_Properties = "Properties";

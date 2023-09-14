@@ -31,6 +31,18 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
             [MarshalAs(UnmanagedType.LPArray)] uint[] boxingTokens,
             [MarshalAs(UnmanagedType.LPArray)] uint[] boxingTokenCounts);
 
+
+
+        // Experimenting with line numbers
+        [DllImport(ProfilerIdentifiers.MutatingProfiler.LibraryRootFileName, CallingConvention = CallingConvention.StdCall, PreserveSig = false)]
+        private static extern void RequestFunctionProbeInstallation2(
+            [MarshalAs(UnmanagedType.LPArray)] ulong[] funcIds,
+            uint fieldTypeToken,
+            uint count,
+            ulong lineNumber,
+            [MarshalAs(UnmanagedType.LPArray)] uint[] boxingTokens,
+            [MarshalAs(UnmanagedType.LPArray)] uint[] boxingTokenCounts);
+
         private delegate void FunctionProbeRegistrationCallback(int hresult);
         private delegate void FunctionProbeInstallationCallback(int hresult);
         private delegate void FunctionProbeUninstallationCallback(int hresult);
@@ -287,6 +299,111 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
                 RequestFunctionProbeInstallation(
                     functionIds.ToArray(),
                     (uint)functionIds.Count,
+                    boxingTokens.ToArray(),
+                    argumentCounts.ToArray());
+            }
+            catch
+            {
+                FunctionProbesStub.Cache = null;
+                newObjectFormatterCache?.Clear();
+
+                _probeState = ProbeStateUninstalled;
+                _installationTaskSource = null;
+                throw;
+            }
+
+            using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(_disposalToken, token);
+            CancellationToken linkedCancellationToken = cts.Token;
+            try
+            {
+                using IDisposable _ = linkedCancellationToken.Register(() =>
+                {
+                    _logger.LogDebug(ParameterCapturingStrings.CancellationRequestedDuringProbeInstallation, token.IsCancellationRequested, _disposalToken.IsCancellationRequested);
+                    _installationTaskSource?.TrySetCanceled(linkedCancellationToken);
+
+                    //
+                    // We need to uninstall the probes ourselves here if dispose has happened  otherwise the probes could be left in an installed state.
+                    //
+                    // NOTE: It's possible that StopCapturingCore could be called twice by doing this - once by Dispose and once by us, this is OK
+                    // as the native layer will gracefully handle multiple RequestFunctionProbeUninstallation calls.
+                    //
+                    if (_disposalToken.IsCancellationRequested)
+                    {
+                        try
+                        {
+                            StopCapturingCore();
+                        }
+                        catch
+                        {
+                        }
+                    }
+                });
+
+                await _installationTaskSource.Task.ConfigureAwait(false);
+            }
+            finally
+            {
+                _installationTaskSource = null;
+            }
+        }
+
+        public async Task StartCapturingAsync2(IList<MethodInfo> methods, IList<FieldInfo> fields, CancellationToken token)
+        {
+            DisposableHelper.ThrowIfDisposed<FunctionProbesManager>(ref _disposedState);
+
+            if (methods.Count == 0)
+            {
+                throw new ArgumentException(nameof(methods));
+            }
+
+            // _probeRegistrationTaskSource will be cancelled (if needed) on dispose
+            await _probeRegistrationTaskSource.Task.WaitAsync(token).ConfigureAwait(false);
+
+            if (ProbeStateUninstalled != Interlocked.CompareExchange(ref _probeState, ProbeStateInstalling, ProbeStateUninstalled))
+            {
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, ParameterCapturingStrings.ErrorMessage_ProbeStateMismatchFormatString, ProbeStateUninstalled, _probeState));
+            }
+
+            ObjectFormatterCache newObjectFormatterCache = new();
+            Dictionary<ulong, InstrumentedMethod> newMethodCache = new(methods.Count);
+            try
+            {
+                List<ulong> functionIds = new(methods.Count);
+                List<uint> argumentCounts = new(methods.Count);
+                List<uint> boxingTokens = new();
+
+                foreach (MethodInfo method in methods)
+                {
+                    ulong functionId = method.GetFunctionId();
+                    if (functionId == 0)
+                    {
+                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, ParameterCapturingStrings.ErrorMessage_FunctionDoesNotHaveIdFormatString, method.Name));
+                    }
+
+                    uint[] methodBoxingTokens = BoxingTokens.GetBoxingTokens(method);
+                    if (!newMethodCache.TryAdd(functionId, new InstrumentedMethod(method, methodBoxingTokens)))
+                    {
+                        // Duplicate, ignore
+                        continue;
+                    }
+
+                    newObjectFormatterCache.CacheMethodParameters(method);
+
+                    functionIds.Add(functionId);
+                    argumentCounts.Add((uint)methodBoxingTokens.Length);
+                    boxingTokens.AddRange(methodBoxingTokens);
+                }
+
+                List<ulong> functionIdsFields = new(fields.Count);
+
+                FunctionProbesStub.Cache = new FunctionProbesCache(new ReadOnlyDictionary<ulong, InstrumentedMethod>(newMethodCache), newObjectFormatterCache);
+
+                _installationTaskSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                RequestFunctionProbeInstallation2(
+                    functionIds.ToArray(),
+                    (uint)fields[0].FieldType.MetadataToken, // bad...like everything else here -> only doing one for now
+                    (uint)functionIds.Count,
+                    26, // Need to propagate this
                     boxingTokens.ToArray(),
                     argumentCounts.ToArray());
             }

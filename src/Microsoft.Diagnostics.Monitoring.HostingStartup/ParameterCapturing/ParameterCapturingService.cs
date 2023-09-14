@@ -84,6 +84,13 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
                 methods.Count);
         }
 
+        public void TestingOnly(Guid requestId, List<string> hits)
+        {
+            var joinedHits = string.Join(";", hits);
+            _eventSource.CapturingTesting(requestId, joinedHits);
+            _logger?.LogInformation("Hits: " + joinedHits);
+        }
+
         public void CapturingStop(Guid requestId)
         {
             _eventSource.CapturingStop(requestId);
