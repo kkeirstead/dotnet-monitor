@@ -10,6 +10,6 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
     {
         public List<string> Hits { get; set; } // figure out a good type (not List<string>)
         public void EnterProbe(ulong uniquifier, object[] args);
-        public void EnterProbe2(ulong uniquifier, object fieldValue, object[] args);
+        public void EnterProbe2(ulong uniquifier, object[] args);
     }
 }

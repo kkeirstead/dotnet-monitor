@@ -9,10 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using static Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.BoxingTokens;
 
 namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.FunctionProbes
 {
@@ -380,7 +382,9 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
                         throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, ParameterCapturingStrings.ErrorMessage_FunctionDoesNotHaveIdFormatString, method.Name));
                     }
 
-                    uint[] methodBoxingTokens = BoxingTokens.GetBoxingTokens(method);
+                    List<uint> methodBoxingTokensList = BoxingTokens.GetBoxingTokens(method).ToList();
+                    methodBoxingTokensList.Add(SpecialCaseBoxingTypes.Int32.BoxingToken()); // hack for testing
+                    uint[] methodBoxingTokens = methodBoxingTokensList.ToArray();
                     if (!newMethodCache.TryAdd(functionId, new InstrumentedMethod(method, methodBoxingTokens)))
                     {
                         // Duplicate, ignore

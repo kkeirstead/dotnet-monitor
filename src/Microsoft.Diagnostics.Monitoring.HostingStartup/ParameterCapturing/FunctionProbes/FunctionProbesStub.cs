@@ -8,7 +8,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
     public static class FunctionProbesStub
     {
         private delegate void EnterProbeDelegate(ulong uniquifier, object[] args);
-        private delegate void EnterProbeDelegate2(ulong uniquifier, object fieldValue, object[] args);
+        private delegate void EnterProbeDelegate2(ulong uniquifier, object[] args);
         private static readonly EnterProbeDelegate2 s_fixedEnterProbeDelegate = EnterProbeStub2;
 
         [ThreadStatic]
@@ -24,7 +24,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
         }
 
         // Is this the ProbeFunction referred to by the profiler, being reverse p-invoked (or something like that)?
-        public static void EnterProbeStub(ulong uniquifier, object fieldValue, object[] args)
+        public static void EnterProbeStub(ulong uniquifier, object[] args)
         {
             IFunctionProbes? probes = Instance;
             if (probes == null || s_inProbe)
@@ -36,7 +36,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
             {
                 s_inProbe = true;
                 //probes.EnterProbe(uniquifier, args);
-                probes.EnterProbe2(uniquifier, fieldValue, args);
+                probes.EnterProbe(uniquifier, args);
             }
             finally
             {
@@ -45,7 +45,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
         }
 
         // Experimenting with line numbers
-        public static void EnterProbeStub2(ulong uniquifier, object fieldValue, object[] args)
+        public static void EnterProbeStub2(ulong uniquifier, object[] args)
         {
             IFunctionProbes? probes = Instance;
             if (probes == null || s_inProbe)
@@ -56,7 +56,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
             try
             {
                 s_inProbe = true;
-                probes.EnterProbe(uniquifier, args);
+                probes.EnterProbe2(uniquifier, args);
             }
             finally
             {

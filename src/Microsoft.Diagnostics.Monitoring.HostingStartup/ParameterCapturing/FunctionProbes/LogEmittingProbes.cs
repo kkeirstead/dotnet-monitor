@@ -75,7 +75,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
             _logger.Log(instrumentedMethod.CaptureMode, instrumentedMethod.MethodWithParametersTemplateString, argValues);
         }
 
-        public void EnterProbe2(ulong uniquifier, object fieldValue, object[] args)
+        public void EnterProbe2(ulong uniquifier, object[] args)
         {
             // We allow the instrumentation of system types, but these types can also be part of an ILogger implementation.
             // In addition, certain loggers don't log directly, but into a background thread.
@@ -130,10 +130,10 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
 
             Hits.Add(string.Join(',', argValues));
 
-            List<string> fieldValues = new() { fieldValue.ToString() ?? "" };
+            //List<string> fieldValues = new() { fieldValue.ToString() ?? "" };
 
             _logger.Log(instrumentedMethod.CaptureMode, instrumentedMethod.MethodWithParametersTemplateString, argValues);
-            _logger.Log(instrumentedMethod.CaptureMode, instrumentedMethod.MethodWithParametersTemplateString, fieldValues.ToArray());
+            //_logger.Log(instrumentedMethod.CaptureMode, instrumentedMethod.MethodWithParametersTemplateString, fieldValues.ToArray());
         }
     }
 }

@@ -88,7 +88,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
             int parameterIndex = 0;
             ParameterInfo[] explicitParameters = method.GetParameters();
 
-            int numberOfParameters = explicitParameters.Length + (method.HasImplicitThis() ? 1 : 0);
+            int numberOfParameters = explicitParameters.Length + (method.HasImplicitThis() ? 1 : 0) + 1; // HACK
             if (numberOfParameters != supportedParameters.Length)
             {
                 throw new ArgumentException(nameof(supportedParameters));

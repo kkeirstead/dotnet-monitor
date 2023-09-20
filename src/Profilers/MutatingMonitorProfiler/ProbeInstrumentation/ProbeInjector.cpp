@@ -305,17 +305,18 @@ HRESULT ProbeInjector::InstallProbe2(
     rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pTryBegin);
 
     // Experimental
+    /*
     pNewInstr = rewriter.NewILInstr();
     pNewInstr->m_opcode = CEE_LDSFLD;
     pNewInstr->m_Arg32 = request.fieldDef;
     rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
-
+    */
     /* Args */
 
     // Size of array
     pNewInstr = rewriter.NewILInstr();
     pNewInstr->m_opcode = CEE_LDC_I4;
-    pNewInstr->m_Arg32 = numArgs;
+    pNewInstr->m_Arg32 = numArgs + 1;
     rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
 
     // Create the array
@@ -324,7 +325,7 @@ HRESULT ProbeInjector::InstallProbe2(
     pNewInstr->m_Arg32 = corLibTypeTokens.systemObjectType;
     rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
 
-    for (UINT32 i = 0; i < numArgs; i++)
+    for (UINT32 i = 0; i < numArgs - 1; i++)
     {
         // New entry on the evaluation stack
         pNewInstr = rewriter.NewILInstr();
@@ -369,6 +370,47 @@ HRESULT ProbeInjector::InstallProbe2(
         pNewInstr->m_opcode = CEE_STELEM_REF;
         rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
     }
+
+
+    // New entry on the evaluation stack
+    pNewInstr = rewriter.NewILInstr();
+    pNewInstr->m_opcode = CEE_DUP;
+    rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
+
+    // Index to set
+    pNewInstr = rewriter.NewILInstr();
+    pNewInstr->m_opcode = CEE_LDC_I4;
+    pNewInstr->m_Arg32 = numArgs - 1;
+    rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
+
+    pNewInstr = rewriter.NewILInstr();
+    pNewInstr->m_opcode = CEE_LDSFLD;
+    pNewInstr->m_Arg32 = request.fieldDef;
+    rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
+
+    ULONG32 typeInfo = request.boxingTypes.at(numArgs - 1);
+
+    // Resolve the boxing token.
+    mdToken boxedTypeToken;
+    IfFailRet(GetBoxingToken(typeInfo, corLibTypeTokens, boxedTypeToken));
+    if (boxedTypeToken != mdTokenNil)
+    {
+        pNewInstr = rewriter.NewILInstr();
+        pNewInstr->m_opcode = CEE_BOX;
+        pNewInstr->m_Arg32 = boxedTypeToken;
+        rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
+    }
+
+    // Replace the i'th element in our new array with what we just pushed on the stack
+    pNewInstr = rewriter.NewILInstr();
+    pNewInstr->m_opcode = CEE_STELEM_REF;
+    rewriter.InsertBefore(pInsertProbeBeforeThisInstr, pNewInstr);
+
+
+
+
+
+
 
     pNewInstr = rewriter.NewILInstr();
     pNewInstr->m_opcode = CEE_CALL;
