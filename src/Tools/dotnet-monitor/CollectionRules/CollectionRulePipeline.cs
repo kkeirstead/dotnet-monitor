@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-// helloooo 2
-
 using Microsoft.Diagnostics.Monitoring;
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Actions;
@@ -98,7 +96,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
 
                         Context.Logger.CollectionRuleTriggerStarted(Context.Name, Context.Options.Trigger.Type);
 
-                        trigger =     factory.Create(
+                        trigger = factory.Create(
                             Context.EndpointInfo,
                             () => triggerSatisfiedSource.TrySetResult(null),
                             Context.Options.Trigger.Settings);
