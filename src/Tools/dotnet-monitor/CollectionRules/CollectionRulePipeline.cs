@@ -144,7 +144,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                         bool actionsCompleted = false;
                         try
                         {
-                            // Only interfering with this one...
                             // Intentionally not using the linkedToken. Allow the action list to execute gracefully
                             // unless forced by a caller to cancel or stop the running of the pipeline.
                             await _actionListExecutor.ExecuteActions(Context, InvokeStartCallback, token);
