@@ -22,7 +22,6 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Options
         [Required]
         public string Type { get; set; }
 
-        
         [Display(
             ResourceType = typeof(OptionsDisplayStrings),
             Description = nameof(OptionsDisplayStrings.DisplayAttributeDescription_CollectionRuleTriggerOptions_Settings))]
