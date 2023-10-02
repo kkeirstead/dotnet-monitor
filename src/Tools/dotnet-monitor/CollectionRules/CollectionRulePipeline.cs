@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-// This is a test 2.
-
 using Microsoft.Diagnostics.Monitoring;
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using Microsoft.Diagnostics.Tools.Monitor.CollectionRules.Actions;
@@ -146,6 +144,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                         bool actionsCompleted = false;
                         try
                         {
+                            // Only interfering with this one...
                             // Intentionally not using the linkedToken. Allow the action list to execute gracefully
                             // unless forced by a caller to cancel or stop the running of the pipeline.
                             await _actionListExecutor.ExecuteActions(Context, InvokeStartCallback, token);
