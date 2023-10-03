@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-// Simple test 2.
+// Simple test 3.
 
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using System.ComponentModel.DataAnnotations;
