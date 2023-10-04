@@ -193,7 +193,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
             return limitReached;
         }
-
         private static void DequeueOldTimestamps(Queue<DateTime> executionTimestamps, TimeSpan? actionCountWindowDuration, DateTime currentTimestamp)
         {
             // If rule has an action count window, remove all execution timestamps that fall outside the window.
