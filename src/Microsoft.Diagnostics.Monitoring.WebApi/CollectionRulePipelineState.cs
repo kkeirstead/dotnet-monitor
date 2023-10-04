@@ -132,7 +132,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 CurrentStateReason = finishedStateReason;
             }
         }
-
         public void RuleFailure(string errorMessage)
         {
             lock (_lock)
