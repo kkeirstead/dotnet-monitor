@@ -3,6 +3,7 @@
 
 // Simple test 24.
 // This should not cause a new comment.
+// This should cause a new comment.
 
 using Microsoft.Diagnostics.Monitoring.WebApi;
 using System.ComponentModel.DataAnnotations;
