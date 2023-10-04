@@ -65,6 +65,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             return command;
         }
 
+        private static void MyTestMethod()
+        {
+            int number = 4 + 6;
+        }
+
         private static CliCommand ConfigCommand()
         {
             CliCommand showCommand = new CliCommand(
