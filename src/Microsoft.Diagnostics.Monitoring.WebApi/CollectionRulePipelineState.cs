@@ -1,11 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-
 namespace Microsoft.Diagnostics.Monitoring.WebApi
 {
     internal class CollectionRulePipelineState
@@ -18,12 +16,10 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
         public TimeSpan? RuleDuration { get; private set; }
         public int ActionCountLimit { get; private set; }
         public DateTime PipelineStartTime { get; private set; }
-
         // By locking here, the caller isn't forced to remember to lock when updating the state.
         // Locking here means that we will lock unnecessarily on the copy of the state; however,
         // given the scale of API calls, this should not be a performance issue.
         private readonly object _lock = new object();
-
         public CollectionRulePipelineState(CollectionRulePipelineState other)
         {
             // Gets a deep copy of the CollectionRulePipelineState
@@ -39,7 +35,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 CurrentStateReason = other.CurrentStateReason;
             }
         }
-
         public CollectionRulePipelineState(int actionCountLimit, TimeSpan? actionCountSlidingWindowDuration, TimeSpan? ruleDuration, DateTime pipelineStartTime)
         {
             ActionCountLimit = actionCountLimit;
@@ -51,7 +46,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             CurrentState = CollectionRuleState.Running;
             CurrentStateReason = Strings.Message_CollectionRuleStateReason_Running;
         }
-
         public bool BeginActionExecution(DateTime currentTime)
         {
             if (!CheckForThrottling(currentTime))
@@ -72,7 +66,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
             return false;
         }
-
         private void ActionExecutionSucceeded()
         {
             lock (_lock)
@@ -83,7 +76,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 CurrentStateReason = Strings.Message_CollectionRuleStateReason_Running;
             }
         }
-
         private void ActionExecutionFailed()
         {
             lock (_lock)
@@ -94,7 +86,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 CurrentStateReason = Strings.Message_CollectionRuleStateReason_Running;
             }
         }
-
         private void BeginThrottled()
         {
             lock (_lock)
@@ -105,7 +96,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 CurrentStateReason = Strings.Message_CollectionRuleStateReason_Throttled;
             }
         }
-
         private void EndThrottled()
         {
             lock (_lock)
@@ -117,7 +107,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 }
             }
         }
-
         public void CollectionRuleFinished(CollectionRuleFinishedStates finishedState)
         {
             string finishedStateReason = "";
