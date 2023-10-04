@@ -215,7 +215,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 }
             }
         }
-
         private static bool CheckForThrottling(int actionCountLimit, TimeSpan? actionCountSWD, int executionTimestampsCount)
         {
             return actionCountSWD.HasValue && actionCountLimit <= executionTimestampsCount;
