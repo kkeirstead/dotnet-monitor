@@ -4,7 +4,7 @@
 # Architecture
 This is a test of a deleted [file](https://github.com/dotnet/dotnet-monitor/blob/v7.0.1/src/Tools/dotnet-monitor/OutputFormat.cs).
 
-This is a test of a shifted line [file](https://github.com/dotnet/dotnet-monitor/blob/v7.0.1/src/Tools/dotnet-monitor/CollectionRules/Options/CollectionRuleTriggerOptions.cs#L23).
+This is a test of a shifted line [file](https://github.com/dotnet/dotnet-monitor/blob/v7.0.1/src/Tools/dotnet-monitor/CollectionRules/Options/CollectionRuleTriggerOptions.cs#L24).
 
 This is a test of a removed line [file](https://github.com/dotnet/dotnet-monitor/blob/v7.0.1/src/Tools/dotnet-monitor/CollectionRules/Options/CollectionRuleTriggerOptions.cs#L1).
 
