@@ -194,6 +194,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                         startedSource.TrySetResult(null);
 
                         // Collection rule filter does not match target process
+                        
 
                         return;
                     }
