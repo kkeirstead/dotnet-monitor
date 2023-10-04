@@ -163,7 +163,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
             return isThrottled;
         }
-
         public bool ActionExecutionCompleted(bool success)
         {
             if (!success)
