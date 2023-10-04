@@ -193,6 +193,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.CollectionRules
                         // resumption of the runtime instance.
                         startedSource.TrySetResult(null);
 
+                        // Collection rule filter does not match target process
+
                         return;
                     }
                 }
