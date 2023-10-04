@@ -143,7 +143,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 CurrentStateReason = string.Format(CultureInfo.InvariantCulture, Strings.Message_CollectionRuleStateReason_Finished_Failure, errorMessage);
             }
         }
-
         public bool CheckForThrottling(DateTime currentTime)
         {
             bool isThrottled;
