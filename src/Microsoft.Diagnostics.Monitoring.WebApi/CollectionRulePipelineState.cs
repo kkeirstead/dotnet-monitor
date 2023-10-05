@@ -23,6 +23,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
         // Locking here means that we will lock unnecessarily on the copy of the state; however,
         // given the scale of API calls, this should not be a performance issue.
         private readonly object _lock = new object();
+
         public CollectionRulePipelineState(CollectionRulePipelineState other)
         {
             // Gets a deep copy of the CollectionRulePipelineState
