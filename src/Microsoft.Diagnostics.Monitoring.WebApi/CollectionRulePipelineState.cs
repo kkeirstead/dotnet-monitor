@@ -18,6 +18,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
         public TimeSpan? RuleDuration { get; private set; }
         public int ActionCountLimit { get; private set; }
         public DateTime PipelineStartTime { get; private set; }
+        
         // By locking here, the caller isn't forced to remember to lock when updating the state.
         // Locking here means that we will lock unnecessarily on the copy of the state; however,
         // given the scale of API calls, this should not be a performance issue.
