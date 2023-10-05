@@ -71,6 +71,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             }
             return false;
         }
+
         private void ActionExecutionSucceeded()
         {
             lock (_lock)
