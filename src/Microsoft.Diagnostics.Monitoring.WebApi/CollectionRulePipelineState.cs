@@ -8,6 +8,7 @@ using System.Globalization;
 
 namespace Microsoft.Diagnostics.Monitoring.WebApi
 {
+
     internal class CollectionRulePipelineState
     {
         public CollectionRuleState CurrentState { get; private set; } = CollectionRuleState.Running;
