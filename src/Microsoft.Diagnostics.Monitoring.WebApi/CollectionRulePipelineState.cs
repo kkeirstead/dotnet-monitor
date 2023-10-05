@@ -39,6 +39,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 CurrentStateReason = other.CurrentStateReason;
             }
         }
+
         public CollectionRulePipelineState(int actionCountLimit, TimeSpan? actionCountSlidingWindowDuration, TimeSpan? ruleDuration, DateTime pipelineStartTime)
         {
             ActionCountLimit = actionCountLimit;
