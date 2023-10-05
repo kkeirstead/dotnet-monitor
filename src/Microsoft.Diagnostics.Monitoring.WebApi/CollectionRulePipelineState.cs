@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+
 namespace Microsoft.Diagnostics.Monitoring.WebApi
 {
     internal class CollectionRulePipelineState
