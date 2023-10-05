@@ -51,6 +51,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             CurrentState = CollectionRuleState.Running;
             CurrentStateReason = Strings.Message_CollectionRuleStateReason_Running;
         }
+
         public bool BeginActionExecution(DateTime currentTime)
         {
             if (!CheckForThrottling(currentTime))
