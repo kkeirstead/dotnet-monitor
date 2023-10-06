@@ -69,6 +69,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
                 return true;
             }
+
             return false;
         }
 
