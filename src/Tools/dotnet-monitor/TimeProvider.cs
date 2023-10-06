@@ -18,7 +18,6 @@ namespace System
         }
 
         public static TimeProvider System { get; } = new SystemTimeProvider();
-
         private sealed class SystemTimeProvider : TimeProvider { }
     }
 }
