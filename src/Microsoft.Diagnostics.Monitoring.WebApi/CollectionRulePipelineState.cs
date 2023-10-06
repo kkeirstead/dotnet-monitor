@@ -231,6 +231,11 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
             }
         }
 
+        private static void TestMethod()
+        {
+            int myNum = 1 + 2;
+        }
+
         # LP 5d8697c3-3ded-43df-a349-4b21207010a6
         private static bool CheckForThrottling(int actionCountLimit, TimeSpan? actionCountSWD, int executionTimestampsCount)
         {
