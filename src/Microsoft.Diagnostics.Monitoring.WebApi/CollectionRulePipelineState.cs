@@ -93,7 +93,6 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 CurrentStateReason = Strings.Message_CollectionRuleStateReason_Running;
             }
         }
-        
         private void BeginThrottled()
         {
             lock (_lock)
