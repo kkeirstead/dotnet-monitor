@@ -70,6 +70,11 @@ namespace Microsoft.Diagnostics.Tools.Monitor
             int number = 4 + 8;
         }
 
+        private static void MyOtherTestMethod()
+        {
+            int number = 9 + 10;
+        }
+
         private static CliCommand ConfigCommand()
         {
             CliCommand showCommand = new CliCommand(
