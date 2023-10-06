@@ -19,4 +19,5 @@ namespace System
         private sealed class SystemTimeProvider : TimeProvider { }
     }
 }
+
 #endif
