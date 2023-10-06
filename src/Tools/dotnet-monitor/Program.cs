@@ -67,7 +67,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         private static void MyTestMethod()
         {
-            int number = 4 + 6;
+            int number = 4 + 8;
         }
 
         private static CliCommand ConfigCommand()
