@@ -17,6 +17,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
         IInProcessOperation Create(
             IEndpointInfo endpointInfo,
             CaptureParametersConfiguration configuration,
-            TimeSpan duration);
+            TimeSpan duration,
+            string workflowId = "");
     }
 }

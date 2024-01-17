@@ -24,6 +24,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
         private readonly CaptureParametersConfiguration _configuration;
         private readonly TimeSpan _duration;
 
+        private readonly string _workflowId;
+
         private readonly Guid _requestId;
 
         private readonly TaskCompletionSource _capturingStoppedCompletionSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -33,7 +35,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
 
         public Task Started => _capturingStartedCompletionSource.Task;
 
-        public CaptureParametersOperation(IEndpointInfo endpointInfo, ProfilerChannel profilerChannel, ILogger logger, CaptureParametersConfiguration configuration, TimeSpan duration)
+        public CaptureParametersOperation(IEndpointInfo endpointInfo, ProfilerChannel profilerChannel, ILogger logger, CaptureParametersConfiguration configuration, TimeSpan duration, string workflowId = "")
         {
             _profilerChannel = profilerChannel;
             _endpointInfo = endpointInfo;
@@ -42,6 +44,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
             _duration = duration;
 
             _requestId = Guid.NewGuid();
+
+            _workflowId = workflowId;
         }
 
         public static bool IsEndpointRuntimeSupported(IEndpointInfo endpointInfo)
@@ -124,7 +128,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
                     {
                         RequestId = _requestId,
                         Duration = _duration,
-                        Configuration = _configuration
+                        Configuration = _configuration,
+                        WorkflowId = _workflowId
                     }),
                     token);
 

@@ -232,7 +232,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
         }
 
 
-        public async Task StartCapturingAsync(IList<MethodInfo> methods, IFunctionProbes probes, CancellationToken token)
+        public async Task StartCapturingAsync(IList<MethodInfo> methods, IFunctionProbes probes, CancellationToken token, string workflowId = "")
         {
             DisposableHelper.ThrowIfDisposed<FunctionProbesManager>(ref _disposedState);
 
@@ -266,7 +266,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
                     }
 
                     ParameterBoxingInstructions[] boxingInstructionsForMethod = BoxingInstructions.GetBoxingInstructions(method);
-                    if (!newMethodCache.TryAdd(functionId, new InstrumentedMethod(method, boxingInstructionsForMethod)))
+                    if (!newMethodCache.TryAdd(functionId, new InstrumentedMethod(method, boxingInstructionsForMethod, workflowId)))
                     {
                         // Duplicate, ignore
                         continue;

@@ -16,11 +16,11 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
     {
         private static readonly string[] SystemTypePrefixes = { nameof(System), nameof(Microsoft) };
 
-        public InstrumentedMethod(MethodInfo method, ParameterBoxingInstructions[] boxingInstructions)
+        public InstrumentedMethod(MethodInfo method, ParameterBoxingInstructions[] boxingInstructions, string workflowId = "")
         {
             FunctionId = method.GetFunctionId();
             SupportedParameters = BoxingInstructions.AreParametersSupported(boxingInstructions);
-            MethodTemplateString = new MethodTemplateString(method);
+            MethodTemplateString = new MethodTemplateString(method, workflowId);
             foreach (bool isParameterSupported in SupportedParameters)
             {
                 if (isParameterSupported)

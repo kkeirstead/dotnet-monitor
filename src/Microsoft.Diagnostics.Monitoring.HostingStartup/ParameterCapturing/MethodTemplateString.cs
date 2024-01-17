@@ -61,19 +61,33 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
 
         public string Template { get; }
 
-        public MethodTemplateString(MethodInfo method)
+        public MethodTemplateString(MethodInfo method, string workflowId)
         {
             ModuleName = GetModuleName(method);
             TypeName = GetDeclaringTypeName(method);
             MethodName = GetMethodName(method);
 
-            Template = string.Concat(
-                TypeName,
-                Tokens.Types.Separator,
-                MethodName,
-                Tokens.Parameters.Start,
-                GetTemplatedParameters(method),
-                Tokens.Parameters.End);
+            if (string.IsNullOrEmpty(workflowId))
+            {
+                Template = string.Concat(
+                    TypeName,
+                    Tokens.Types.Separator,
+                    MethodName,
+                    Tokens.Parameters.Start,
+                    GetTemplatedParameters(method),
+                    Tokens.Parameters.End);
+            } else
+            {
+                Template = string.Concat(
+                    workflowId,
+                    Tokens.Types.Separator,
+                    TypeName,
+                    Tokens.Types.Separator,
+                    MethodName,
+                    Tokens.Parameters.Start,
+                    GetTemplatedParameters(method),
+                    Tokens.Parameters.End);
+            }
         }
 
         private static string GetModuleName(MethodInfo method) => method.Module.Name;

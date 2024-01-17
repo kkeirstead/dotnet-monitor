@@ -132,7 +132,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Pip
                     throw ex;
                 }
 
-                await _probeManager.StartCapturingAsync(methods, request.Probes, token).ConfigureAwait(false);
+                await _probeManager.StartCapturingAsync(methods, request.Probes, token, request.Payload.WorkflowId).ConfigureAwait(false);
                 _callbacks.CapturingStart(request.Payload, methods);
 
                 return true;

@@ -580,7 +580,9 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
             [FromQuery]
             string name = null,
             [FromQuery]
-            string tags = null)
+            string tags = null,
+            [FromQuery]
+            string workflowId = null)
         {
             if (!_parameterCapturingOptions.Value.GetEnabled())
             {
@@ -592,7 +594,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Controllers
 
             return await InvokeForProcess(async processInfo =>
             {
-                IInProcessOperation operation = _captureParametersFactory.Create(processInfo.EndpointInfo, configuration, duration);
+                IInProcessOperation operation = _captureParametersFactory.Create(processInfo.EndpointInfo, configuration, duration, workflowId);
                 return await InProcessResult(Utilities.ArtifactType_Parameters, processInfo, operation, tags);
             }, processKey, Utilities.ArtifactType_Parameters);
         }

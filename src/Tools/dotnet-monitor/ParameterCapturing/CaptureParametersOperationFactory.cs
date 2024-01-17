@@ -19,9 +19,9 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
             _logger = logger;
         }
 
-        public IInProcessOperation Create(IEndpointInfo endpointInfo, CaptureParametersConfiguration configuration, TimeSpan duration)
+        public IInProcessOperation Create(IEndpointInfo endpointInfo, CaptureParametersConfiguration configuration, TimeSpan duration, string workflowId = "")
         {
-            return new CaptureParametersOperation(endpointInfo, _profilerChannel, _logger, configuration, duration);
+            return new CaptureParametersOperation(endpointInfo, _profilerChannel, _logger, configuration, duration, workflowId);
         }
     }
 }
