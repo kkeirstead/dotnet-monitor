@@ -29,6 +29,9 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
             public const string ActivityId = Prefix + "ActivityId";
             public const string ActivityIdFormat = Prefix + "ActivityIdFormat";
 
+            public const string WorkflowId = Prefix + "WorkflowId";
+
+
             public static class CaptureSite
             {
                 private const string Prefix = Scopes.Prefix + "CaptureSite_";
@@ -119,6 +122,11 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
             {
                 scope.Values.Add(Scopes.ActivityId, currentActivity.Id);
                 scope.Values.Add(Scopes.ActivityIdFormat, currentActivity.IdFormat);
+            }
+
+            if (!string.IsNullOrEmpty(methodTemplateString.WorkflowId))
+            {
+                scope.Values.Add(Scopes.WorkflowId, methodTemplateString.WorkflowId);
             }
 
             return scope;
