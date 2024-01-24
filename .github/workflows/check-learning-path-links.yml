@@ -24,7 +24,7 @@ jobs:
     steps:
 
       - name: Checkout head
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.1
         with:
           persist-credentials: true
           ref: main
@@ -50,7 +50,7 @@ jobs:
           cd ../
     
       - name: Checkout previous update
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.1
         with:
           persist-credentials: false
           ref:  ${{ env.prev_sha }}
