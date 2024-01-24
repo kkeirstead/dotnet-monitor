@@ -7,7 +7,7 @@ dotnet-monitor exposes functionality through both [collection rules](./collectio
 
 ## Adding New APIs
 
-The web API surface is defined by a series of controllers [here](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Microsoft.Diagnostics.Monitoring.WebApi/Controllers/). It's common for an API to expose functionality also available via [Actions](./collectionrules.md#actions) and so methods in these controllers are often wrappers around a shared implementation. Each controller may have one or more attributes that configure how and where it is exposed, you can learn more about the notable controller attributes [here](#notable-controller-attributes).
+The web API surface is defined by a series of controllers [here](https://github.com/dotnet/dotnet-monitor/blob/6a8b650ef797cb8aab4d80787dbdce12b1b22fc4/src/Microsoft.Diagnostics.Monitoring.WebApi/Controllers/). It's common for an API to expose functionality also available via [Actions](./collectionrules.md#actions) and so methods in these controllers are often wrappers around a shared implementation. Each controller may have one or more attributes that configure how and where it is exposed, you can learn more about the notable controller attributes [here](#notable-controller-attributes).
 
 If the new API needs to either accept or return structured data, a dedicated model should be used. Models are defined [here](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Microsoft.Diagnostics.Monitoring.WebApi/Models/).
 

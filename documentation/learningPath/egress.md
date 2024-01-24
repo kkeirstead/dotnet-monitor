@@ -26,7 +26,7 @@ graph LR
     class ide2 altColor
 ```
 
-1. [User initiates collection of artifact with a designated egress provider](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Microsoft.Diagnostics.Monitoring.WebApi/Operation/EgressOperation.cs#L45)
+1. [User initiates collection of artifact with a designated egress provider](https://github.com/dotnet/dotnet-monitor/blob/6a8b650ef797cb8aab4d80787dbdce12b1b22fc4/src/Microsoft.Diagnostics.Monitoring.WebApi/Operation/EgressOperation.cs#L45)
 1. [Locate extension's executable and manifest](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Tools/dotnet-monitor/Extensibility/ExtensionDiscoverer.cs#L28)
 1. [Start extension and pass configuration/artifact via StdIn to the other process](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Tools/dotnet-monitor/Egress/Extension/EgressExtension.cs#L102)
 1. [Connect to egress provider using configuration and send artifact](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Extensions/AzureBlobStorage/AzureBlobEgressProvider.cs#L36)

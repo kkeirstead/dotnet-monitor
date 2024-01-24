@@ -32,7 +32,7 @@ graph LR
 
 ### Key Areas Of The Code
 
-* Collection rules are registered [here](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Tools/dotnet-monitor/ServiceCollectionExtensions.cs#L135). When adding a new trigger or action, these types need to be added here to take effect. This section is also responsible for making sure options get configured and validated.
+* Collection rules are registered [here](https://github.com/dotnet/dotnet-monitor/blob/6a8b650ef797cb8aab4d80787dbdce12b1b22fc4/src/Tools/dotnet-monitor/ServiceCollectionExtensions.cs#L135). When adding a new trigger or action, these types need to be added here to take effect. This section is also responsible for making sure options get configured and validated.
 * Options for collection rules can be found [here](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Tools/dotnet-monitor/CollectionRules/Options/CollectionRuleOptions.cs).
 * Rules are applied, removed, and restarted in response to configuration changes [here](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Tools/dotnet-monitor/CollectionRules/CollectionRuleService.cs). This is also responsible for generating a description of each collection rule's state for the `/collectionrules` API Endpoint.
 * The pipeline responsible for the lifetime of a single executing collection rule can be found [here](https://github.com/dotnet/dotnet-monitor/blob/386d6a2599c1ea6d99410c04a7f1878503fb0e95/src/Tools/dotnet-monitor/CollectionRules/CollectionRulePipeline.cs#L54).
