@@ -86,6 +86,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing
             return true;
         }
 
+        // Add a workflow id and pull out of methodtemplate string
         public void Log(ParameterCaptureMode mode, MethodTemplateString methodTemplateString, string[] args)
         {
             DisposableHelper.ThrowIfDisposed<ParameterCapturingLogger>(ref _disposedState);

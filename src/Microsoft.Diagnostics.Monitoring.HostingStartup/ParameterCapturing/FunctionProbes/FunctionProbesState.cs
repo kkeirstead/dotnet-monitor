@@ -11,6 +11,7 @@ namespace Microsoft.Diagnostics.Monitoring.HostingStartup.ParameterCapturing.Fun
 
         public IFunctionProbes Probes { get; }
 
+        // add workflow id to this
         public FunctionProbesState(ReadOnlyDictionary<ulong, InstrumentedMethod> instrumentedMethods, IFunctionProbes probes)
         {
             InstrumentedMethods = instrumentedMethods;
