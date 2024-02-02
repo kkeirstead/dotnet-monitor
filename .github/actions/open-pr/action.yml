@@ -42,8 +42,8 @@ runs:
   using: "composite"
   steps:
     - name: Open PR
+      working-directory: ./head
       run: |
-        cd $path
         current_branch_name=$(git symbolic-ref --short HEAD)
         pr_branch_name="bot/$BRANCH_NAME"
 
