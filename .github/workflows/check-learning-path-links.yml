@@ -18,8 +18,8 @@ jobs:
       - name: Checkout head
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
-          fetch-depth: 0 # Fetch the entire repo for the below git commit graph operations
+          persist-credentials: true # need this for opening a PR
+          fetch-depth: 0
           ref: main
 
       - name: Get previous update SHA
@@ -27,12 +27,6 @@ jobs:
         run: |
           prev_sha=$(cat .github/learning-path-sha.txt)
           echo "prev_sha=$prev_sha" >> $GITHUB_ENV
-
-      - name: Checkout head
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-          ref: main
 
       - name: Checkout previous update
         uses: actions/checkout@v4
@@ -56,7 +50,7 @@ jobs:
           changedFilePaths: ${{ env.updated_files }}
           sourceDirectoryName: 'src'
           oldHash: ${{ env.prev_sha }}
-          newHash: $("GITHUB_SHA")
+          newHash: ${{ env.GITHUB_SHA }}
           learningPathHashFile: '.github/learning-path-sha.txt'
 
       - name: Open PR
@@ -66,6 +60,6 @@ jobs:
           title: "[REQUIRES MANUAL REVIEW] Update Learning Paths"
           commit_message: Update Learning Paths
           body: This PR was auto generated and will not be automatically merged in - adjustments should be made manually as-needed.<br />${{ steps.check-links.outputs.outputText }}
-          branch_name: learningPathUpdates/$("GITHUB_SHA")
+          branch_name: learningPathUpdates/${{ env.GITHUB_SHA }}
           fail_if_files_unchanged: true
           auth_token: ${{ secrets.GITHUB_TOKEN }}
