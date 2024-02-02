@@ -41,8 +41,6 @@ jobs:
         with:
           persist-credentials: true
           ref: main
-          fetch-depth: 0 # Fetch the entire repo for the below git commit graph operations
-          path: head
 
       - name: Checkout previous update
         uses: actions/checkout@v4
@@ -72,7 +70,7 @@ jobs:
       - name: Open PR
         uses: ./.github/actions/open-pr
         with:
-          files_to_commit: --all -- :!prev
+          files_to_commit: ${{ steps.check-links.outputs.modifiedFilesToCommit }}
           title: "[REQUIRES MANUAL REVIEW] Update Learning Paths"
           commit_message: Update Learning Paths
           body: This PR was auto generated and will not be automatically merged in - adjustments should be made manually as-needed.<br />${{ steps.check-links.outputs.outputText }}
