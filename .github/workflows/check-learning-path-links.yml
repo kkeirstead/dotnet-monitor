@@ -41,6 +41,7 @@ jobs:
         with:
           persist-credentials: true
           ref: main
+          path: head
 
       - name: Checkout previous update
         uses: actions/checkout@v4
@@ -70,6 +71,7 @@ jobs:
       - name: Open PR
         uses: ./.github/actions/open-pr
         with:
+          path: head
           files_to_commit: ${{ steps.check-links.outputs.modifiedFilesToCommit }}
           title: "[REQUIRES MANUAL REVIEW] Update Learning Paths"
           commit_message: Update Learning Paths
