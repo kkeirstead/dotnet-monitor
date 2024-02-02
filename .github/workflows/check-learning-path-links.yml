@@ -50,7 +50,7 @@ jobs:
           changedFilePaths: ${{ env.updated_files }}
           sourceDirectoryName: 'src'
           oldHash: ${{ env.prev_sha }}
-          newHash: ${{ env.GITHUB_SHA }}
+          newHash: ${{ github.sha }}
           learningPathHashFile: '.github/learning-path-sha.txt'
 
       - name: Open PR
@@ -60,6 +60,6 @@ jobs:
           title: "[REQUIRES MANUAL REVIEW] Update Learning Paths"
           commit_message: Update Learning Paths
           body: This PR was auto generated and will not be automatically merged in - adjustments should be made manually as-needed.<br />${{ steps.check-links.outputs.outputText }}
-          branch_name: learningPathUpdates/${{ env.GITHUB_SHA }}
+          branch_name: learningPathUpdates/${{ github.sha }}
           fail_if_files_unchanged: true
           auth_token: ${{ secrets.GITHUB_TOKEN }}
