@@ -40,8 +40,8 @@ runs:
   steps:
     - name: Open PR
       run: |
-        cd ../head/dotnet-monitor
         pwd
+        ls
         current_branch_name=$(git symbolic-ref --short HEAD)
         pr_branch_name="bot/$BRANCH_NAME"
 
