@@ -40,8 +40,6 @@ runs:
   steps:
     - name: Open PR
       run: |
-        pwd
-        ls
         current_branch_name=$(git symbolic-ref --short HEAD)
         pr_branch_name="bot/$BRANCH_NAME"
 
