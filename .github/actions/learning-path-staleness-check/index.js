@@ -132,9 +132,14 @@ function ValidateLinks(learningPathContents, repoURLToSearch, modifiedPRFiles, l
   {
     // Clean up the link, determine if it has a line number suffix
     let endOfLink = startOfLink + CheckForEndOfLink(learningPathContents, startOfLink)
+
+    console.log("End of Link: " + endOfLink);
+
     if (endOfLink === -1) { endOfLink = learningPathContents.length; } // If no illegal characters are found, the link is at the end of the file
 
     const link = learningPathContents.substring(startOfLink, endOfLink);
+
+    console.log("Link: " + link);
 
     if (excludeLinksArray.some(excludeLink => link.toLowerCase().includes(excludeLink))) { continue; }
 
