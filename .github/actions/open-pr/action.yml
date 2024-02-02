@@ -39,7 +39,6 @@ runs:
   using: "composite"
   steps:
     - name: Open PR
-      working-directory: ./head
       run: |
         pwd
         ls
