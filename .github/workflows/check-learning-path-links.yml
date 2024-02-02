@@ -56,13 +56,6 @@ jobs:
           echo "Files to validate: '${changed_source_files}'"
           echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
 
-      - name: Checkout head
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-          fetch-depth: 0 # Fetch the entire repo for the below git commit graph operations
-          ref: main
-
       - name: Check Learning Path Links
         id: check-links
         uses: ./.github/actions/learning-path-staleness-check
@@ -74,6 +67,13 @@ jobs:
           oldHash: ${{ env.prev_sha }}
           newHash: ${{ env.new_sha }}
           learningPathHashFile: '.github/learning-path-sha.txt'
+
+      - name: Checkout head
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0 # Fetch the entire repo for the below git commit graph operations
+          ref: main
 
       - name: Open PR
         uses: ./.github/actions/open-pr
