@@ -41,6 +41,7 @@ jobs:
         with:
           persist-credentials: true
           ref: main
+          fetch-depth: 0 # Fetch the entire repo for the below git commit graph operations
           path: head
 
       - name: Checkout previous update
