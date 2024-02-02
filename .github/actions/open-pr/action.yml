@@ -1,6 +1,9 @@
 name: 'Open PR'
 description: 'Opens a PR targeting the currently checked out out branch.'
 inputs:
+  path:
+    description: 'The path for opening the PR'
+    required: false
   branch_name:
     description: 'The branch name to create. Will be prefixed with "bot/".'
     required: true
@@ -40,6 +43,7 @@ runs:
   steps:
     - name: Open PR
       run: |
+        cd $path
         current_branch_name=$(git symbolic-ref --short HEAD)
         pr_branch_name="bot/$BRANCH_NAME"
 
