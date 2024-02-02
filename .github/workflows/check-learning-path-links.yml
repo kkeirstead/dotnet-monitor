@@ -18,7 +18,7 @@ jobs:
       - name: Checkout head
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          persist-credentials: false
           fetch-depth: 0 # Fetch the entire repo for the below git commit graph operations
           ref: main
 
@@ -55,6 +55,13 @@ jobs:
           changed_source_files=$(git diff-tree --no-commit-id --name-only -r "$prev_sha" "$GITHUB_SHA" | { grep "**.cs$" || test $? = 1; })
           echo "Files to validate: '${changed_source_files}'"
           echo "updated_files=$(echo ${changed_source_files})" >> $GITHUB_ENV
+
+      - name: Checkout head
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0 # Fetch the entire repo for the below git commit graph operations
+          ref: main
 
       - name: Check Learning Path Links
         id: check-links
