@@ -18,7 +18,7 @@ jobs:
       - name: Checkout head
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          persist-credentials: true
           fetch-depth: 0 # Fetch the entire repo for the below git commit graph operations
           ref: main
 
@@ -71,7 +71,6 @@ jobs:
       - name: Open PR
         uses: ./.github/actions/open-pr
         with:
-          path: head
           files_to_commit: "*"
           title: "[REQUIRES MANUAL REVIEW] Update Learning Paths"
           commit_message: Update Learning Paths
