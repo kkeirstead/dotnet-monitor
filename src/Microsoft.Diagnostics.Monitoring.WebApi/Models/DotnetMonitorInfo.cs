@@ -30,5 +30,12 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Models
         /// </summary>
         [JsonPropertyName("diagnosticPortName")]
         public string? DiagnosticPortName { get; set; }
+
+        /// <summary>
+        /// The status of dotnet-monitor's feature enablement and configuration.
+        /// </summary>
+        [JsonPropertyName("featureAvailability")]
+        public required IFeatureAvailabilityInfo FeatureAvailability { get; set; }
+
     }
 }
