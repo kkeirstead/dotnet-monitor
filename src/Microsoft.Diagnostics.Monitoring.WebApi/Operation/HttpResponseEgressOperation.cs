@@ -25,6 +25,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
         private readonly IArtifactOperation _operation;
 
+        public string ArtifactType => _operation.ArtifactType;
+
         public HttpResponseEgressOperation(HttpContext context, IProcessInfo processInfo, string? tags, IArtifactOperation operation)
         {
             _httpContext = context;

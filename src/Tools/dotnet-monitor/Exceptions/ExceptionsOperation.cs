@@ -54,6 +54,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Exceptions
 
         public Task Started => _startCompletionSource.Task;
 
+        public string ArtifactType => Utils.ArtifactType_Exceptions;
+
         public async Task ExecuteAsync(Stream outputStream, CancellationToken token)
         {
             _startCompletionSource.TrySetResult();

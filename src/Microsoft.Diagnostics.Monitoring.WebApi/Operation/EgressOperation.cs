@@ -18,6 +18,7 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
         public string EgressProviderName { get; private set; }
         public bool IsStoppable { get { return _operation?.IsStoppable ?? false; } }
         public ISet<string> Tags { get; private set; }
+        public string ArtifactType => _operation.ArtifactType;
 
         public Task Started => _operation.Started;
 

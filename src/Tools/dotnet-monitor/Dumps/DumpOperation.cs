@@ -56,5 +56,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         public bool IsStoppable => false;
 
         public Task Started => _startCompletionSource.Task;
+
+        public string ArtifactType => Utils.ArtifactType_Dump;
     }
 }

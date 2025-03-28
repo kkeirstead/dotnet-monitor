@@ -15,7 +15,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
         IArtifactOperation
         where T : Pipeline
     {
-        private readonly string _artifactType;
+        public string ArtifactType { get; init; }
         private readonly TaskCompletionSource _startCompletionSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         private Func<CancellationToken, Task>? _stopFunc;
@@ -24,13 +24,14 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
         protected PipelineArtifactOperation(OperationTrackerService trackerService, ILogger logger, string artifactType, IEndpointInfo endpointInfo, bool isStoppable = true, bool register = false)
         {
-            _artifactType = artifactType;
+            ArtifactType = artifactType;
             OperationTrackerService = trackerService;
 
             Logger = logger;
             EndpointInfo = endpointInfo;
             IsStoppable = isStoppable;
             Register = register;
+
         }
 
         public async Task ExecuteAsync(Stream outputStream, CancellationToken token)
@@ -47,7 +48,7 @@ namespace Microsoft.Diagnostics.Tools.Monitor
 
                 Task runTask = await StartPipelineAsync(pipeline, token);
 
-                Logger.StartCollectArtifact(_artifactType);
+                Logger.StartCollectArtifact(ArtifactType);
 
                 // Signal that the artifact operation has started
                 _startCompletionSource.TrySetResult();

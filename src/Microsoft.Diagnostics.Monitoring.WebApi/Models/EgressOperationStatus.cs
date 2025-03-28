@@ -31,6 +31,9 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi.Models
 
         [JsonPropertyName("tags")]
         public ISet<string>? Tags { get; set; }
+
+        [JsonPropertyName("artifactType")]
+        public string? ArtifactType { get; set; }
     }
 
     [Description("Represents the details of a given process used in an operation.")]

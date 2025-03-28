@@ -37,6 +37,8 @@ namespace Microsoft.Diagnostics.Tools.Monitor.ParameterCapturing
 
         public Task Started => _capturingStartedCompletionSource.Task;
 
+        public string ArtifactType => Utils.ArtifactType_Parameters;
+
         public CaptureParametersOperation(
             IEndpointInfo endpointInfo,
             ProfilerChannel profilerChannel,

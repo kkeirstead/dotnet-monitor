@@ -37,6 +37,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
             public required ISet<string> Tags { get; set; }
 
+            public required string ArtifactType { get; set; }
+
             public TaskCompletionSource TaskCompletionSource { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
@@ -91,7 +93,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                 State = Models.OperationState.Starting,
                 EgressRequest = request,
                 OperationId = operationId,
-                Tags = request.EgressOperation.Tags
+                Tags = request.EgressOperation.Tags,
+                ArtifactType = request.EgressOperation.ArtifactType
             };
 
             lock (_requests)
@@ -271,7 +274,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                                 ProcessId = processInfo.ProcessId,
                                 Uid = processInfo.RuntimeInstanceCookie
                             } : null,
-                        Tags = kvp.Value.Tags
+                        Tags = kvp.Value.Tags,
+                        ArtifactType = kvp.Value.ArtifactType
                     };
                 }).ToList();
             }
@@ -301,7 +305,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
                             ProcessId = processInfo.ProcessId,
                             Uid = processInfo.RuntimeInstanceCookie
                         } : null,
-                    Tags = entry.Tags
+                    Tags = entry.Tags,
+                    ArtifactType = entry.EgressRequest.EgressOperation.ArtifactType
                 };
 
                 if (entry.State == Models.OperationState.Succeeded)

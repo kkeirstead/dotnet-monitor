@@ -18,6 +18,8 @@ namespace Microsoft.Diagnostics.Monitoring.WebApi
 
         public EgressProcessInfo ProcessInfo { get; }
 
+        public string ArtifactType { get; }
+
         Task<ExecutionResult<EgressResult>> ExecuteAsync(IServiceProvider serviceProvider, CancellationToken token);
 
         Task StopAsync(CancellationToken token);
