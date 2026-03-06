@@ -5,8 +5,8 @@ const UpdateReleaseNotesLabel = "update-release-notes";
 const BackportLabel = "backport";
 
 async function run() {
-    const [core, github] = await actionUtils.installAndRequirePackages("@actions/core", "@actions/github");
-
+    const [core, github] = await actionUtils.installAndRequirePackages("@actions/core@2", "@actions/github");
+    
     const octokit = github.getOctokit(core.getInput("auth_token", { required: true }));
 
     const output = core.getInput("output", { required: true });
