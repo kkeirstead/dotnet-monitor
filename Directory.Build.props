@@ -14,7 +14,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <!-- NU1507 Disable multi-feed check as .NET uses multiple internal feeds intentionally -->
-    <NoWarn>$(NoWarn);NU1507</NoWarn>
+    <!-- NU1510 Suppress package pruning warnings for packages now part of .NET 10 runtime -->
+    <NoWarn>$(NoWarn);NU1507;NU1510</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>

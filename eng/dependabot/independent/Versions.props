@@ -2,14 +2,22 @@
   <!-- Import references updated by Dependabot. -->
 
   <PropertyGroup>
-    <AzureCoreVersion>1.50.0</AzureCoreVersion>
-    <AzureIdentityVersion>1.17.1</AzureIdentityVersion>
+    <AzureCoreVersion>1.51.1</AzureCoreVersion>
+    <AzureIdentityVersion>1.18.0</AzureIdentityVersion>
     <AzureStorageBlobsVersion>12.27.0</AzureStorageBlobsVersion>
     <AzureStorageQueuesVersion>12.25.0</AzureStorageQueuesVersion>
     <MicrosoftIdentityWebVersion>4.3.0</MicrosoftIdentityWebVersion>
     <MicrosoftOpenApiReadersVersion>1.6.28</MicrosoftOpenApiReadersVersion>
     <SystemPrivateUriVersion>4.3.2</SystemPrivateUriVersion>
     <SystemSecurityPrincipalWindowsVersion>5.0.0</SystemSecurityPrincipalWindowsVersion>
+
+    <!--
+      These versions are required by Azure.Core 1.51.1 and Azure.Identity 1.18.0.
+      They have transitive dependencies on .NET 10 versions of these packages.
+    -->
+    <SystemTextJsonMinVersion>10.0.3</SystemTextJsonMinVersion>
+    <MicrosoftExtensionsLoggingAbstractionsMinVersion>10.0.3</MicrosoftExtensionsLoggingAbstractionsMinVersion>
+    <MicrosoftExtensionsConfigurationAbstractionsMinVersion>10.0.3</MicrosoftExtensionsConfigurationAbstractionsMinVersion>
 
     <!-- Third-party references -->
     <NewtonsoftJsonVersion>13.0.4</NewtonsoftJsonVersion>

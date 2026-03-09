@@ -160,13 +160,14 @@ namespace Microsoft.Diagnostics.Tools.Monitor.Commands
             })
             .ConfigureContainer((HostBuilderContext context, IServiceCollection services) =>
             {
-                ServerUrlsBlockingConfigurationManager? manager =
-                    context.Properties[typeof(ServerUrlsBlockingConfigurationManager)] as ServerUrlsBlockingConfigurationManager;
-                Debug.Assert(null != manager, $"Expected {typeof(ServerUrlsBlockingConfigurationManager).FullName} to be a {typeof(HostBuilderContext).FullName} property.");
-                if (null != manager)
+                if (context.Properties[typeof(ServerUrlsBlockingConfigurationManager)] is ServerUrlsBlockingConfigurationManager manager)
                 {
                     // Block reading of the Urls option so that Kestrel is unable to read it from the composed configuration.
                     manager.IsBlocking = true;
+                }
+                else
+                {
+                    Debug.Fail($"Expected {typeof(ServerUrlsBlockingConfigurationManager).FullName} to be a {typeof(HostBuilderContext).FullName} property.");
                 }
             });
         }
