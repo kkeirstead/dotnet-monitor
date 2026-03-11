@@ -1,0 +1,20 @@
+<Project>
+  <!--
+    This file contains version overrides for Azure SDK packages.
+    AzureBlobStorage requires higher versions of Azure.Core and Azure.Identity than what is used
+    by other parts of the solution. Import this file in any project that needs the higher versions.
+
+    Note: Uses VersionOverride to override central package management versions.
+    Projects that already have these packages may get duplicate warnings which are suppressed via NoWarn.
+  -->
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);NU1504</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Core" VersionOverride="$(AzureCoreVersion)" />
+    <PackageReference Include="Azure.Identity" VersionOverride="$(AzureIdentityVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" VersionOverride="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" VersionOverride="10.0.3" />
+    <PackageReference Include="System.Text.Json" VersionOverride="10.0.3" />
+  </ItemGroup>
+</Project>
