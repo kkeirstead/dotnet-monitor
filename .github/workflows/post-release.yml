@@ -4,6 +4,7 @@ run-name: '[${{ github.ref_name }}] Post release'
 on:
   release: # Run on every release to add new version information.
     types: [released]
+  workflow_dispatch:
 
 # Only process one release at a time so we can generate cumulative results in the same PR.
 # NOTE: This is currently restricted to only having 2 releases at the exact same time, any more and
