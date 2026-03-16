@@ -4,7 +4,7 @@ const path = require('path');
 async function run() {
     const [core, github] = await actionUtils.installAndRequirePackages(
       { name: "@actions/core", version: "2" },      // or "2.0.3"
-      { name: "@actions/github" }                   // no pin
+      { name: "@actions/github", version: "8" }                   
     );
 
     const releasesDataFile = core.getInput("releases_json_file", { required: true });
